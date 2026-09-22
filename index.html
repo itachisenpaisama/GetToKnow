@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Zweites Date – Deep Talk & Erinnerungen</title>
+  <title>Zweites Date – Deep Talk & Connection</title>
 
+  <!-- App-Icon & Vollbild-Einstellung -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="2nd Date">
-<link rel="apple-touch-icon" href="https://fav.farm/🍷">
-<link rel="icon" href="https://fav.farm/🍷">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="2nd Date">
+  <link rel="apple-touch-icon" href="https://fav.farm/🍷">
+  <link rel="icon" href="https://fav.farm/🍷">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,7 +20,7 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: radial-gradient(circle at 50% 10%, #1e1b4b 0%, #09090b 100%);
+      background: radial-gradient(circle at 50% 5%, #2a1122 0%, #09090b 100%);
       min-height: 100vh;
       color: #f4f4f5;
     }
@@ -27,25 +28,25 @@
       font-family: 'Playfair Display', serif;
     }
     .glass-card {
-      background: rgba(24, 24, 27, 0.75);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(24, 24, 27, 0.82);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
     .pulse-record {
       animation: pulse 1.5s infinite;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.08); }
+      50% { opacity: 0.5; transform: scale(1.08); }
     }
   </style>
 </head>
 <body class="flex flex-col items-center justify-between p-4 sm:p-6 select-none">
 
   <!-- Header -->
-  <header class="w-full max-w-xl flex items-center justify-between py-2 border-b border-zinc-800">
+  <header class="w-full max-w-xl flex items-center justify-between py-2 border-b border-zinc-800/80">
     <div class="flex items-center gap-2">
-      <span class="text-xl">✨</span>
+      <span class="text-xl">🍷</span>
       <h1 class="font-serif-date text-lg tracking-wide text-rose-300">Connection Deck</h1>
     </div>
     <div class="flex gap-2">
@@ -58,60 +59,103 @@
     </div>
   </header>
 
-  <!-- Haupt-Container -->
-  <main class="w-full max-w-xl my-auto py-6">
+  <!-- Hauptbereich -->
+  <main class="w-full max-w-xl my-auto py-4">
 
-    <!-- Screen 1: Setup / Willkommen -->
-    <div id="screen-setup" class="glass-card rounded-3xl p-6 sm:p-8 shadow-2xl text-center">
-      <div class="w-16 h-16 mx-auto rounded-full bg-rose-500/10 flex items-center justify-center text-3xl mb-4 border border-rose-500/20">
-        🍷
+    <!-- Screen 1: Setup / Start -->
+    <div id="screen-setup" class="glass-card rounded-3xl p-6 sm:p-8 shadow-2xl text-center space-y-5">
+      <div class="w-16 h-16 mx-auto rounded-full bg-rose-500/10 flex items-center justify-center text-3xl border border-rose-500/20">
+        ✨
       </div>
-      <h2 class="font-serif-date text-2xl sm:text-3xl text-zinc-100 mb-2">Unser 2. Date</h2>
-      <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
-        Echte Fragen, die verbinden. Abwechselnd, ehrlich und ohne Ablenkung.
-      </p>
+      <div>
+        <h2 class="font-serif-date text-2xl sm:text-3xl text-zinc-100 mb-1">Unser 2. Date</h2>
+        <p class="text-xs sm:text-sm text-zinc-400">Kein Smalltalk mehr. Echte Fragen, Knistern & Momente.</p>
+      </div>
 
-      <div class="space-y-4 mb-6 text-left">
+      <div class="space-y-3 text-left">
         <div>
           <label class="block text-xs uppercase tracking-wider text-zinc-400 mb-1 font-semibold">Person 1</label>
-          <input type="text" id="input-p1" value="Ich" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-100 focus:outline-none focus:border-rose-500 transition">
+          <input type="text" id="input-p1" value="Ich" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-xl px-4 py-2.5 text-zinc-100 focus:outline-none focus:border-rose-500">
         </div>
         <div>
           <label class="block text-xs uppercase tracking-wider text-zinc-400 mb-1 font-semibold">Person 2</label>
-          <input type="text" id="input-p2" value="Du" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-100 focus:outline-none focus:border-rose-500 transition">
+          <input type="text" id="input-p2" value="Du" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-xl px-4 py-2.5 text-zinc-100 focus:outline-none focus:border-rose-500">
         </div>
       </div>
 
+      <!-- Start-Level Auswahl -->
+      <div class="text-left space-y-2">
+        <label class="block text-xs uppercase tracking-wider text-zinc-400 font-semibold">Start-Tiefe wählen</label>
+        <div class="grid grid-cols-3 gap-2 text-xs">
+          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-800/90 border border-zinc-700 text-zinc-300 font-medium active-level" data-level="all">
+            🎲 Alle Mixen
+          </button>
+          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-800/90 border border-zinc-700 text-zinc-300 font-medium" data-level="1">
+            🥂 Lvl 1: Warm-up
+          </button>
+          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-800/90 border border-zinc-700 text-zinc-300 font-medium" data-level="2">
+            🌟 Lvl 2: Deep
+          </button>
+        </div>
+        <button type="button" class="level-btn w-full py-2 px-3 rounded-xl bg-zinc-800/90 border border-zinc-700 text-rose-300 font-medium text-xs" data-level="3">
+          🔥 Lvl 3: Intim & Nah (Knistern)
+        </button>
+      </div>
+
       <button id="btn-start-game" class="w-full bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-500 hover:to-indigo-500 text-white font-medium py-3.5 px-6 rounded-xl shadow-lg transition-all transform active:scale-95">
-        Session beginnen ✨
+        Session starten 🍷
       </button>
-      <button id="btn-resume-game" class="hidden w-full mt-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-medium py-2.5 px-6 rounded-xl transition">
+      <button id="btn-resume-game" class="hidden w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-medium py-2.5 px-6 rounded-xl transition text-sm">
         Vorherige Session fortsetzen ⏸️
       </button>
     </div>
 
-    <!-- Screen 2: Aktive Frage -->
-    <div id="screen-game" class="hidden space-y-4">
+    <!-- Screen 2: Game Flow -->
+    <div id="screen-game" class="hidden space-y-3">
       
-      <!-- Status & Pause Bar -->
-      <div class="flex items-center justify-between text-xs text-zinc-400 px-2">
-        <span id="turn-indicator" class="font-medium text-rose-400 bg-rose-950/60 px-3 py-1 rounded-full border border-rose-800/30">
-          Am Zug: ...
-        </span>
-        <div class="flex items-center gap-3">
-          <span id="progress-info">Frage 1 von 30</span>
-          <button id="btn-pause" class="hover:text-zinc-200 transition">⏸️ Pause</button>
+      <!-- Top Switch Bar: Modus & Level In-Game Wechsel -->
+      <div class="flex items-center justify-between gap-1.5 px-1">
+        <!-- MODUS TOGGLE -->
+        <button id="btn-toggle-mode" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-950/80 border border-indigo-700/50 text-indigo-200 transition">
+          <span id="mode-icon">🔄</span>
+          <span id="mode-label">Abwechselnd</span>
+        </button>
+
+        <!-- LEVEL SCHNELLWECHSLER IM SPIEL -->
+        <div class="flex items-center gap-1 bg-zinc-900/90 border border-zinc-800 p-1 rounded-full text-[11px]">
+          <button id="lvl-badge-all" onclick="changeInGameLevel('all')" class="px-2 py-0.5 rounded-full text-zinc-400 font-medium">Mix</button>
+          <button id="lvl-badge-1" onclick="changeInGameLevel('1')" class="px-2 py-0.5 rounded-full text-zinc-400 font-medium">Lvl 1</button>
+          <button id="lvl-badge-2" onclick="changeInGameLevel('2')" class="px-2 py-0.5 rounded-full text-zinc-400 font-medium">Lvl 2</button>
+          <button id="lvl-badge-3" onclick="changeInGameLevel('3')" class="px-2 py-0.5 rounded-full text-rose-300 font-medium">Lvl 3</button>
+        </div>
+
+        <button id="btn-pause" class="text-xs px-2.5 py-1.5 rounded-full bg-zinc-800 text-zinc-300 hover:text-white">⏸️</button>
+      </div>
+
+      <!-- Turn & Level Info Bar -->
+      <div class="flex items-center justify-between text-xs px-2">
+        <div id="turn-indicator" class="font-semibold text-rose-300 bg-rose-950/70 px-3.5 py-1 rounded-full border border-rose-800/40">
+          🎤 Jetzt antwortet: ...
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="both-mode-status" class="hidden text-[11px] text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">
+            Teil 1/2
+          </span>
+          <span id="progress-info" class="text-xs text-zinc-400 font-mono">1 / 30</span>
         </div>
       </div>
 
       <!-- Question Card -->
-      <div class="glass-card rounded-3xl p-6 sm:p-8 min-h-[220px] flex flex-col justify-between shadow-2xl relative overflow-hidden">
-        <div class="text-xs uppercase tracking-widest text-zinc-500 font-semibold mb-2" id="question-category">
-          Kategorie: Deep Talk
+      <div class="glass-card rounded-3xl p-6 sm:p-7 min-h-[190px] flex flex-col justify-between shadow-2xl relative overflow-hidden">
+        <div class="flex justify-between items-center text-xs uppercase tracking-widest font-semibold">
+          <span id="question-level-badge" class="px-2.5 py-0.5 rounded-full bg-zinc-800 text-rose-300 border border-zinc-700">Lvl 1 • Warm-up</span>
+          <span id="question-category" class="text-zinc-500">Allgemein</span>
         </div>
-        <div id="question-text" class="font-serif-date text-xl sm:text-2xl text-zinc-100 my-auto py-4 leading-snug">
+        
+        <div id="question-text" class="font-serif-date text-xl sm:text-2xl text-zinc-100 my-auto py-3 leading-snug">
           Lade Frage...
         </div>
+
         <div class="flex justify-between items-center text-xs text-zinc-500 pt-2 border-t border-zinc-800/60">
           <span>Keine Wiederholungen</span>
           <button id="btn-skip" class="text-zinc-400 hover:text-zinc-200">Überspringen ⏩</button>
@@ -119,37 +163,33 @@
       </div>
 
       <!-- Voice Recording & Transcript Section -->
-      <div class="glass-card rounded-2xl p-5 space-y-4">
+      <div class="glass-card rounded-2xl p-4 sm:p-5 space-y-3">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span class="text-sm font-semibold text-zinc-200">Sprachnachricht & Notiz</span>
+            <span class="text-xs font-semibold text-zinc-200">Voice-Aufnahme & Notiz</span>
             <span id="recording-time" class="hidden text-xs text-rose-400 font-mono">00:00</span>
           </div>
-          <div class="flex gap-2">
-            <button id="btn-record-voice" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-rose-600 hover:bg-rose-500 text-white flex items-center gap-1.5 transition">
-              <span id="record-dot" class="w-2 h-2 rounded-full bg-white"></span>
-              <span id="record-btn-text">Aufnehmen</span>
-            </button>
-          </div>
+          <button id="btn-record-voice" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-rose-600 hover:bg-rose-500 text-white flex items-center gap-1.5 transition">
+            <span id="record-dot" class="w-2 h-2 rounded-full bg-white"></span>
+            <span id="record-btn-text">Aufnehmen</span>
+          </button>
         </div>
 
-        <!-- Audio Player Preview (wenn aufgenommen) -->
-        <audio id="audio-preview" controls class="hidden w-full h-8 mt-2"></audio>
+        <audio id="audio-preview" controls class="hidden w-full h-8"></audio>
 
-        <!-- Transkript & Stichpunkte -->
         <div>
-          <label class="block text-xs text-zinc-400 mb-1">Live-Transkript / Wichtige Stichpunkte:</label>
-          <textarea id="answer-notes" rows="3" placeholder="Wird beim Sprechen automatisch transkribiert oder kann manuell notiert werden..." class="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-rose-500"></textarea>
+          <textarea id="answer-notes" rows="2" placeholder="Wird beim Sprechen transkribiert oder kann notiert werden..." class="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl p-3 text-xs sm:text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-rose-500"></textarea>
         </div>
 
-        <button id="btn-save-answer" class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 py-3 rounded-xl font-medium text-sm transition">
-          Antwort sichern & Nächste Frage ➔
+        <button id="btn-save-answer" class="w-full bg-gradient-to-r from-zinc-800 to-zinc-700 hover:from-zinc-700 hover:to-zinc-600 text-zinc-100 py-3 rounded-xl font-medium text-xs sm:text-sm transition flex items-center justify-center gap-2">
+          <span>Antwort speichern & Weiter</span>
+          <span id="btn-save-next-label">➔</span>
         </button>
       </div>
 
     </div>
 
-    <!-- Screen 3: Eigene Fragen Hinzufügen (Modal) -->
+    <!-- Screen 3: Eigene Fragen Modal -->
     <div id="modal-questions" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
       <div class="glass-card w-full max-w-lg rounded-2xl p-6 space-y-4 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
@@ -157,34 +197,35 @@
           <button id="btn-close-modal-q" class="text-zinc-400 hover:text-white">✕</button>
         </div>
         <div class="space-y-2">
-          <input type="text" id="new-q-text" placeholder="Neue Frage eingeben..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-rose-500">
-          <div class="flex gap-2">
-            <input type="text" id="new-q-cat" placeholder="Kategorie (z. B. Deep Talk, Lustig)" class="w-2/3 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-zinc-300">
-            <button id="btn-add-q" class="w-1/3 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-semibold py-2">Hinzufügen</button>
+          <input type="text" id="new-q-text" placeholder="Neue Frage eingeben..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-zinc-200 focus:outline-none focus:border-rose-500">
+          <div class="grid grid-cols-2 gap-2">
+            <select id="new-q-level" class="bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-zinc-300">
+              <option value="1">Level 1 (Warm-up)</option>
+              <option value="2">Level 2 (Deep Talk)</option>
+              <option value="3">Level 3 (Intim & Nah)</option>
+            </select>
+            <input type="text" id="new-q-cat" placeholder="Kategorie (z. B. Humor)" class="bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-zinc-300">
           </div>
+          <button id="btn-add-q" class="w-full bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-semibold py-2">Frage speichern</button>
         </div>
-        <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="questions-list-render">
-          <!-- Dynamische Liste -->
-        </div>
+        <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="questions-list-render"></div>
       </div>
     </div>
 
-    <!-- Screen 4: Date-Memory / Export Modal -->
+    <!-- Screen 4: Memory / Export Modal -->
     <div id="modal-archive" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
       <div class="glass-card w-full max-w-xl rounded-2xl p-6 space-y-4 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
           <h3 class="font-serif-date text-lg text-rose-300">Unsere Date-Erinnerungen</h3>
           <button id="btn-close-modal-archive" class="text-zinc-400 hover:text-white">✕</button>
         </div>
-        <div id="archive-list-render" class="flex-1 overflow-y-auto space-y-3 pr-1 text-sm">
-          <!-- Gespeicherte Antworten -->
-        </div>
+        <div id="archive-list-render" class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs sm:text-sm"></div>
         <div class="flex gap-2 pt-2 border-t border-zinc-800">
           <button id="btn-export-json" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition">
-            💾 Als JSON speichern
+            💾 JSON Export
           </button>
           <button id="btn-export-summary" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white text-xs py-2.5 rounded-xl font-medium transition">
-            📄 Date-Zusammenfassung (Drucken/PDF)
+            📄 Drucken / PDF Zusammenfassung
           </button>
         </div>
       </div>
@@ -192,30 +233,41 @@
 
   </main>
 
-  <!-- Footer -->
-  <footer class="text-xs text-zinc-600 py-2">
-    100% lokal & privat auf deinem Gerät gespeichert.
+  <footer class="text-[11px] text-zinc-600 py-1">
+    100% offline & lokal auf deinem Smartphone.
   </footer>
 
-  <!-- IndexedDB & App Logik -->
   <script>
-    // --- 1. DEFAULT PLACEHOLDER FRAGEN ---
+    // --- 1. FRAGENKATALOG NACH LEVELN (30 kuratierte Fragen für ein 2. Date) ---
     const DEFAULT_QUESTIONS = [
-      { id: 1, text: "Was war der schönste Moment deiner letzten Woche?", category: "Eisbrecher" },
-      { id: 2, text: "Welches Buch, Film oder Gespräch hat deine Sicht auf die Welt nachhaltig verändert?", category: "Deep Talk" },
-      { id: 3, text: "Was ist dir in einer Beziehung am wichtigsten, worüber die meisten Leute zu wenig reden?", category: "Werte & Liebe" },
-      { id: 4, text: "Welche Eigenschaft an dir verstehen Menschen oft erst auf den zweiten Blick?", category: "Selbstreflexion" },
-      { id: 5, text: "Wenn du morgen früh aufwachen könntest und eine neue Fähigkeit hättest – welche wäre es?", category: "Träume" },
-      { id: 6, text: "Wovor hattest du als Kind am meisten Angst und worüber lachst du heute?", category: "Kindheit" },
-      { id: 7, text: "Was bringt dich innerhalb von Sekunden zum Lächeln, egal wie dein Tag war?", category: "Herzenssache" },
-      { id: 8, text: "Gibt es etwas, das du schon lange tun wolltest, dich aber noch nicht getraut hast?", category: "Mut" },
-      { id: 9, text: "Wie sieht für dich ein perfekter freier Sonntag ohne Verpflichtungen aus?", category: "Alltag & Genuss" },
-      { id: 10, text: "Welchen Ratschlag würdest du deinem 18-jährigen Ich heute mitgeben?", category: "Lebensweisheit" }
+      // Level 1: Warm-up & Leicht (Eisbrecher, Alltag, Lachen)
+      { id: 1, level: "1", category: "Eisbrecher", text: "Was war der spontanste oder witzigste Moment deiner letzten Woche?" },
+      { id: 2, level: "1", category: "Genuss", text: "Wenn wir jetzt sofort ein Flugticket für ein langes Wochenende buchen müssten: Wohin geht es?" },
+      { id: 3, level: "1", category: "Humor", text: "Was ist dein absolut heimlichstes Guilty Pleasure (Essen, Serie oder Musik)?" },
+      { id: 4, level: "1", category: "Kindheit", text: "Welcher Kindheitstraum von dir war rückblickend total verrückt?" },
+      { id: 5, level: "1", category: "Alltag", text: "Wie sieht für dich der perfekte Sonntag ohne Verpflichtungen aus?" },
+      { id: 6, level: "1", category: "Spontan", text: "Gibt es einen Song, bei dem du im Auto oder unter der Dusche immer laut mitsingen musst?" },
+
+      // Level 2: Deep Talk & Werte (Träume, Reflexion, Charakter)
+      { id: 7, level: "2", category: "Reflexion", text: "Welche Eigenschaft an dir verstehen Menschen oft erst auf den zweiten Blick?" },
+      { id: 8, level: "2", category: "Werte", text: "Was ist etwas, das du in den letzten zwei Jahren über dich selbst gelernt hast?" },
+      { id: 9, level: "2", category: "Leidenschaft", text: "Über welches Thema oder welche Leidenschaft könntest du stundenlang reden, ohne müde zu werden?" },
+      { id: 10, level: "2", category: "Freundschaft", text: "Was schätzen deine engsten Freunde am allermeisten an dir?" },
+      { id: 11, level: "2", category: "Lebensweg", text: "Welcher Moment oder welche Entscheidung hat deinen Lebensweg bisher am stärksten geprägt?" },
+      { id: 12, level: "2", category: "Gefühl", text: "Wann fühlst du dich bei einem Menschen wirklich sicher und angekommen?" },
+
+      // Level 3: Intim, Knistern & Nähe (Verletzlichkeit, Liebe, Unser Date)
+      { id: 13, level: "3", category: "Erster Eindruck", text: "Was war dein erster Gedanke, als du mich bei unserem ersten Date gesehen hast?" },
+      { id: 14, level: "3", category: "Anziehung", text: "Was macht jemanden für dich auf mentaler und emotionaler Ebene extrem anziehend?" },
+      { id: 15, level: "3", category: "Verletzlichkeit", text: "Wovor hast du in Beziehungen oder beim Kennenlernen manchmal insgeheim Angst?" },
+      { id: 16, level: "3", category: "Romantik", text: "Was war der romantischste Moment, den du jemals erlebt hast?" },
+      { id: 17, level: "3", category: "Wahrheit", text: "Gibt es etwas, das du mich heute schon die ganze Zeit fragen wolltest, dich aber noch nicht getraut hast?" },
+      { id: 18, level: "3", category: "Zukunft", text: "Wenn du dir für heute Abend noch eine Sache wünschen könntest – was wäre es?" }
     ];
 
-    // --- 2. INDEXED DB FÜR AUDIO-SPEICHERUNG ---
+    // --- 2. INDEXED DB (Audio) ---
     let db;
-    const req = indexedDB.open("DateAppDB", 1);
+    const req = indexedDB.open("DateAppDB_v3", 1);
     req.onupgradeneeded = (e) => {
       db = e.target.result;
       if (!db.objectStoreNames.contains("recordings")) {
@@ -237,15 +289,19 @@
       request.onsuccess = () => callback(request.result?.blob);
     }
 
-    // --- 3. STATE MANAGEMENT ---
-    let questions = JSON.parse(localStorage.getItem("date_questions")) || DEFAULT_QUESTIONS;
-    let session = JSON.parse(localStorage.getItem("date_session")) || null;
-    let savedAnswers = JSON.parse(localStorage.getItem("date_answers")) || [];
+    // --- 3. STATE ---
+    let questions = JSON.parse(localStorage.getItem("date_questions_v3")) || DEFAULT_QUESTIONS;
+    let session = JSON.parse(localStorage.getItem("date_session_v3")) || null;
+    let savedAnswers = JSON.parse(localStorage.getItem("date_answers_v3")) || [];
+    let currentActiveLevel = localStorage.getItem("date_current_lvl") || "all";
+    let gameMode = localStorage.getItem("date_mode") || "alternate";
 
     function saveState() {
-      localStorage.setItem("date_questions", JSON.stringify(questions));
-      localStorage.setItem("date_session", JSON.stringify(session));
-      localStorage.setItem("date_answers", JSON.stringify(savedAnswers));
+      localStorage.setItem("date_questions_v3", JSON.stringify(questions));
+      localStorage.setItem("date_session_v3", JSON.stringify(session));
+      localStorage.setItem("date_answers_v3", JSON.stringify(savedAnswers));
+      localStorage.setItem("date_current_lvl", currentActiveLevel);
+      localStorage.setItem("date_mode", gameMode);
       updateCounts();
     }
 
@@ -254,45 +310,121 @@
       document.getElementById("count-answers").textContent = savedAnswers.length;
     }
 
-    // --- 4. GAME FLOW ---
+    // Level Auswahl im Setup
+    document.querySelectorAll(".level-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".level-btn").forEach(b => {
+          b.classList.remove("border-rose-500", "text-rose-400", "bg-rose-950/50");
+          b.classList.add("bg-zinc-800/90", "text-zinc-300");
+        });
+        btn.classList.remove("bg-zinc-800/90", "text-zinc-300");
+        btn.classList.add("border-rose-500", "text-rose-400", "bg-rose-950/50");
+        currentActiveLevel = btn.dataset.level;
+      });
+    });
+
+    // In-Game Level Switcher
+    window.changeInGameLevel = function(lvl) {
+      currentActiveLevel = lvl;
+      saveState();
+      updateInGameLevelUI();
+      // Neuer Index-Pool aus dem gewählten Level
+      let pool = questions.map((q, i) => ({ ...q, idx: i }));
+      if (currentActiveLevel !== "all") {
+        pool = pool.filter(q => q.level === currentActiveLevel);
+      }
+      session.remainingIndices = pool.map(q => q.idx).sort(() => Math.random() - 0.5);
+      session.totalInSession = session.remainingIndices.length;
+      nextQuestion();
+    };
+
+    function updateInGameLevelUI() {
+      ['all', '1', '2', '3'].forEach(lvl => {
+        const el = document.getElementById(`lvl-badge-${lvl}`);
+        if (!el) return;
+        if (currentActiveLevel === lvl) {
+          el.className = "px-2 py-0.5 rounded-full bg-rose-600 text-white font-semibold shadow";
+        } else {
+          el.className = "px-2 py-0.5 rounded-full text-zinc-400 hover:text-zinc-200 font-medium";
+        }
+      });
+    }
+
+    // Modus Umschalter
+    const btnToggleMode = document.getElementById("btn-toggle-mode");
+    const modeLabel = document.getElementById("mode-label");
+    const modeIcon = document.getElementById("mode-icon");
+    const bothModeStatus = document.getElementById("both-mode-status");
+
+    function renderModeUI() {
+      if (gameMode === "both") {
+        modeLabel.textContent = "Beide antworten";
+        modeIcon.textContent = "👥";
+        btnToggleMode.className = "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-rose-950/90 border border-rose-600/60 text-rose-200";
+      } else {
+        modeLabel.textContent = "Abwechselnd";
+        modeIcon.textContent = "🔄";
+        btnToggleMode.className = "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-950/80 border border-indigo-700/50 text-indigo-200";
+      }
+    }
+
+    btnToggleMode.addEventListener("click", () => {
+      gameMode = (gameMode === "alternate") ? "both" : "alternate";
+      saveState();
+      renderModeUI();
+      if (session) renderCurrentTurn();
+    });
+
+    // --- 4. GAME ENGINE ---
     const screenSetup = document.getElementById("screen-setup");
     const screenGame = document.getElementById("screen-game");
-    const inputP1 = document.getElementById("input-p1");
-    const inputP2 = document.getElementById("input-p2");
     const btnStart = document.getElementById("btn-start-game");
     const btnResume = document.getElementById("btn-resume-game");
     const turnIndicator = document.getElementById("turn-indicator");
     const progressInfo = document.getElementById("progress-info");
     const questionText = document.getElementById("question-text");
     const questionCategory = document.getElementById("question-category");
+    const questionLevelBadge = document.getElementById("question-level-badge");
 
     if (session && session.remainingIndices.length > 0) {
       btnResume.classList.remove("hidden");
     }
 
     btnStart.addEventListener("click", () => {
-      const p1 = inputP1.value.trim() || "Person 1";
-      const p2 = inputP2.value.trim() || "Person 2";
-      
-      // Shuffle Frage-Indizes
-      const indices = questions.map((_, i) => i).sort(() => Math.random() - 0.5);
+      const p1 = document.getElementById("input-p1").value.trim() || "Person 1";
+      const p2 = document.getElementById("input-p2").value.trim() || "Person 2";
+
+      let pool = questions.map((q, i) => ({ ...q, originalIndex: i }));
+      if (currentActiveLevel !== "all") {
+        pool = pool.filter(q => q.level === currentActiveLevel);
+      }
+      if (pool.length === 0) {
+        pool = questions.map((q, i) => ({ ...q, originalIndex: i }));
+      }
+
+      const indices = pool.map(q => q.originalIndex).sort(() => Math.random() - 0.5);
 
       session = {
         p1, p2,
-        currentTurn: 0, // 0 = p1, 1 = p2
+        currentTurn: 0,
+        bothStep: 1,
         remainingIndices: indices,
         currentIndex: null,
-        totalInSession: questions.length,
+        totalInSession: indices.length,
         answeredCount: 0
       };
       saveState();
+      renderModeUI();
+      updateInGameLevelUI();
       startGameView();
       nextQuestion();
     });
 
     btnResume.addEventListener("click", () => {
+      renderModeUI();
+      updateInGameLevelUI();
       startGameView();
-      renderCurrentQuestion();
+      renderCurrentTurn();
     });
 
     document.getElementById("btn-pause").addEventListener("click", () => {
@@ -308,24 +440,43 @@
 
     function nextQuestion() {
       if (session.remainingIndices.length === 0) {
-        alert("Glückwunsch! Ihr habt alle Fragen durchgespielt!");
+        alert("Wunderbar! Ihr habt alle Fragen in diesem Level beantwortet!");
         return;
       }
       session.currentIndex = session.remainingIndices.pop();
+      session.bothStep = 1;
       saveState();
-      renderCurrentQuestion();
+      renderCurrentTurn();
     }
 
-    function renderCurrentQuestion() {
+    function renderCurrentTurn() {
       const q = questions[session.currentIndex];
       const activePlayer = session.currentTurn === 0 ? session.p1 : session.p2;
-      
-      turnIndicator.textContent = `🎤 Jetzt antwortet: ${activePlayer}`;
-      questionCategory.textContent = `Kategorie: ${q.category || 'Allgemein'}`;
-      questionText.textContent = `„${q.text}“`;
-      progressInfo.textContent = `Frage ${session.answeredCount + 1} von ${session.totalInSession}`;
 
-      // Reset Input
+      if (gameMode === "both") {
+        bothModeStatus.classList.remove("hidden");
+        bothModeStatus.textContent = session.bothStep === 1 ? `1/2: ${activePlayer}` : `2/2: ${session.currentTurn === 0 ? session.p2 : session.p1}`;
+        turnIndicator.textContent = `👥 ${session.bothStep === 1 ? activePlayer : (session.currentTurn === 0 ? session.p2 : session.p1)} antwortet`;
+        document.getElementById("btn-save-next-label").textContent = session.bothStep === 1 ? `➔ Dann ${session.currentTurn === 0 ? session.p2 : session.p1}` : "➔ Nächste Frage";
+      } else {
+        bothModeStatus.classList.add("hidden");
+        turnIndicator.textContent = `🎤 Jetzt antwortet: ${activePlayer}`;
+        document.getElementById("btn-save-next-label").textContent = "➔";
+      }
+
+      // Level Badge Styling
+      const lvlLabels = { "1": "Lvl 1 • Warm-up", "2": "Lvl 2 • Deep Talk", "3": "🔥 Lvl 3 • Intim & Nah" };
+      questionLevelBadge.textContent = lvlLabels[q.level] || `Lvl ${q.level}`;
+      if (q.level === "3") {
+        questionLevelBadge.className = "px-2.5 py-0.5 rounded-full bg-rose-950/80 text-rose-300 border border-rose-700/60 font-medium";
+      } else {
+        questionLevelBadge.className = "px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700";
+      }
+
+      questionCategory.textContent = q.category || 'Allgemein';
+      questionText.textContent = `„${q.text}“`;
+      progressInfo.textContent = `${session.answeredCount + 1} / ${session.totalInSession}`;
+
       document.getElementById("answer-notes").value = "";
       document.getElementById("audio-preview").classList.add("hidden");
       currentAudioBlob = null;
@@ -336,13 +487,8 @@
       nextQuestion();
     });
 
-    // --- 5. VOICE RECORDING & TRANSCRIPT (Web Audio & SpeechRecognition) ---
-    let mediaRecorder;
-    let audioChunks = [];
-    let currentAudioBlob = null;
-    let isRecording = false;
-    let recognition;
-
+    // --- 5. AUDIO & TRANSKRIPT ---
+    let mediaRecorder, audioChunks = [], currentAudioBlob = null, isRecording = false, recognition;
     const btnRecord = document.getElementById("btn-record-voice");
     const recordBtnText = document.getElementById("record-btn-text");
     const recordDot = document.getElementById("record-dot");
@@ -350,55 +496,45 @@
     const audioPreview = document.getElementById("audio-preview");
     const answerNotes = document.getElementById("answer-notes");
 
-    // Spracherkennung initialisieren (Web Speech API)
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       recognition = new SpeechRecognition();
       recognition.lang = "de-DE";
       recognition.continuous = true;
       recognition.interimResults = true;
-
       recognition.onresult = (event) => {
         let transcript = "";
-        for (let i = 0; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript + " ";
-        }
+        for (let i = 0; i < event.results.length; i++) transcript += event.results[i][0].transcript + " ";
         answerNotes.value = transcript.trim();
       };
     }
 
     btnRecord.addEventListener("click", async () => {
       if (!isRecording) {
-        // Start Recording
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
           mediaRecorder = new MediaRecorder(stream);
           audioChunks = [];
-
           mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
           mediaRecorder.onstop = () => {
             currentAudioBlob = new Blob(audioChunks, { type: "audio/webm" });
-            const audioUrl = URL.createObjectURL(currentAudioBlob);
-            audioPreview.src = audioUrl;
+            audioPreview.src = URL.createObjectURL(currentAudioBlob);
             audioPreview.classList.remove("hidden");
           };
-
           mediaRecorder.start();
-          if (recognition) recognition.start();
-
+          if (recognition) { try { recognition.start(); } catch(e){} }
           isRecording = true;
           recordBtnText.textContent = "Stoppen";
           recordDot.classList.add("pulse-record", "bg-rose-400");
           recordingTime.classList.remove("hidden");
         } catch (err) {
-          alert("Mikrofon-Zugriff verweigert oder nicht verfügbar: " + err.message);
+          alert("Mikrofon nicht erreichbar: " + err.message);
         }
       } else {
-        // Stop Recording
         mediaRecorder.stop();
         if (recognition) recognition.stop();
         isRecording = false;
-        recordBtnText.textContent = "Aufnahme bereit";
+        recordBtnText.textContent = "Fertig";
         recordDot.classList.remove("pulse-record", "bg-rose-400");
         recordingTime.classList.add("hidden");
       }
@@ -407,48 +543,60 @@
     // --- 6. ANTWORT SPEICHERN ---
     document.getElementById("btn-save-answer").addEventListener("click", () => {
       const q = questions[session.currentIndex];
-      const activePlayer = session.currentTurn === 0 ? session.p1 : session.p2;
+      let answeringPlayer;
+      if (gameMode === "both") {
+        answeringPlayer = session.bothStep === 1 
+          ? (session.currentTurn === 0 ? session.p1 : session.p2)
+          : (session.currentTurn === 0 ? session.p2 : session.p1);
+      } else {
+        answeringPlayer = session.currentTurn === 0 ? session.p1 : session.p2;
+      }
+
       const notes = answerNotes.value.trim();
       const answerId = "ans_" + Date.now();
 
-      if (currentAudioBlob) {
-        saveAudioBlob(answerId, currentAudioBlob);
-      }
+      if (currentAudioBlob) saveAudioBlob(answerId, currentAudioBlob);
 
       savedAnswers.push({
         id: answerId,
         question: q.text,
+        level: q.level,
         category: q.category,
-        player: activePlayer,
-        notes: notes || "Keine Notiz erfasst",
+        player: answeringPlayer,
+        notes: notes || "Keine Notiz",
         hasAudio: !!currentAudioBlob,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
 
-      session.answeredCount++;
-      session.currentTurn = 1 - session.currentTurn; // Wechseln
-      saveState();
-      nextQuestion();
+      if (gameMode === "both" && session.bothStep === 1) {
+        session.bothStep = 2;
+        saveState();
+        renderCurrentTurn();
+      } else {
+        session.answeredCount++;
+        session.currentTurn = 1 - session.currentTurn;
+        session.bothStep = 1;
+        saveState();
+        nextQuestion();
+      }
     });
 
-    // --- 7. FRAGEN VERWALTEN (MODAL) ---
+    // --- 7. MODALS & EXPORT ---
     const modalQuestions = document.getElementById("modal-questions");
     document.getElementById("btn-manage-questions").addEventListener("click", () => {
       renderQuestionsList();
       modalQuestions.classList.remove("hidden");
     });
-    document.getElementById("btn-close-modal-q").addEventListener("click", () => {
-      modalQuestions.classList.add("hidden");
-    });
+    document.getElementById("btn-close-modal-q").addEventListener("click", () => modalQuestions.classList.add("hidden"));
 
     document.getElementById("btn-add-q").addEventListener("click", () => {
       const text = document.getElementById("new-q-text").value.trim();
+      const level = document.getElementById("new-q-level").value;
       const cat = document.getElementById("new-q-cat").value.trim() || "Eigene Frage";
       if (!text) return;
 
-      questions.push({ id: Date.now(), text, category: cat });
+      questions.push({ id: Date.now(), level, category: cat, text });
       document.getElementById("new-q-text").value = "";
-      document.getElementById("new-q-cat").value = "";
       saveState();
       renderQuestionsList();
     });
@@ -456,12 +604,12 @@
     function renderQuestionsList() {
       const container = document.getElementById("questions-list-render");
       container.innerHTML = questions.map((q, idx) => `
-        <div class="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800 text-xs">
+        <div class="flex items-center justify-between p-2 rounded-xl bg-zinc-900/60 border border-zinc-800 text-xs">
           <div class="flex-1 pr-2">
-            <span class="text-rose-400 font-medium">[${q.category}]</span>
+            <span class="text-rose-400 font-medium">[Lvl ${q.level}]</span>
             <span class="text-zinc-200 ml-1">${q.text}</span>
           </div>
-          <button onclick="deleteQuestion(${idx})" class="text-zinc-500 hover:text-rose-400 transition">✕</button>
+          <button onclick="deleteQuestion(${idx})" class="text-zinc-500 hover:text-rose-400">✕</button>
         </div>
       `).join("");
     }
@@ -472,31 +620,28 @@
       renderQuestionsList();
     };
 
-    // --- 8. DATE MEMORY & EXPORT ---
     const modalArchive = document.getElementById("modal-archive");
     document.getElementById("btn-view-archive").addEventListener("click", () => {
       renderArchive();
       modalArchive.classList.remove("hidden");
     });
-    document.getElementById("btn-close-modal-archive").addEventListener("click", () => {
-      modalArchive.classList.add("hidden");
-    });
+    document.getElementById("btn-close-modal-archive").addEventListener("click", () => modalArchive.classList.add("hidden"));
 
     function renderArchive() {
       const container = document.getElementById("archive-list-render");
       if (savedAnswers.length === 0) {
-        container.innerHTML = "<p class='text-zinc-500 text-center py-6'>Noch keine Antworten in dieser Session gespeichert.</p>";
+        container.innerHTML = "<p class='text-zinc-500 text-center py-6'>Noch keine Antworten gespeichert.</p>";
         return;
       }
       container.innerHTML = savedAnswers.map(ans => `
-        <div class="p-3.5 rounded-xl bg-zinc-900/80 border border-zinc-800 space-y-1">
-          <div class="flex justify-between text-xs text-zinc-400">
-            <span class="font-semibold text-rose-300">${ans.player}</span>
+        <div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800 space-y-1">
+          <div class="flex justify-between text-[11px] text-zinc-400">
+            <span class="font-semibold text-rose-300">${ans.player} (Lvl ${ans.level || '?'})</span>
             <span>${ans.timestamp}</span>
           </div>
           <div class="font-serif-date text-zinc-100 text-sm">„${ans.question}“</div>
           <div class="text-zinc-300 text-xs bg-zinc-950/40 p-2 rounded-lg mt-1">
-            <strong>Kernaussage:</strong> ${ans.notes}
+            <strong>Antwort/Notiz:</strong> ${ans.notes}
           </div>
           ${ans.hasAudio ? `<div class="pt-1"><button onclick="playSavedAudio('${ans.id}')" class="text-xs text-rose-400 hover:underline">▶️ Sprachnachricht anhören</button></div>` : ''}
         </div>
@@ -505,9 +650,8 @@
 
     window.playSavedAudio = function(id) {
       getAudioBlob(id, (blob) => {
-        if (!blob) return alert("Audioaufnahme nicht gefunden.");
-        const url = URL.createObjectURL(blob);
-        new Audio(url).play();
+        if (!blob) return alert("Audio nicht gefunden.");
+        new Audio(URL.createObjectURL(blob)).play();
       });
     };
 
@@ -515,14 +659,14 @@
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ questions, savedAnswers }, null, 2));
       const a = document.createElement("a");
       a.href = dataStr;
-      a.download = `date-answers-${new Date().toISOString().slice(0,10)}.json`;
+      a.download = `date-memory-${new Date().toISOString().slice(0,10)}.json`;
       a.click();
     });
 
     document.getElementById("btn-export-summary").addEventListener("click", () => {
       const win = window.open("", "_blank");
       win.document.write(`
-        <html><head><title>Date Zusammenfassung</title>
+        <html><head><title>Date Memory</title>
         <style>body{font-family:sans-serif;padding:30px;max-width:700px;margin:auto;line-height:1.5;color:#222;} h1{color:#e11d48;} .card{border-bottom:1px solid #ddd;padding:12px 0;}</style>
         </head><body>
         <h1>Unser 2. Date – Erinnerungs-Zusammenfassung</h1>
@@ -530,9 +674,9 @@
         <hr>
         ${savedAnswers.map(a => `
           <div class="card">
-            <p><strong>Frage:</strong> ${a.question}</p>
+            <p><strong>Frage:</strong> ${a.question} (Level ${a.level})</p>
             <p><strong>Antwort von:</strong> ${a.player} (${a.timestamp})</p>
-            <p><strong>Zusammenfassung / Notiz:</strong> ${a.notes}</p>
+            <p><strong>Notiz:</strong> ${a.notes}</p>
           </div>
         `).join("")}
         <script>window.print();<\/script>
