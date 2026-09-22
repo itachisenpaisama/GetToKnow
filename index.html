@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="https://fav.farm/✦">
   <link rel="icon" href="https://fav.farm/✦">
 
-  <!-- Tailwind CSS & Inter Font -->
+  <!-- Tailwind CSS & Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,9 +31,23 @@
       font-family: 'Newsreader', serif;
     }
     .glass-surface {
-      background: rgba(18, 18, 20, 0.94);
+      background: rgba(18, 18, 22, 0.94);
       backdrop-filter: blur(24px);
       border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .card-animate {
+      animation: cardIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pulse-record {
+      animation: pulseRecord 1.4s ease-in-out infinite;
+    }
+    @keyframes pulseRecord {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.15); }
     }
   </style>
 </head>
@@ -69,12 +83,12 @@
       <!-- Player Names -->
       <div class="space-y-3">
         <div>
-          <label class="block text-[11px] font-medium tracking-wide uppercase text-zinc-500 mb-1">Person 1</label>
-          <input type="text" id="input-p1" value="Ich" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-500 transition">
+          <label class="block text-[11px] font-medium tracking-wide uppercase text-indigo-400 mb-1">Person 1</label>
+          <input type="text" id="input-p1" value="Ich" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
         </div>
         <div>
-          <label class="block text-[11px] font-medium tracking-wide uppercase text-zinc-500 mb-1">Person 2</label>
-          <input type="text" id="input-p2" value="Du" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-500 transition">
+          <label class="block text-[11px] font-medium tracking-wide uppercase text-rose-400 mb-1">Person 2</label>
+          <input type="text" id="input-p2" value="Du" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 transition">
         </div>
       </div>
 
@@ -100,10 +114,10 @@
       </div>
 
       <button id="btn-start-game" type="button" class="w-full bg-white hover:bg-zinc-200 text-black font-semibold py-3.5 px-6 rounded-xl shadow-lg transition active:scale-[0.98]">
-        Starten
+        Neue Session starten
       </button>
       <button id="btn-resume-game" type="button" class="hidden w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-medium py-3 rounded-xl transition text-xs">
-        Session fortsetzen
+        Laufende Session fortsetzen ⏸️
       </button>
     </div>
 
@@ -127,19 +141,25 @@
         <button id="btn-pause" type="button" class="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-300 transition">⏸️</button>
       </div>
 
-      <!-- Turn & Progress -->
+      <!-- Turn & Progress with Player Glow -->
       <div class="flex items-center justify-between text-xs px-2 text-zinc-400">
-        <span id="turn-indicator" class="font-medium text-zinc-200">
-          An der Reihe: ...
-        </span>
+        <div id="turn-indicator" class="font-medium text-zinc-200 flex items-center gap-2">
+          <span id="player-glow-dot" class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]"></span>
+          <span id="turn-text">An der Reihe: ...</span>
+        </div>
         <div class="flex items-center gap-2">
           <span id="both-mode-status" class="hidden text-[10px] uppercase font-semibold text-zinc-300 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">Teil 1/2</span>
           <span id="progress-info" class="font-mono text-zinc-500">1 / 110</span>
         </div>
       </div>
 
-      <!-- Question Card -->
-      <div class="glass-surface rounded-3xl p-6 sm:p-8 min-h-[200px] flex flex-col justify-between shadow-xl relative">
+      <!-- Progress Line Bar -->
+      <div class="w-full bg-zinc-900 h-1 rounded-full overflow-hidden">
+        <div id="progress-bar-fill" class="bg-gradient-to-r from-indigo-500 to-rose-500 h-full w-0 transition-all duration-300"></div>
+      </div>
+
+      <!-- Question Card with Card Animation -->
+      <div id="question-card" class="glass-surface rounded-3xl p-6 sm:p-8 min-h-[200px] flex flex-col justify-between shadow-xl relative card-animate">
         <div class="flex items-center justify-between text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">
           <span id="question-level-badge" class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">Lvl 1</span>
           <span id="question-category">Kategorie</span>
@@ -238,12 +258,10 @@
             <div>
               <label class="block text-[10px] uppercase text-zinc-500 font-semibold mb-0.5">Kategorie</label>
               <select id="new-q-cat-select" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-zinc-200">
-                <!-- Dynamisch befüllt mit allen Kategorien + "Neue Kategorie erstellen" -->
               </select>
             </div>
           </div>
 
-          <!-- Freitextfeld für neue Kategorie (nur sichtbar wenn "Neue Kategorie..." gewählt ist) -->
           <div id="custom-cat-input-wrapper" class="hidden">
             <label class="block text-[10px] uppercase text-zinc-400 font-semibold mb-0.5">Name der neuen Kategorie:</label>
             <input type="text" id="new-q-custom-cat" placeholder="z. B. Spontanes & Reisen" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-zinc-400">
@@ -257,7 +275,7 @@
       </div>
     </div>
 
-    <!-- Screen 4: Archive Modal -->
+    <!-- Screen 4: Archive Modal mit AUDIO DOWNLOAD -->
     <div id="modal-archive" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
       <div class="glass-surface w-full max-w-xl rounded-3xl p-6 space-y-4 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
@@ -283,6 +301,11 @@
   </footer>
 
   <script>
+    // --- HAPTISCHES FEEDBACK HELPER ---
+    function haptic(ms = 10) {
+      if (navigator.vibrate) try { navigator.vibrate(ms); } catch(e){}
+    }
+
     // --- 1. DEINE 110 FRAGEN ---
     const RAW_USER_QUESTIONS = [
       { t: "Welcher Song müsste als persönliche Erkennungsmusik ertönen, sobald du einen Raum betrittst?", l: "1", c: "Humor & Marotten" },
@@ -404,10 +427,10 @@
       category: q.c
     }));
 
-    // --- 2. INDEXED DB ---
+    // --- 2. INDEXED DB (Audio Storage) ---
     let db;
     try {
-      const req = indexedDB.open("CloserAppDB_v5", 1);
+      const req = indexedDB.open("CloserAppDB_v6", 1);
       req.onupgradeneeded = (e) => {
         db = e.target.result;
         if (!db.objectStoreNames.contains("recordings")) db.createObjectStore("recordings", { keyPath: "id" });
@@ -429,8 +452,8 @@
       r.onerror = () => cb(null);
     }
 
-    // --- 3. STATE ---
-    let stored = localStorage.getItem("closer_questions_v7");
+    // --- 3. STATE & STORAGE MIT SESSION PERSISTENCE ---
+    let stored = localStorage.getItem("closer_questions_v8");
     let questions;
     try {
       questions = JSON.parse(stored);
@@ -440,9 +463,12 @@
     }
 
     let selectedQuestionIds = new Set(questions.map(q => q.id));
-    let session = null;
     let savedAnswers = [];
-    try { savedAnswers = JSON.parse(localStorage.getItem("closer_answers_v7")) || []; } catch(e){}
+    try { savedAnswers = JSON.parse(localStorage.getItem("closer_answers_v8")) || []; } catch(e){}
+    
+    let session = null;
+    try { session = JSON.parse(localStorage.getItem("closer_session_v8")); } catch(e){}
+    
     let currentActiveLevel = "all";
     let gameMode = "alternate";
 
@@ -452,8 +478,13 @@
     let activeCategories = new Set(getAllCategories());
 
     function saveState() {
-      localStorage.setItem("closer_questions_v7", JSON.stringify(questions));
-      localStorage.setItem("closer_answers_v7", JSON.stringify(savedAnswers));
+      localStorage.setItem("closer_questions_v8", JSON.stringify(questions));
+      localStorage.setItem("closer_answers_v8", JSON.stringify(savedAnswers));
+      if (session) {
+        localStorage.setItem("closer_session_v8", JSON.stringify(session));
+      } else {
+        localStorage.removeItem("closer_session_v8");
+      }
       updateCounts();
     }
 
@@ -464,6 +495,14 @@
       if (badgeEl) badgeEl.textContent = `${selectedQuestionIds.size} von ${questions.length} Fragen aktiv`;
       const archiveEl = document.getElementById("count-answers");
       if (archiveEl) archiveEl.textContent = savedAnswers.length;
+
+      // Resume Button Sichtbarkeit
+      const btnResume = document.getElementById("btn-resume-game");
+      if (session && session.remainingIds && session.remainingIds.length > 0) {
+        btnResume.classList.remove("hidden");
+      } else {
+        btnResume.classList.add("hidden");
+      }
     }
 
     // --- 4. SESSION FILTER & LÖSCHEN ---
@@ -493,6 +532,7 @@
     }
 
     window.toggleCategoryFilter = function(cat) {
+      haptic(8);
       if (activeCategories.has(cat)) {
         activeCategories.delete(cat);
         questions.filter(q => q.category === cat).forEach(q => selectedQuestionIds.delete(q.id));
@@ -506,6 +546,7 @@
     };
 
     document.getElementById("btn-select-all").addEventListener("click", () => {
+      haptic(10);
       questions.forEach(q => selectedQuestionIds.add(q.id));
       activeCategories = new Set(getAllCategories());
       renderCategoryChips();
@@ -514,6 +555,7 @@
     });
 
     document.getElementById("btn-deselect-all").addEventListener("click", () => {
+      haptic(10);
       selectedQuestionIds.clear();
       activeCategories.clear();
       renderCategoryChips();
@@ -521,7 +563,6 @@
       updateCounts();
     });
 
-    // Fragenliste mit Checkbox & LÖSCHEN (Trash-Icon)
     function renderCustomSelectorList() {
       const container = document.getElementById("custom-questions-selector-list");
       document.getElementById("active-selection-count").textContent = `${selectedQuestionIds.size} / ${questions.length} aktiv`;
@@ -544,8 +585,7 @@
               </div>
               <p class="text-zinc-200 leading-snug">${q.text}</p>
             </div>
-            <!-- LÖSCHEN BUTTON -->
-            <button type="button" onclick="deleteSingleQuestion(${q.id})" class="text-zinc-600 hover:text-rose-400 p-1 text-sm transition" title="Frage dauerhaft löschen">
+            <button type="button" onclick="deleteSingleQuestion(${q.id})" class="text-zinc-600 hover:text-rose-400 p-1 text-sm transition" title="Frage löschen">
               🗑️
             </button>
           </div>
@@ -554,6 +594,7 @@
     }
 
     window.toggleSingleQuestion = function(id) {
+      haptic(5);
       if (selectedQuestionIds.has(id)) selectedQuestionIds.delete(id);
       else selectedQuestionIds.add(id);
       renderCustomSelectorList();
@@ -562,6 +603,7 @@
 
     window.deleteSingleQuestion = function(id) {
       if (confirm("Möchtest du diese Frage wirklich dauerhaft löschen?")) {
+        haptic(15);
         questions = questions.filter(q => q.id !== id);
         selectedQuestionIds.delete(id);
         saveState();
@@ -572,7 +614,7 @@
       }
     };
 
-    // --- 5. KATEGORIE DROPDOWN & NEUE KATEGORIE OPTION ---
+    // --- 5. KATEGORIE DROPDOWN & SMART CLASSIFIER ---
     const catSelect = document.getElementById("new-q-cat-select");
     const customCatWrapper = document.getElementById("custom-cat-input-wrapper");
     const customCatInput = document.getElementById("new-q-custom-cat");
@@ -583,12 +625,8 @@
       html += `<option value="__NEW__" class="font-semibold text-rose-400">➕ Neue Kategorie erstellen...</option>`;
       catSelect.innerHTML = html;
 
-      // Wrapper anzeigen falls __NEW__
-      if (catSelect.value === "__NEW__") {
-        customCatWrapper.classList.remove("hidden");
-      } else {
-        customCatWrapper.classList.add("hidden");
-      }
+      if (catSelect.value === "__NEW__") customCatWrapper.classList.remove("hidden");
+      else customCatWrapper.classList.add("hidden");
     }
 
     catSelect.addEventListener("change", () => {
@@ -600,7 +638,6 @@
       }
     });
 
-    // Auto-Kategorisierung beim Tippen & Einfügen
     const newQTextInput = document.getElementById("new-q-text");
     const newQLevelSelect = document.getElementById("new-q-level");
     const autoFeedback = document.getElementById("auto-detect-feedback");
@@ -631,8 +668,6 @@
       }
 
       newQLevelSelect.value = detectedLvl;
-      
-      // Im Dropdown auswählen falls vorhanden, sonst als neue Kategorie
       const existingOptions = Array.from(catSelect.options).map(o => o.value);
       if (existingOptions.includes(detectedCat)) {
         catSelect.value = detectedCat;
@@ -646,7 +681,6 @@
     newQTextInput.addEventListener("input", (e) => analyzeQuestionText(e.target.value));
     newQTextInput.addEventListener("paste", () => setTimeout(() => analyzeQuestionText(newQTextInput.value), 50));
 
-    // Neue Frage speichern
     document.getElementById("btn-add-new-q").addEventListener("click", () => {
       const text = newQTextInput.value.trim();
       const level = newQLevelSelect.value;
@@ -657,6 +691,7 @@
       }
       if (!text) return;
 
+      haptic(12);
       const newId = Date.now();
       const newQuestion = { id: newId, text, level, category: finalCat };
       questions.unshift(newQuestion);
@@ -680,13 +715,18 @@
     const btnStart = document.getElementById("btn-start-game");
     const btnResume = document.getElementById("btn-resume-game");
     const turnIndicator = document.getElementById("turn-indicator");
+    const turnText = document.getElementById("turn-text");
+    const playerGlowDot = document.getElementById("player-glow-dot");
     const progressInfo = document.getElementById("progress-info");
+    const progressBarFill = document.getElementById("progress-bar-fill");
+    const questionCard = document.getElementById("question-card");
     const questionText = document.getElementById("question-text");
     const questionCategory = document.getElementById("question-category");
     const questionLevelBadge = document.getElementById("question-level-badge");
 
     document.querySelectorAll(".level-btn").forEach(btn => {
       btn.addEventListener("click", () => {
+        haptic(8);
         document.querySelectorAll(".level-btn").forEach(b => {
           b.classList.remove("border-zinc-400", "text-white");
           b.classList.add("border-zinc-800", "text-zinc-400");
@@ -706,6 +746,7 @@
     });
 
     window.changeInGameLevel = function(lvl) {
+      haptic(10);
       currentActiveLevel = lvl;
       updateInGameLevelUI();
       let pool = questions.filter(q => selectedQuestionIds.has(q.id));
@@ -713,8 +754,12 @@
         pool = pool.filter(q => q.level === currentActiveLevel);
       }
       if (pool.length === 0) pool = questions.filter(q => selectedQuestionIds.has(q.id));
+      
+      if (!session) {
+        session = { p1: "Ich", p2: "Du", currentTurn: 0, bothStep: 1, answeredCount: 0 };
+      }
       session.remainingIds = pool.map(q => q.id).sort(() => Math.random() - 0.5);
-      session.totalInSession = session.remainingIds.length;
+      session.totalInSession = session.remainingIds.length + (session.answeredCount || 0);
       nextQuestion();
     };
 
@@ -743,19 +788,19 @@
     }
 
     btnToggleMode.addEventListener("click", () => {
+      haptic(8);
       gameMode = (gameMode === "alternate") ? "both" : "alternate";
       renderModeUI();
       if (session) renderCurrentTurn();
     });
 
     btnStart.addEventListener("click", () => {
+      haptic(15);
       const p1 = document.getElementById("input-p1").value.trim() || "Person 1";
       const p2 = document.getElementById("input-p2").value.trim() || "Person 2";
 
       let pool = questions.filter(q => selectedQuestionIds.has(q.id));
-      if (currentActiveLevel !== "all") {
-        pool = pool.filter(q => q.level === currentActiveLevel);
-      }
+      if (currentActiveLevel !== "all") pool = pool.filter(q => q.level === currentActiveLevel);
       if (pool.length === 0) {
         alert("Keine Fragen aktiv. Bitte wähle Fragen in der '⚙️ Auswahl' an!");
         return;
@@ -773,6 +818,7 @@
         answeredCount: 0
       };
 
+      saveState();
       renderModeUI();
       updateInGameLevelUI();
       screenSetup.classList.add("hidden");
@@ -781,6 +827,7 @@
     });
 
     btnResume.addEventListener("click", () => {
+      haptic(10);
       renderModeUI();
       updateInGameLevelUI();
       screenSetup.classList.add("hidden");
@@ -789,40 +836,69 @@
     });
 
     document.getElementById("btn-pause").addEventListener("click", () => {
+      haptic(8);
+      stopActiveMediaStream();
       screenGame.classList.add("hidden");
       screenSetup.classList.remove("hidden");
-      btnResume.classList.remove("hidden");
+      saveState();
     });
 
     function nextQuestion() {
       if (!session || session.remainingIds.length === 0) {
-        alert("Alle ausgewählten Fragen dieser Session wurden beantwortet!");
+        alert("Wunderbar! Alle Fragen dieser Session wurden beantwortet!");
+        session = null;
+        saveState();
+        screenGame.classList.add("hidden");
+        screenSetup.classList.remove("hidden");
         return;
       }
       session.currentId = session.remainingIds.pop();
       session.bothStep = 1;
+      saveState();
       renderCurrentTurn();
     }
 
     function renderCurrentTurn() {
       const q = questions.find(item => item.id === session.currentId) || questions[0];
-      const activePlayer = session.currentTurn === 0 ? session.p1 : session.p2;
+      const isP1 = (gameMode === "both") 
+        ? (session.bothStep === 1 ? session.currentTurn === 0 : session.currentTurn !== 0)
+        : (session.currentTurn === 0);
+      
+      const activePlayer = isP1 ? session.p1 : session.p2;
+
+      // Glow & Player Colors
+      if (isP1) {
+        playerGlowDot.className = "w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]";
+        turnText.innerHTML = `An der Reihe: <strong class="text-indigo-300 font-semibold">${activePlayer}</strong>`;
+      } else {
+        playerGlowDot.className = "w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(244,63,94,0.8)]";
+        turnText.innerHTML = `An der Reihe: <strong class="text-rose-300 font-semibold">${activePlayer}</strong>`;
+      }
 
       if (gameMode === "both") {
         bothModeStatus.classList.remove("hidden");
-        bothModeStatus.textContent = session.bothStep === 1 ? `1/2: ${activePlayer}` : `2/2: ${session.currentTurn === 0 ? session.p2 : session.p1}`;
-        turnIndicator.textContent = `An der Reihe: ${session.bothStep === 1 ? activePlayer : (session.currentTurn === 0 ? session.p2 : session.p1)}`;
-        document.getElementById("btn-save-next-label").textContent = session.bothStep === 1 ? `➔ Dann ${session.currentTurn === 0 ? session.p2 : session.p1}` : "➔ Weiter";
+        bothModeStatus.textContent = session.bothStep === 1 ? `1/2: ${activePlayer}` : `2/2: ${activePlayer}`;
+        document.getElementById("btn-save-next-label").textContent = session.bothStep === 1 ? `➔ Dann ${isP1 ? session.p2 : session.p1}` : "➔ Weiter";
       } else {
         bothModeStatus.classList.add("hidden");
-        turnIndicator.textContent = `An der Reihe: ${activePlayer}`;
         document.getElementById("btn-save-next-label").textContent = "➔";
       }
 
       questionLevelBadge.textContent = `Lvl ${q.level || '1'}`;
       questionCategory.textContent = q.category || 'Allgemein';
       questionText.textContent = `„${q.text}“`;
-      progressInfo.textContent = `${session.answeredCount + 1} / ${session.totalInSession}`;
+      
+      const currentNum = session.answeredCount + 1;
+      progressInfo.textContent = `${currentNum} / ${session.totalInSession}`;
+      
+      // Progress Bar Update
+      const pct = Math.min(100, Math.round((currentNum / session.totalInSession) * 100));
+      progressBarFill.style.width = `${pct}%`;
+
+      // Trigger Card Transition Animation
+      questionCard.classList.remove("card-animate");
+      void questionCard.offsetWidth; // Reflow
+      questionCard.classList.add("card-animate");
 
       document.getElementById("answer-transcript").value = "";
       document.getElementById("answer-summary").value = "";
@@ -831,12 +907,19 @@
     }
 
     document.getElementById("btn-skip").addEventListener("click", () => {
+      haptic(8);
+      stopActiveMediaStream();
       session.currentTurn = 1 - session.currentTurn;
       nextQuestion();
     });
 
-    // --- 7. AUDIO RECORDER & LIVE TIMER ---
-    let mediaRecorder, audioChunks = [], currentAudioBlob = null, isRecording = false, recognition;
+    // --- 7. AUDIO RECORDER (MIT ZERO STREAM LEAK & ACCURATE TIMER) ---
+    let activeMediaStream = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let currentAudioBlob = null;
+    let isRecording = false;
+    let recognition = null;
     let timerInterval = null, timerSeconds = 0;
 
     const btnRecord = document.getElementById("btn-record-voice");
@@ -847,18 +930,31 @@
     const answerTranscript = document.getElementById("answer-transcript");
     const answerSummary = document.getElementById("answer-summary");
 
+    // Sicherstellen, dass kein Mikrofon-Stream im Hintergrund weiterläuft
+    function stopActiveMediaStream() {
+      if (activeMediaStream) {
+        activeMediaStream.getTracks().forEach(t => {
+          try { t.stop(); } catch(e){}
+        });
+        activeMediaStream = null;
+      }
+    }
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
-      recognition = new SpeechRecognition();
-      recognition.lang = "de-DE";
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.onresult = (event) => {
-        let text = "";
-        for (let i = 0; i < event.results.length; i++) text += event.results[i][0].transcript + " ";
-        answerTranscript.value = text.trim();
-        generateBulletSummary(text.trim());
-      };
+      try {
+        recognition = new SpeechRecognition();
+        recognition.lang = "de-DE";
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.onresult = (event) => {
+          let text = "";
+          for (let i = 0; i < event.results.length; i++) text += event.results[i][0].transcript + " ";
+          answerTranscript.value = text.trim();
+          generateBulletSummary(text.trim());
+        };
+        recognition.onerror = () => {};
+      } catch(e) {}
     }
 
     function generateBulletSummary(rawText) {
@@ -869,7 +965,10 @@
       }
     }
 
-    document.getElementById("btn-re-summarize").addEventListener("click", () => generateBulletSummary(answerTranscript.value));
+    document.getElementById("btn-re-summarize").addEventListener("click", () => {
+      haptic(5);
+      generateBulletSummary(answerTranscript.value);
+    });
 
     function startTimer() {
       timerSeconds = 0;
@@ -884,32 +983,44 @@
       }, 1000);
     }
 
-    function stopTimer() { clearInterval(timerInterval); }
+    function stopTimer() {
+      clearInterval(timerInterval);
+    }
 
     btnRecord.addEventListener("click", async () => {
+      haptic(12);
       if (!isRecording) {
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          mediaRecorder = new MediaRecorder(stream);
+          activeMediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(activeMediaStream);
           audioChunks = [];
-          mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+          
+          mediaRecorder.ondataavailable = (e) => {
+            if (e.data && e.data.size > 0) audioChunks.push(e.data);
+          };
+          
           mediaRecorder.onstop = () => {
             currentAudioBlob = new Blob(audioChunks, { type: "audio/webm" });
             audioPreview.src = URL.createObjectURL(currentAudioBlob);
             audioPreview.classList.remove("hidden");
+            stopActiveMediaStream(); // Stream sauber schließen!
           };
-          mediaRecorder.start();
+
+          mediaRecorder.start(250);
           if (recognition) { try { recognition.start(); } catch(e){} }
           startTimer();
           isRecording = true;
           recordBtnText.textContent = "Stoppen";
-          recordDot.className = "w-2 h-2 rounded-full bg-rose-500 animate-pulse";
+          recordDot.className = "w-2 h-2 rounded-full bg-rose-500 pulse-record";
         } catch (err) {
           alert("Mikrofon nicht erreichbar: " + err.message);
+          stopActiveMediaStream();
         }
       } else {
-        mediaRecorder.stop();
-        if (recognition) recognition.stop();
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+          mediaRecorder.stop();
+        }
+        if (recognition) { try { recognition.stop(); } catch(e){} }
         stopTimer();
         isRecording = false;
         recordBtnText.textContent = "Fertig";
@@ -920,15 +1031,14 @@
 
     // --- 8. ANTWORT SPEICHERN ---
     document.getElementById("btn-save-answer").addEventListener("click", () => {
+      haptic(15);
+      stopActiveMediaStream();
+
       const q = questions.find(item => item.id === session.currentId) || questions[0];
-      let answeringPlayer;
-      if (gameMode === "both") {
-        answeringPlayer = session.bothStep === 1 
-          ? (session.currentTurn === 0 ? session.p1 : session.p2)
-          : (session.currentTurn === 0 ? session.p2 : session.p1);
-      } else {
-        answeringPlayer = session.currentTurn === 0 ? session.p1 : session.p2;
-      }
+      const isP1 = (gameMode === "both") 
+        ? (session.bothStep === 1 ? session.currentTurn === 0 : session.currentTurn !== 0)
+        : (session.currentTurn === 0);
+      const answeringPlayer = isP1 ? session.p1 : session.p2;
 
       const transcript = answerTranscript.value.trim();
       const summary = answerSummary.value.trim();
@@ -960,9 +1070,10 @@
       saveState();
     });
 
-    // --- 9. ARCHIV & EXPORT ---
+    // --- 9. ARCHIV & AUDIO DOWNLOAD ---
     const modalArchive = document.getElementById("modal-archive");
     document.getElementById("btn-view-archive").addEventListener("click", () => {
+      haptic(8);
       renderArchive();
       modalArchive.classList.remove("hidden");
     });
@@ -987,19 +1098,37 @@
             <div><strong class="text-zinc-300">Stichpunkte:</strong><div class="whitespace-pre-line text-zinc-300 mt-0.5">${ans.summary}</div></div>
             <div class="pt-1 text-[11px] text-zinc-500 border-t border-zinc-800/60 mt-1"><strong>Transkript:</strong> ${ans.transcript}</div>
           </div>
-          ${ans.hasAudio ? `<div><button onclick="playSavedAudio('${ans.id}')" class="text-xs text-zinc-400 hover:underline">▶️ Sprachnachricht abspielen</button></div>` : ''}
+          ${ans.hasAudio ? `
+            <div class="flex items-center gap-3 pt-1">
+              <button type="button" onclick="playSavedAudio('${ans.id}')" class="text-xs text-indigo-400 hover:underline">▶️ Abspielen</button>
+              <button type="button" onclick="downloadSavedAudio('${ans.id}')" class="text-xs text-zinc-400 hover:text-white underline">⬇️ Audio speichern</button>
+            </div>
+          ` : ''}
         </div>
       `).join("");
     }
 
     window.playSavedAudio = function(id) {
+      haptic(8);
       getAudioBlob(id, (blob) => {
         if (!blob) return alert("Audioaufnahme nicht gefunden.");
         new Audio(URL.createObjectURL(blob)).play();
       });
     };
 
+    window.downloadSavedAudio = function(id) {
+      haptic(10);
+      getAudioBlob(id, (blob) => {
+        if (!blob) return alert("Audioaufnahme nicht gefunden.");
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `closer-voice-${id}.webm`;
+        a.click();
+      });
+    };
+
     document.getElementById("btn-export-json").addEventListener("click", () => {
+      haptic(10);
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ questions, savedAnswers }, null, 2));
       const a = document.createElement("a");
       a.href = dataStr;
@@ -1008,6 +1137,7 @@
     });
 
     document.getElementById("btn-export-summary").addEventListener("click", () => {
+      haptic(10);
       const win = window.open("", "_blank");
       win.document.write(`
         <html><head><title>Closer Session</title>
