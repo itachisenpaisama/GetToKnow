@@ -191,13 +191,13 @@
 
     </div>
 
-    <!-- Screen 3: Detaillierte Fragen-Auswahl (Session Filter & Eigene Fragen) -->
+    <!-- Screen 3: Detaillierte Fragen-Auswahl, Lösch-Option & Dropdown Kategorien -->
     <div id="modal-filter" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
       <div class="glass-surface w-full max-w-xl rounded-3xl p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
           <div>
             <h3 class="font-semibold text-sm text-zinc-200">Session-Auswahl & Fragen</h3>
-            <span class="text-[11px] text-zinc-400">Wähle Kategorien oder einzelne Fragen aus</span>
+            <span class="text-[11px] text-zinc-400">Wähle Kategorien oder einzelne Fragen aus / lösche Fragen</span>
           </div>
           <button id="btn-close-modal-filter" type="button" class="text-zinc-400 hover:text-white p-1 text-base">✕</button>
         </div>
@@ -217,14 +217,15 @@
           <span class="text-zinc-300 font-semibold text-xs" id="active-selection-count">110 / 110 aktiv</span>
         </div>
 
-        <!-- 3. Fragenliste mit Checkboxen -->
+        <!-- 3. Fragenliste mit Checkboxen und LÖSCHEN-Button -->
         <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="custom-questions-selector-list"></div>
 
-        <!-- 4. Neue Frage hinzufügen mit reparierter Auto-Kategorisierung -->
+        <!-- 4. Neue Frage mit KATEGORIE-DROPDOWN & "NEUE KATEGORIE" OPTION -->
         <div class="pt-2 border-t border-zinc-800 space-y-2">
           <span class="text-[11px] font-semibold text-zinc-300 block">➕ Neue eigene Frage hinzufügen</span>
           <input type="text" id="new-q-text" placeholder="Frage eingeben (wird automatisch eingestuft)..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-zinc-500">
           <div id="auto-detect-feedback" class="text-[10px] text-emerald-400 hidden">✨ Automatisch erkannt: Lvl 1 • Humor & Marotten</div>
+          
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block text-[10px] uppercase text-zinc-500 font-semibold mb-0.5">Stufe</label>
@@ -236,9 +237,18 @@
             </div>
             <div>
               <label class="block text-[10px] uppercase text-zinc-500 font-semibold mb-0.5">Kategorie</label>
-              <input type="text" id="new-q-cat" value="Allgemein" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-zinc-200">
+              <select id="new-q-cat-select" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-zinc-200">
+                <!-- Dynamisch befüllt mit allen Kategorien + "Neue Kategorie erstellen" -->
+              </select>
             </div>
           </div>
+
+          <!-- Freitextfeld für neue Kategorie (nur sichtbar wenn "Neue Kategorie..." gewählt ist) -->
+          <div id="custom-cat-input-wrapper" class="hidden">
+            <label class="block text-[10px] uppercase text-zinc-400 font-semibold mb-0.5">Name der neuen Kategorie:</label>
+            <input type="text" id="new-q-custom-cat" placeholder="z. B. Spontanes & Reisen" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-zinc-400">
+          </div>
+
           <button id="btn-add-new-q" type="button" class="w-full bg-white hover:bg-zinc-200 text-black rounded-xl text-xs font-semibold py-2 transition">
             Frage speichern & aktivieren
           </button>
@@ -273,7 +283,7 @@
   </footer>
 
   <script>
-    // --- 1. DEINE 110 HANDVERLESENEN FRAGEN (SAUBER KATEGORISIERT) ---
+    // --- 1. DEINE 110 FRAGEN ---
     const RAW_USER_QUESTIONS = [
       { t: "Welcher Song müsste als persönliche Erkennungsmusik ertönen, sobald du einen Raum betrittst?", l: "1", c: "Humor & Marotten" },
       { t: "Was ist deine absolut seltsamste Angewohnheit, wenn du vollkommen ungestört allein zu Hause bist?", l: "1", c: "Humor & Marotten" },
@@ -387,7 +397,6 @@
       { t: "Teile ein reales, ungelöstes Dilemma, das dich in den letzten Wochen innerlich beschäftigt hat, und frage mich, wie ich an deiner Stelle entscheiden würde.", l: "3", c: "Verletzlichkeit & Tiefe" }
     ];
 
-    // IDs zuweisen
     const DEFAULT_QUESTIONS = RAW_USER_QUESTIONS.map((q, i) => ({
       id: i + 1,
       text: q.t,
@@ -398,7 +407,7 @@
     // --- 2. INDEXED DB ---
     let db;
     try {
-      const req = indexedDB.open("CloserAppDB_v4", 1);
+      const req = indexedDB.open("CloserAppDB_v5", 1);
       req.onupgradeneeded = (e) => {
         db = e.target.result;
         if (!db.objectStoreNames.contains("recordings")) db.createObjectStore("recordings", { keyPath: "id" });
@@ -421,28 +430,30 @@
     }
 
     // --- 3. STATE ---
-    // Fragen neu befüllen
-    let questions = DEFAULT_QUESTIONS;
-    localStorage.setItem("closer_questions_v6", JSON.stringify(questions));
+    let stored = localStorage.getItem("closer_questions_v7");
+    let questions;
+    try {
+      questions = JSON.parse(stored);
+      if (!Array.isArray(questions) || questions.length === 0) questions = DEFAULT_QUESTIONS;
+    } catch(e) {
+      questions = DEFAULT_QUESTIONS;
+    }
 
-    // Ausgewählte Fragen-IDs für die Session (standardmäßig ALLE)
     let selectedQuestionIds = new Set(questions.map(q => q.id));
-
     let session = null;
     let savedAnswers = [];
-    try { savedAnswers = JSON.parse(localStorage.getItem("closer_answers_v6")) || []; } catch(e){}
+    try { savedAnswers = JSON.parse(localStorage.getItem("closer_answers_v7")) || []; } catch(e){}
     let currentActiveLevel = "all";
     let gameMode = "alternate";
 
-    // Alle eindeutigen Kategorien ermitteln
     function getAllCategories() {
       return Array.from(new Set(questions.map(q => q.category))).filter(Boolean);
     }
     let activeCategories = new Set(getAllCategories());
 
     function saveState() {
-      localStorage.setItem("closer_questions_v6", JSON.stringify(questions));
-      localStorage.setItem("closer_answers_v6", JSON.stringify(savedAnswers));
+      localStorage.setItem("closer_questions_v7", JSON.stringify(questions));
+      localStorage.setItem("closer_answers_v7", JSON.stringify(savedAnswers));
       updateCounts();
     }
 
@@ -455,7 +466,7 @@
       if (archiveEl) archiveEl.textContent = savedAnswers.length;
     }
 
-    // --- 4. SESSION FILTER & AUSWAHL MODAL ---
+    // --- 4. SESSION FILTER & LÖSCHEN ---
     const modalFilter = document.getElementById("modal-filter");
     document.getElementById("btn-open-filter-modal").addEventListener("click", openFilterModal);
     document.getElementById("btn-customize-session").addEventListener("click", openFilterModal);
@@ -463,6 +474,7 @@
 
     function openFilterModal() {
       renderCategoryChips();
+      populateCategoryDropdown();
       renderCustomSelectorList();
       modalFilter.classList.remove("hidden");
     }
@@ -483,11 +495,9 @@
     window.toggleCategoryFilter = function(cat) {
       if (activeCategories.has(cat)) {
         activeCategories.delete(cat);
-        // Fragen dieser Kategorie abwählen
         questions.filter(q => q.category === cat).forEach(q => selectedQuestionIds.delete(q.id));
       } else {
         activeCategories.add(cat);
-        // Fragen dieser Kategorie anwählen
         questions.filter(q => q.category === cat).forEach(q => selectedQuestionIds.add(q.id));
       }
       renderCategoryChips();
@@ -511,14 +521,20 @@
       updateCounts();
     });
 
+    // Fragenliste mit Checkbox & LÖSCHEN (Trash-Icon)
     function renderCustomSelectorList() {
       const container = document.getElementById("custom-questions-selector-list");
       document.getElementById("active-selection-count").textContent = `${selectedQuestionIds.size} / ${questions.length} aktiv`;
 
+      if (questions.length === 0) {
+        container.innerHTML = `<p class="text-xs text-zinc-500 text-center py-4">Keine Fragen vorhanden.</p>`;
+        return;
+      }
+
       container.innerHTML = questions.map(q => {
         const isChecked = selectedQuestionIds.has(q.id);
         return `
-          <div class="flex items-start gap-2.5 p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80 text-xs">
+          <div class="flex items-start gap-2.5 p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80 text-xs hover:border-zinc-700 transition">
             <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSingleQuestion(${q.id})" class="mt-1 w-3.5 h-3.5 rounded bg-zinc-800 accent-white cursor-pointer">
             <div class="flex-1 cursor-pointer" onclick="toggleSingleQuestion(${q.id})">
               <div class="flex items-center gap-1.5 text-[10px] text-zinc-500 mb-0.5">
@@ -528,25 +544,65 @@
               </div>
               <p class="text-zinc-200 leading-snug">${q.text}</p>
             </div>
+            <!-- LÖSCHEN BUTTON -->
+            <button type="button" onclick="deleteSingleQuestion(${q.id})" class="text-zinc-600 hover:text-rose-400 p-1 text-sm transition" title="Frage dauerhaft löschen">
+              🗑️
+            </button>
           </div>
         `;
       }).join("");
     }
 
     window.toggleSingleQuestion = function(id) {
-      if (selectedQuestionIds.has(id)) {
-        selectedQuestionIds.delete(id);
-      } else {
-        selectedQuestionIds.add(id);
-      }
+      if (selectedQuestionIds.has(id)) selectedQuestionIds.delete(id);
+      else selectedQuestionIds.add(id);
       renderCustomSelectorList();
       updateCounts();
     };
 
-    // --- 5. AUTOMATISCHE KATEGORISIERUNG (REPARIERT & SOFORT SICHTBAR) ---
+    window.deleteSingleQuestion = function(id) {
+      if (confirm("Möchtest du diese Frage wirklich dauerhaft löschen?")) {
+        questions = questions.filter(q => q.id !== id);
+        selectedQuestionIds.delete(id);
+        saveState();
+        renderCategoryChips();
+        populateCategoryDropdown();
+        renderCustomSelectorList();
+        updateCounts();
+      }
+    };
+
+    // --- 5. KATEGORIE DROPDOWN & NEUE KATEGORIE OPTION ---
+    const catSelect = document.getElementById("new-q-cat-select");
+    const customCatWrapper = document.getElementById("custom-cat-input-wrapper");
+    const customCatInput = document.getElementById("new-q-custom-cat");
+
+    function populateCategoryDropdown(preferredCat = "") {
+      const cats = getAllCategories();
+      let html = cats.map(c => `<option value="${c}" ${c === preferredCat ? 'selected' : ''}>${c}</option>`).join("");
+      html += `<option value="__NEW__" class="font-semibold text-rose-400">➕ Neue Kategorie erstellen...</option>`;
+      catSelect.innerHTML = html;
+
+      // Wrapper anzeigen falls __NEW__
+      if (catSelect.value === "__NEW__") {
+        customCatWrapper.classList.remove("hidden");
+      } else {
+        customCatWrapper.classList.add("hidden");
+      }
+    }
+
+    catSelect.addEventListener("change", () => {
+      if (catSelect.value === "__NEW__") {
+        customCatWrapper.classList.remove("hidden");
+        customCatInput.focus();
+      } else {
+        customCatWrapper.classList.add("hidden");
+      }
+    });
+
+    // Auto-Kategorisierung beim Tippen & Einfügen
     const newQTextInput = document.getElementById("new-q-text");
     const newQLevelSelect = document.getElementById("new-q-level");
-    const newQCatInput = document.getElementById("new-q-cat");
     const autoFeedback = document.getElementById("auto-detect-feedback");
 
     function analyzeQuestionText(raw) {
@@ -559,20 +615,15 @@
       let detectedLvl = "2";
       let detectedCat = "Reflexion & Werte";
 
-      // Level 3 Patterns: Tiefe Verletzlichkeit, Wunden, Beziehungsängste, Tränen
       if (t.match(/angst|weinen|geweint|tod|sterben|trauma|verletzt|narbe|schmerz|scham|schämen|bereuen|elter|verlust|tabu|einsam|schutzlos|verwundbar|dilemma|liebesbeziehung|partner|vertrauen/)) {
         detectedLvl = "3";
         if (t.match(/partner|liebe|beziehung|nähe/)) detectedCat = "Liebe & Beziehungen";
         else detectedCat = "Verletzlichkeit & Tiefe";
-      }
-      // Level 1 Patterns: Humor, Marotten, Comedy, Spass, Essen, Guilty Pleasure, Verschwörung
-      else if (t.match(/song|raum|marotte|angewohnheit|verschwörung|ratschlag|haustier|guilty|pleasure|aufregen|missgeschick|meister|jugend|kauf|essen|lüge|kind|bösewicht|talent|gericht|serie|comedy|sport|olymp|party/)) {
+      } else if (t.match(/song|raum|marotte|angewohnheit|verschwörung|ratschlag|haustier|guilty|pleasure|aufregen|missgeschick|meister|jugend|kauf|essen|lüge|kind|bösewicht|talent|gericht|serie|comedy|sport|olymp|party/)) {
         detectedLvl = "1";
         if (t.match(/essen|gericht|geschmack|kauf|sonntag|aufregen/)) detectedCat = "Alltag & Gewohnheiten";
         else detectedCat = "Humor & Marotten";
-      }
-      // Level 2 Patterns: Ethik, Gedankenspiele, Identität, Philosophie
-      else if (t.match(/kristallkugel|wahrheit|lügen|zeitmaschine|zukunft|insel|mysterium|gesetz|dinner|philosoph|buch|kultur|reise|weltbild|batterie|notfall|stadt|ordnung|projekt/)) {
+      } else if (t.match(/kristallkugel|wahrheit|lügen|zeitmaschine|zukunft|insel|mysterium|gesetz|dinner|philosoph|buch|kultur|reise|weltbild|batterie|notfall|stadt|ordnung|projekt/)) {
         detectedLvl = "2";
         if (t.match(/kristallkugel|zeitmaschine|gedanken|mysterium|gesetz|morgen|insel|90 jahre/)) detectedCat = "Gedankenspiele & Ethik";
         else if (t.match(/reise|sonntag|buch|stadt|ordnung|beruf|batterie/)) detectedCat = "Identität & Alltag";
@@ -580,32 +631,45 @@
       }
 
       newQLevelSelect.value = detectedLvl;
-      newQCatInput.value = detectedCat;
+      
+      // Im Dropdown auswählen falls vorhanden, sonst als neue Kategorie
+      const existingOptions = Array.from(catSelect.options).map(o => o.value);
+      if (existingOptions.includes(detectedCat)) {
+        catSelect.value = detectedCat;
+        customCatWrapper.classList.add("hidden");
+      }
+
       autoFeedback.textContent = `✨ Erkannt: Lvl ${detectedLvl} • ${detectedCat}`;
       autoFeedback.classList.remove("hidden");
     }
 
     newQTextInput.addEventListener("input", (e) => analyzeQuestionText(e.target.value));
-    newQTextInput.addEventListener("paste", (e) => {
-      setTimeout(() => analyzeQuestionText(newQTextInput.value), 50);
-    });
+    newQTextInput.addEventListener("paste", () => setTimeout(() => analyzeQuestionText(newQTextInput.value), 50));
 
+    // Neue Frage speichern
     document.getElementById("btn-add-new-q").addEventListener("click", () => {
       const text = newQTextInput.value.trim();
       const level = newQLevelSelect.value;
-      const cat = newQCatInput.value.trim() || "Eigene Frage";
+      
+      let finalCat = catSelect.value;
+      if (finalCat === "__NEW__") {
+        finalCat = customCatInput.value.trim() || "Eigene Kategorie";
+      }
       if (!text) return;
 
       const newId = Date.now();
-      const newQuestion = { id: newId, text, level, category: cat };
+      const newQuestion = { id: newId, text, level, category: finalCat };
       questions.unshift(newQuestion);
       selectedQuestionIds.add(newId);
-      activeCategories.add(cat);
+      activeCategories.add(finalCat);
 
       newQTextInput.value = "";
+      customCatInput.value = "";
       autoFeedback.classList.add("hidden");
+      
       saveState();
       renderCategoryChips();
+      populateCategoryDropdown(finalCat);
       renderCustomSelectorList();
       updateCounts();
     });
@@ -631,7 +695,6 @@
         btn.classList.add("border-zinc-400", "text-white");
         currentActiveLevel = btn.dataset.level;
 
-        // Auto-Filter ausgewählte Fragen nach Level
         selectedQuestionIds.clear();
         questions.forEach(q => {
           if (currentActiveLevel === "all" || q.level === currentActiveLevel) {
@@ -694,7 +757,7 @@
         pool = pool.filter(q => q.level === currentActiveLevel);
       }
       if (pool.length === 0) {
-        alert("Keine Fragen für diese Auswahl aktiv. Bitte wähle Fragen in der '⚙️ Auswahl' an!");
+        alert("Keine Fragen aktiv. Bitte wähle Fragen in der '⚙️ Auswahl' an!");
         return;
       }
 
@@ -772,7 +835,7 @@
       nextQuestion();
     });
 
-    // --- 7. AUDIO RECORDER & LIVE-TIMER ---
+    // --- 7. AUDIO RECORDER & LIVE TIMER ---
     let mediaRecorder, audioChunks = [], currentAudioBlob = null, isRecording = false, recognition;
     let timerInterval = null, timerSeconds = 0;
 
