@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Zweites Date – Deep Talk & Erinnerungen</title>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="2nd Date">
+<link rel="apple-touch-icon" href="https://fav.farm/🍷">
+<link rel="icon" href="https://fav.farm/🍷">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at 50% 10%, #1e1b4b 0%, #09090b 100%);
+      min-height: 100vh;
+      color: #f4f4f5;
+    }
+    .font-serif-date {
+      font-family: 'Playfair Display', serif;
+    }
+    .glass-card {
+      background: rgba(24, 24, 27, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .pulse-record {
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.08); }
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-between p-4 sm:p-6 select-none">
+
+  <!-- Header -->
+  <header class="w-full max-w-xl flex items-center justify-between py-2 border-b border-zinc-800">
+    <div class="flex items-center gap-2">
+      <span class="text-xl">✨</span>
+      <h1 class="font-serif-date text-lg tracking-wide text-rose-300">Connection Deck</h1>
+    </div>
+    <div class="flex gap-2">
+      <button id="btn-manage-questions" class="px-3 py-1 text-xs rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition">
+        ➕ Fragen (<span id="count-total-questions">0</span>)
+      </button>
+      <button id="btn-view-archive" class="px-3 py-1 text-xs rounded-full bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-800/40 transition">
+        📖 Date-Memory (<span id="count-answers">0</span>)
+      </button>
+    </div>
+  </header>
+
+  <!-- Haupt-Container -->
+  <main class="w-full max-w-xl my-auto py-6">
+
+    <!-- Screen 1: Setup / Willkommen -->
+    <div id="screen-setup" class="glass-card rounded-3xl p-6 sm:p-8 shadow-2xl text-center">
+      <div class="w-16 h-16 mx-auto rounded-full bg-rose-500/10 flex items-center justify-center text-3xl mb-4 border border-rose-500/20">
+        🍷
+      </div>
+      <h2 class="font-serif-date text-2xl sm:text-3xl text-zinc-100 mb-2">Unser 2. Date</h2>
+      <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
+        Echte Fragen, die verbinden. Abwechselnd, ehrlich und ohne Ablenkung.
+      </p>
+
+      <div class="space-y-4 mb-6 text-left">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-zinc-400 mb-1 font-semibold">Person 1</label>
+          <input type="text" id="input-p1" value="Ich" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-100 focus:outline-none focus:border-rose-500 transition">
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-zinc-400 mb-1 font-semibold">Person 2</label>
+          <input type="text" id="input-p2" value="Du" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-100 focus:outline-none focus:border-rose-500 transition">
+        </div>
+      </div>
+
+      <button id="btn-start-game" class="w-full bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-500 hover:to-indigo-500 text-white font-medium py-3.5 px-6 rounded-xl shadow-lg transition-all transform active:scale-95">
+        Session beginnen ✨
+      </button>
+      <button id="btn-resume-game" class="hidden w-full mt-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-medium py-2.5 px-6 rounded-xl transition">
+        Vorherige Session fortsetzen ⏸️
+      </button>
+    </div>
+
+    <!-- Screen 2: Aktive Frage -->
+    <div id="screen-game" class="hidden space-y-4">
+      
+      <!-- Status & Pause Bar -->
+      <div class="flex items-center justify-between text-xs text-zinc-400 px-2">
+        <span id="turn-indicator" class="font-medium text-rose-400 bg-rose-950/60 px-3 py-1 rounded-full border border-rose-800/30">
+          Am Zug: ...
+        </span>
+        <div class="flex items-center gap-3">
+          <span id="progress-info">Frage 1 von 30</span>
+          <button id="btn-pause" class="hover:text-zinc-200 transition">⏸️ Pause</button>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="glass-card rounded-3xl p-6 sm:p-8 min-h-[220px] flex flex-col justify-between shadow-2xl relative overflow-hidden">
+        <div class="text-xs uppercase tracking-widest text-zinc-500 font-semibold mb-2" id="question-category">
+          Kategorie: Deep Talk
+        </div>
+        <div id="question-text" class="font-serif-date text-xl sm:text-2xl text-zinc-100 my-auto py-4 leading-snug">
+          Lade Frage...
+        </div>
+        <div class="flex justify-between items-center text-xs text-zinc-500 pt-2 border-t border-zinc-800/60">
+          <span>Keine Wiederholungen</span>
+          <button id="btn-skip" class="text-zinc-400 hover:text-zinc-200">Überspringen ⏩</button>
+        </div>
+      </div>
+
+      <!-- Voice Recording & Transcript Section -->
+      <div class="glass-card rounded-2xl p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-semibold text-zinc-200">Sprachnachricht & Notiz</span>
+            <span id="recording-time" class="hidden text-xs text-rose-400 font-mono">00:00</span>
+          </div>
+          <div class="flex gap-2">
+            <button id="btn-record-voice" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-rose-600 hover:bg-rose-500 text-white flex items-center gap-1.5 transition">
+              <span id="record-dot" class="w-2 h-2 rounded-full bg-white"></span>
+              <span id="record-btn-text">Aufnehmen</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Audio Player Preview (wenn aufgenommen) -->
+        <audio id="audio-preview" controls class="hidden w-full h-8 mt-2"></audio>
+
+        <!-- Transkript & Stichpunkte -->
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1">Live-Transkript / Wichtige Stichpunkte:</label>
+          <textarea id="answer-notes" rows="3" placeholder="Wird beim Sprechen automatisch transkribiert oder kann manuell notiert werden..." class="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-rose-500"></textarea>
+        </div>
+
+        <button id="btn-save-answer" class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 py-3 rounded-xl font-medium text-sm transition">
+          Antwort sichern & Nächste Frage ➔
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Screen 3: Eigene Fragen Hinzufügen (Modal) -->
+    <div id="modal-questions" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="glass-card w-full max-w-lg rounded-2xl p-6 space-y-4 max-h-[85vh] flex flex-col">
+        <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
+          <h3 class="font-semibold text-zinc-100">Fragenpool anpassen</h3>
+          <button id="btn-close-modal-q" class="text-zinc-400 hover:text-white">✕</button>
+        </div>
+        <div class="space-y-2">
+          <input type="text" id="new-q-text" placeholder="Neue Frage eingeben..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-rose-500">
+          <div class="flex gap-2">
+            <input type="text" id="new-q-cat" placeholder="Kategorie (z. B. Deep Talk, Lustig)" class="w-2/3 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-zinc-300">
+            <button id="btn-add-q" class="w-1/3 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-semibold py-2">Hinzufügen</button>
+          </div>
+        </div>
+        <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="questions-list-render">
+          <!-- Dynamische Liste -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 4: Date-Memory / Export Modal -->
+    <div id="modal-archive" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="glass-card w-full max-w-xl rounded-2xl p-6 space-y-4 max-h-[85vh] flex flex-col">
+        <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
+          <h3 class="font-serif-date text-lg text-rose-300">Unsere Date-Erinnerungen</h3>
+          <button id="btn-close-modal-archive" class="text-zinc-400 hover:text-white">✕</button>
+        </div>
+        <div id="archive-list-render" class="flex-1 overflow-y-auto space-y-3 pr-1 text-sm">
+          <!-- Gespeicherte Antworten -->
+        </div>
+        <div class="flex gap-2 pt-2 border-t border-zinc-800">
+          <button id="btn-export-json" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition">
+            💾 Als JSON speichern
+          </button>
+          <button id="btn-export-summary" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white text-xs py-2.5 rounded-xl font-medium transition">
+            📄 Date-Zusammenfassung (Drucken/PDF)
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-xs text-zinc-600 py-2">
+    100% lokal & privat auf deinem Gerät gespeichert.
+  </footer>
+
+  <!-- IndexedDB & App Logik -->
+  <script>
+    // --- 1. DEFAULT PLACEHOLDER FRAGEN ---
+    const DEFAULT_QUESTIONS = [
+      { id: 1, text: "Was war der schönste Moment deiner letzten Woche?", category: "Eisbrecher" },
+      { id: 2, text: "Welches Buch, Film oder Gespräch hat deine Sicht auf die Welt nachhaltig verändert?", category: "Deep Talk" },
+      { id: 3, text: "Was ist dir in einer Beziehung am wichtigsten, worüber die meisten Leute zu wenig reden?", category: "Werte & Liebe" },
+      { id: 4, text: "Welche Eigenschaft an dir verstehen Menschen oft erst auf den zweiten Blick?", category: "Selbstreflexion" },
+      { id: 5, text: "Wenn du morgen früh aufwachen könntest und eine neue Fähigkeit hättest – welche wäre es?", category: "Träume" },
+      { id: 6, text: "Wovor hattest du als Kind am meisten Angst und worüber lachst du heute?", category: "Kindheit" },
+      { id: 7, text: "Was bringt dich innerhalb von Sekunden zum Lächeln, egal wie dein Tag war?", category: "Herzenssache" },
+      { id: 8, text: "Gibt es etwas, das du schon lange tun wolltest, dich aber noch nicht getraut hast?", category: "Mut" },
+      { id: 9, text: "Wie sieht für dich ein perfekter freier Sonntag ohne Verpflichtungen aus?", category: "Alltag & Genuss" },
+      { id: 10, text: "Welchen Ratschlag würdest du deinem 18-jährigen Ich heute mitgeben?", category: "Lebensweisheit" }
+    ];
+
+    // --- 2. INDEXED DB FÜR AUDIO-SPEICHERUNG ---
+    let db;
+    const req = indexedDB.open("DateAppDB", 1);
+    req.onupgradeneeded = (e) => {
+      db = e.target.result;
+      if (!db.objectStoreNames.contains("recordings")) {
+        db.createObjectStore("recordings", { keyPath: "id" });
+      }
+    };
+    req.onsuccess = (e) => { db = e.target.result; };
+
+    function saveAudioBlob(id, blob) {
+      if (!db) return;
+      const tx = db.transaction("recordings", "readwrite");
+      tx.objectStore("recordings").put({ id, blob });
+    }
+
+    function getAudioBlob(id, callback) {
+      if (!db) return;
+      const tx = db.transaction("recordings", "readonly");
+      const request = tx.objectStore("recordings").get(id);
+      request.onsuccess = () => callback(request.result?.blob);
+    }
+
+    // --- 3. STATE MANAGEMENT ---
+    let questions = JSON.parse(localStorage.getItem("date_questions")) || DEFAULT_QUESTIONS;
+    let session = JSON.parse(localStorage.getItem("date_session")) || null;
+    let savedAnswers = JSON.parse(localStorage.getItem("date_answers")) || [];
+
+    function saveState() {
+      localStorage.setItem("date_questions", JSON.stringify(questions));
+      localStorage.setItem("date_session", JSON.stringify(session));
+      localStorage.setItem("date_answers", JSON.stringify(savedAnswers));
+      updateCounts();
+    }
+
+    function updateCounts() {
+      document.getElementById("count-total-questions").textContent = questions.length;
+      document.getElementById("count-answers").textContent = savedAnswers.length;
+    }
+
+    // --- 4. GAME FLOW ---
+    const screenSetup = document.getElementById("screen-setup");
+    const screenGame = document.getElementById("screen-game");
+    const inputP1 = document.getElementById("input-p1");
+    const inputP2 = document.getElementById("input-p2");
+    const btnStart = document.getElementById("btn-start-game");
+    const btnResume = document.getElementById("btn-resume-game");
+    const turnIndicator = document.getElementById("turn-indicator");
+    const progressInfo = document.getElementById("progress-info");
+    const questionText = document.getElementById("question-text");
+    const questionCategory = document.getElementById("question-category");
+
+    if (session && session.remainingIndices.length > 0) {
+      btnResume.classList.remove("hidden");
+    }
+
+    btnStart.addEventListener("click", () => {
+      const p1 = inputP1.value.trim() || "Person 1";
+      const p2 = inputP2.value.trim() || "Person 2";
+      
+      // Shuffle Frage-Indizes
+      const indices = questions.map((_, i) => i).sort(() => Math.random() - 0.5);
+
+      session = {
+        p1, p2,
+        currentTurn: 0, // 0 = p1, 1 = p2
+        remainingIndices: indices,
+        currentIndex: null,
+        totalInSession: questions.length,
+        answeredCount: 0
+      };
+      saveState();
+      startGameView();
+      nextQuestion();
+    });
+
+    btnResume.addEventListener("click", () => {
+      startGameView();
+      renderCurrentQuestion();
+    });
+
+    document.getElementById("btn-pause").addEventListener("click", () => {
+      screenGame.classList.add("hidden");
+      screenSetup.classList.remove("hidden");
+      btnResume.classList.remove("hidden");
+    });
+
+    function startGameView() {
+      screenSetup.classList.add("hidden");
+      screenGame.classList.remove("hidden");
+    }
+
+    function nextQuestion() {
+      if (session.remainingIndices.length === 0) {
+        alert("Glückwunsch! Ihr habt alle Fragen durchgespielt!");
+        return;
+      }
+      session.currentIndex = session.remainingIndices.pop();
+      saveState();
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const q = questions[session.currentIndex];
+      const activePlayer = session.currentTurn === 0 ? session.p1 : session.p2;
+      
+      turnIndicator.textContent = `🎤 Jetzt antwortet: ${activePlayer}`;
+      questionCategory.textContent = `Kategorie: ${q.category || 'Allgemein'}`;
+      questionText.textContent = `„${q.text}“`;
+      progressInfo.textContent = `Frage ${session.answeredCount + 1} von ${session.totalInSession}`;
+
+      // Reset Input
+      document.getElementById("answer-notes").value = "";
+      document.getElementById("audio-preview").classList.add("hidden");
+      currentAudioBlob = null;
+    }
+
+    document.getElementById("btn-skip").addEventListener("click", () => {
+      session.currentTurn = 1 - session.currentTurn;
+      nextQuestion();
+    });
+
+    // --- 5. VOICE RECORDING & TRANSCRIPT (Web Audio & SpeechRecognition) ---
+    let mediaRecorder;
+    let audioChunks = [];
+    let currentAudioBlob = null;
+    let isRecording = false;
+    let recognition;
+
+    const btnRecord = document.getElementById("btn-record-voice");
+    const recordBtnText = document.getElementById("record-btn-text");
+    const recordDot = document.getElementById("record-dot");
+    const recordingTime = document.getElementById("recording-time");
+    const audioPreview = document.getElementById("audio-preview");
+    const answerNotes = document.getElementById("answer-notes");
+
+    // Spracherkennung initialisieren (Web Speech API)
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = "de-DE";
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
+      recognition.onresult = (event) => {
+        let transcript = "";
+        for (let i = 0; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript + " ";
+        }
+        answerNotes.value = transcript.trim();
+      };
+    }
+
+    btnRecord.addEventListener("click", async () => {
+      if (!isRecording) {
+        // Start Recording
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+
+          mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+          mediaRecorder.onstop = () => {
+            currentAudioBlob = new Blob(audioChunks, { type: "audio/webm" });
+            const audioUrl = URL.createObjectURL(currentAudioBlob);
+            audioPreview.src = audioUrl;
+            audioPreview.classList.remove("hidden");
+          };
+
+          mediaRecorder.start();
+          if (recognition) recognition.start();
+
+          isRecording = true;
+          recordBtnText.textContent = "Stoppen";
+          recordDot.classList.add("pulse-record", "bg-rose-400");
+          recordingTime.classList.remove("hidden");
+        } catch (err) {
+          alert("Mikrofon-Zugriff verweigert oder nicht verfügbar: " + err.message);
+        }
+      } else {
+        // Stop Recording
+        mediaRecorder.stop();
+        if (recognition) recognition.stop();
+        isRecording = false;
+        recordBtnText.textContent = "Aufnahme bereit";
+        recordDot.classList.remove("pulse-record", "bg-rose-400");
+        recordingTime.classList.add("hidden");
+      }
+    });
+
+    // --- 6. ANTWORT SPEICHERN ---
+    document.getElementById("btn-save-answer").addEventListener("click", () => {
+      const q = questions[session.currentIndex];
+      const activePlayer = session.currentTurn === 0 ? session.p1 : session.p2;
+      const notes = answerNotes.value.trim();
+      const answerId = "ans_" + Date.now();
+
+      if (currentAudioBlob) {
+        saveAudioBlob(answerId, currentAudioBlob);
+      }
+
+      savedAnswers.push({
+        id: answerId,
+        question: q.text,
+        category: q.category,
+        player: activePlayer,
+        notes: notes || "Keine Notiz erfasst",
+        hasAudio: !!currentAudioBlob,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      session.answeredCount++;
+      session.currentTurn = 1 - session.currentTurn; // Wechseln
+      saveState();
+      nextQuestion();
+    });
+
+    // --- 7. FRAGEN VERWALTEN (MODAL) ---
+    const modalQuestions = document.getElementById("modal-questions");
+    document.getElementById("btn-manage-questions").addEventListener("click", () => {
+      renderQuestionsList();
+      modalQuestions.classList.remove("hidden");
+    });
+    document.getElementById("btn-close-modal-q").addEventListener("click", () => {
+      modalQuestions.classList.add("hidden");
+    });
+
+    document.getElementById("btn-add-q").addEventListener("click", () => {
+      const text = document.getElementById("new-q-text").value.trim();
+      const cat = document.getElementById("new-q-cat").value.trim() || "Eigene Frage";
+      if (!text) return;
+
+      questions.push({ id: Date.now(), text, category: cat });
+      document.getElementById("new-q-text").value = "";
+      document.getElementById("new-q-cat").value = "";
+      saveState();
+      renderQuestionsList();
+    });
+
+    function renderQuestionsList() {
+      const container = document.getElementById("questions-list-render");
+      container.innerHTML = questions.map((q, idx) => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800 text-xs">
+          <div class="flex-1 pr-2">
+            <span class="text-rose-400 font-medium">[${q.category}]</span>
+            <span class="text-zinc-200 ml-1">${q.text}</span>
+          </div>
+          <button onclick="deleteQuestion(${idx})" class="text-zinc-500 hover:text-rose-400 transition">✕</button>
+        </div>
+      `).join("");
+    }
+
+    window.deleteQuestion = function(idx) {
+      questions.splice(idx, 1);
+      saveState();
+      renderQuestionsList();
+    };
+
+    // --- 8. DATE MEMORY & EXPORT ---
+    const modalArchive = document.getElementById("modal-archive");
+    document.getElementById("btn-view-archive").addEventListener("click", () => {
+      renderArchive();
+      modalArchive.classList.remove("hidden");
+    });
+    document.getElementById("btn-close-modal-archive").addEventListener("click", () => {
+      modalArchive.classList.add("hidden");
+    });
+
+    function renderArchive() {
+      const container = document.getElementById("archive-list-render");
+      if (savedAnswers.length === 0) {
+        container.innerHTML = "<p class='text-zinc-500 text-center py-6'>Noch keine Antworten in dieser Session gespeichert.</p>";
+        return;
+      }
+      container.innerHTML = savedAnswers.map(ans => `
+        <div class="p-3.5 rounded-xl bg-zinc-900/80 border border-zinc-800 space-y-1">
+          <div class="flex justify-between text-xs text-zinc-400">
+            <span class="font-semibold text-rose-300">${ans.player}</span>
+            <span>${ans.timestamp}</span>
+          </div>
+          <div class="font-serif-date text-zinc-100 text-sm">„${ans.question}“</div>
+          <div class="text-zinc-300 text-xs bg-zinc-950/40 p-2 rounded-lg mt-1">
+            <strong>Kernaussage:</strong> ${ans.notes}
+          </div>
+          ${ans.hasAudio ? `<div class="pt-1"><button onclick="playSavedAudio('${ans.id}')" class="text-xs text-rose-400 hover:underline">▶️ Sprachnachricht anhören</button></div>` : ''}
+        </div>
+      `).join("");
+    }
+
+    window.playSavedAudio = function(id) {
+      getAudioBlob(id, (blob) => {
+        if (!blob) return alert("Audioaufnahme nicht gefunden.");
+        const url = URL.createObjectURL(blob);
+        new Audio(url).play();
+      });
+    };
+
+    document.getElementById("btn-export-json").addEventListener("click", () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ questions, savedAnswers }, null, 2));
+      const a = document.createElement("a");
+      a.href = dataStr;
+      a.download = `date-answers-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+    });
+
+    document.getElementById("btn-export-summary").addEventListener("click", () => {
+      const win = window.open("", "_blank");
+      win.document.write(`
+        <html><head><title>Date Zusammenfassung</title>
+        <style>body{font-family:sans-serif;padding:30px;max-width:700px;margin:auto;line-height:1.5;color:#222;} h1{color:#e11d48;} .card{border-bottom:1px solid #ddd;padding:12px 0;}</style>
+        </head><body>
+        <h1>Unser 2. Date – Erinnerungs-Zusammenfassung</h1>
+        <p>Datum: ${new Date().toLocaleDateString('de-DE')}</p>
+        <hr>
+        ${savedAnswers.map(a => `
+          <div class="card">
+            <p><strong>Frage:</strong> ${a.question}</p>
+            <p><strong>Antwort von:</strong> ${a.player} (${a.timestamp})</p>
+            <p><strong>Zusammenfassung / Notiz:</strong> ${a.notes}</p>
+          </div>
+        `).join("")}
+        <script>window.print();<\/script>
+        </body></html>
+      `);
+      win.document.close();
+    });
+
+    updateCounts();
+  </script>
+</body>
+</html>
