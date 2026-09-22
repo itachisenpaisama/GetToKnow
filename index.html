@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Closer – Meaningful Conversations</title>
+  <title>Closer</title>
 
   <!-- PWA & Mobile Standalone -->
   <link rel="manifest" href="manifest.json">
@@ -11,8 +11,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Closer">
-  <link rel="apple-touch-icon" href="https://fav.farm/✨">
-  <link rel="icon" href="https://fav.farm/✨">
+  <link rel="apple-touch-icon" href="https://fav.farm/✦">
+  <link rel="icon" href="https://fav.farm/✦">
 
   <!-- Tailwind CSS & Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -31,16 +31,9 @@
       font-family: 'Newsreader', serif;
     }
     .glass-surface {
-      background: rgba(18, 18, 20, 0.85);
+      background: rgba(18, 18, 20, 0.88);
       backdrop-filter: blur(24px);
       border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .recording-wave {
-      animation: wave 1.2s ease-in-out infinite;
-    }
-    @keyframes wave {
-      0%, 100% { transform: scaleY(0.4); }
-      50% { transform: scaleY(1); }
     }
   </style>
 </head>
@@ -49,15 +42,14 @@
   <!-- Minimal Header -->
   <header class="w-full flex items-center justify-between py-3 border-b border-zinc-800/80">
     <div class="flex items-center gap-2.5">
-      <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-      <span class="text-sm font-semibold tracking-wider uppercase text-zinc-200">Closer</span>
+      <span class="text-zinc-200 text-sm font-bold tracking-widest uppercase">✦ CLOSER</span>
     </div>
     <div class="flex items-center gap-2">
       <button id="btn-manage-questions" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200 transition">
         Fragen (<span id="count-total-questions">0</span>)
       </button>
       <button id="btn-view-archive" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200 transition">
-        Archive (<span id="count-answers">0</span>)
+        Archiv (<span id="count-answers">0</span>)
       </button>
     </div>
   </header>
@@ -68,9 +60,9 @@
     <!-- Screen 1: Setup / Start -->
     <div id="screen-setup" class="glass-surface rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
       <div class="space-y-1.5">
-        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Get closer.</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Closer</h1>
         <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-          Gespräche, die in die Tiefe gehen. Beantwortet Fragen abwechselnd oder gemeinsam.
+          Tiefe Fragen für zwei Personen. Abwechselnd oder gemeinsam beantworten.
         </p>
       </div>
 
@@ -86,21 +78,19 @@
         </div>
       </div>
 
-      <!-- Level Selection -->
+      <!-- Level Selection (Clean) -->
       <div class="space-y-2">
-        <label class="block text-[11px] font-medium tracking-wide uppercase text-zinc-500">Intensität</label>
-        <div class="grid grid-cols-3 gap-2 text-xs">
-          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium active-level" data-level="all">Alle Mixen</button>
-          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium" data-level="1">Lvl 1 • Easy</button>
-          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium" data-level="2">Lvl 2 • Deep</button>
+        <label class="block text-[11px] font-medium tracking-wide uppercase text-zinc-500">Stufe</label>
+        <div class="grid grid-cols-4 gap-2 text-xs">
+          <button type="button" class="level-btn py-2.5 rounded-xl bg-zinc-900 border border-zinc-400 text-white font-medium" data-level="all">Alle</button>
+          <button type="button" class="level-btn py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium" data-level="1">Lvl 1</button>
+          <button type="button" class="level-btn py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium" data-level="2">Lvl 2</button>
+          <button type="button" class="level-btn py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium" data-level="3">Lvl 3</button>
         </div>
-        <button type="button" class="level-btn w-full py-2.5 px-3 rounded-xl bg-zinc-900 border border-zinc-800 text-rose-400/90 font-medium text-xs" data-level="3">
-          Lvl 3 • Intim & Knistern
-        </button>
       </div>
 
       <button id="btn-start-game" class="w-full bg-white hover:bg-zinc-200 text-black font-semibold py-3.5 px-6 rounded-xl shadow-lg transition active:scale-[0.98]">
-        Session starten
+        Starten
       </button>
       <button id="btn-resume-game" class="hidden w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-medium py-3 rounded-xl transition text-xs">
         Session fortsetzen
@@ -118,12 +108,12 @@
           <span id="mode-label">Abwechselnd</span>
         </button>
 
-        <!-- Quick Level Pills -->
-        <div class="flex items-center gap-1 bg-zinc-900/90 border border-zinc-800 p-1 rounded-full text-[11px]">
-          <button id="lvl-badge-all" onclick="changeInGameLevel('all')" class="px-2 py-0.5 rounded-full text-zinc-400">All</button>
-          <button id="lvl-badge-1" onclick="changeInGameLevel('1')" class="px-2 py-0.5 rounded-full text-zinc-400">L1</button>
-          <button id="lvl-badge-2" onclick="changeInGameLevel('2')" class="px-2 py-0.5 rounded-full text-zinc-400">L2</button>
-          <button id="lvl-badge-3" onclick="changeInGameLevel('3')" class="px-2 py-0.5 rounded-full text-rose-400">L3</button>
+        <!-- Level Switcher -->
+        <div class="flex items-center gap-1 bg-zinc-900 border border-zinc-800 p-1 rounded-full text-[11px]">
+          <button id="lvl-badge-all" onclick="changeInGameLevel('all')" class="px-2 py-0.5 rounded-full text-zinc-400">Alle</button>
+          <button id="lvl-badge-1" onclick="changeInGameLevel('1')" class="px-2 py-0.5 rounded-full text-zinc-400">Lvl 1</button>
+          <button id="lvl-badge-2" onclick="changeInGameLevel('2')" class="px-2 py-0.5 rounded-full text-zinc-400">Lvl 2</button>
+          <button id="lvl-badge-3" onclick="changeInGameLevel('3')" class="px-2 py-0.5 rounded-full text-zinc-400">Lvl 3</button>
         </div>
 
         <button id="btn-pause" class="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-300 transition">⏸️</button>
@@ -135,7 +125,7 @@
           An der Reihe: ...
         </span>
         <div class="flex items-center gap-2">
-          <span id="both-mode-status" class="hidden text-[10px] uppercase font-semibold text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-900/40">Teil 1/2</span>
+          <span id="both-mode-status" class="hidden text-[10px] uppercase font-semibold text-zinc-300 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">Teil 1/2</span>
           <span id="progress-info" class="font-mono text-zinc-500">1 / 30</span>
         </div>
       </div>
@@ -143,7 +133,7 @@
       <!-- Clean Question Card -->
       <div class="glass-surface rounded-3xl p-6 sm:p-8 min-h-[200px] flex flex-col justify-between shadow-xl relative">
         <div class="flex items-center justify-between text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">
-          <span id="question-level-badge">Lvl 1 • Warm-up</span>
+          <span id="question-level-badge" class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">Lvl 1</span>
           <span id="question-category">Allgemein</span>
         </div>
 
@@ -159,11 +149,9 @@
 
       <!-- Voice & Notes Section -->
       <div class="glass-surface rounded-2xl p-5 space-y-4">
-        <!-- Voice Recorder Header -->
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
-            <span class="text-xs font-semibold text-zinc-300">Sprachnachricht</span>
-            <!-- Live Timer (Fixed!) -->
+            <span class="text-xs font-semibold text-zinc-300">Sprachaufnahme</span>
             <span id="recording-timer" class="hidden font-mono text-xs font-semibold text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-900/40">00:00</span>
           </div>
           <button id="btn-record-voice" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-200 flex items-center gap-2 border border-zinc-700/80 transition">
@@ -174,48 +162,61 @@
 
         <audio id="audio-preview" controls class="hidden w-full h-8"></audio>
 
-        <!-- 1. Full Transcript Field -->
         <div class="space-y-1">
-          <label class="block text-[11px] font-medium uppercase tracking-wider text-zinc-500">Vollständiges Transkript</label>
+          <label class="block text-[11px] font-medium uppercase tracking-wider text-zinc-500">Transkript</label>
           <textarea id="answer-transcript" rows="2" placeholder="Wird beim Sprechen automatisch transkribiert..." class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl p-3 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition"></textarea>
         </div>
 
-        <!-- 2. Bullet Summary Field -->
         <div class="space-y-1">
           <div class="flex justify-between items-center">
-            <label class="block text-[11px] font-medium uppercase tracking-wider text-zinc-500">Kernaussagen (Stichpunkte)</label>
-            <button id="btn-re-summarize" type="button" class="text-[10px] text-zinc-500 hover:text-zinc-300 underline">Neu zusammenfassen</button>
+            <label class="block text-[11px] font-medium uppercase tracking-wider text-zinc-500">Stichpunkte</label>
+            <button id="btn-re-summarize" type="button" class="text-[10px] text-zinc-500 hover:text-zinc-300 underline">Neu generieren</button>
           </div>
-          <textarea id="answer-summary" rows="2" placeholder="• Automatisch generierte Kernpunkte..." class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl p-3 text-xs text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition"></textarea>
+          <textarea id="answer-summary" rows="2" placeholder="• Wichtige Kernpunkte..." class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl p-3 text-xs text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition"></textarea>
         </div>
 
         <button id="btn-save-answer" class="w-full bg-zinc-100 hover:bg-white text-zinc-950 py-3 rounded-xl font-semibold text-xs transition flex items-center justify-center gap-2">
-          <span>Antwort sichern</span>
+          <span>Antwort speichern</span>
           <span id="btn-save-next-label">➔</span>
         </button>
       </div>
 
     </div>
 
-    <!-- Screen 3: Eigene Fragen Modal -->
+    <!-- Screen 3: Eigene Fragen Modal MIT AUTO-KATEGORISIERUNG -->
     <div id="modal-questions" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
       <div class="glass-surface w-full max-w-lg rounded-3xl p-6 space-y-4 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
-          <h3 class="font-semibold text-sm text-zinc-200">Fragenkatalog</h3>
+          <h3 class="font-semibold text-sm text-zinc-200">Fragen verwalten</h3>
           <button id="btn-close-modal-q" class="text-zinc-500 hover:text-white">✕</button>
         </div>
-        <div class="space-y-2">
-          <input type="text" id="new-q-text" placeholder="Eigene Frage eingeben..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-zinc-600">
-          <div class="grid grid-cols-2 gap-2">
-            <select id="new-q-level" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-300">
-              <option value="1">Level 1 (Easy)</option>
-              <option value="2">Level 2 (Deep)</option>
-              <option value="3">Level 3 (Intim)</option>
-            </select>
-            <input type="text" id="new-q-cat" placeholder="Kategorie (z. B. Humor)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-300">
+        
+        <div class="space-y-2 bg-zinc-900/60 p-3 rounded-2xl border border-zinc-800/80">
+          <div>
+            <input type="text" id="new-q-text" placeholder="Frage eingeben (wird automatisch eingestuft)..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-zinc-500">
+            <span id="auto-detected-hint" class="text-[10px] text-zinc-500 mt-1 block">💡 Automatisch zugewiesen, kann unten geändert werden:</span>
           </div>
-          <button id="btn-add-q" class="w-full bg-zinc-100 hover:bg-white text-zinc-950 rounded-xl text-xs font-semibold py-2 transition">Frage hinzufügen</button>
+          
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <div>
+              <label class="block text-[10px] uppercase text-zinc-500 font-semibold mb-1">Stufe</label>
+              <select id="new-q-level" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200">
+                <option value="1">Lvl 1</option>
+                <option value="2">Lvl 2</option>
+                <option value="3">Lvl 3</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] uppercase text-zinc-500 font-semibold mb-1">Kategorie</label>
+              <input type="text" id="new-q-cat" value="Allgemein" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200">
+            </div>
+          </div>
+          
+          <button id="btn-add-q" class="w-full mt-2 bg-zinc-100 hover:bg-white text-zinc-950 rounded-xl text-xs font-semibold py-2.5 transition">
+            Frage speichern
+          </button>
         </div>
+
         <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="questions-list-render"></div>
       </div>
     </div>
@@ -230,7 +231,7 @@
         <div id="archive-list-render" class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs"></div>
         <div class="flex gap-2 pt-2 border-t border-zinc-800">
           <button id="btn-export-json" class="flex-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition">
-            JSON Export
+            JSON
           </button>
           <button id="btn-export-summary" class="flex-1 bg-white hover:bg-zinc-200 text-zinc-950 text-xs py-2.5 rounded-xl font-semibold transition">
             Drucken / PDF
@@ -246,10 +247,10 @@
   </footer>
 
   <script>
-    // --- 1. KURATIERTER FRAGENKATALOG ---
+    // --- 1. DEFAULT FRAGENKATALOG (Lvl 1, Lvl 2, Lvl 3) ---
     const DEFAULT_QUESTIONS = [
       { id: 1, level: "1", category: "Eisbrecher", text: "Was war der spontanste Moment deiner letzten Woche?" },
-      { id: 2, level: "1", category: "Genuss", text: "Wohin ging die beste Reise deines Lebens und warum?" },
+      { id: 2, level: "1", category: "Reisen", text: "Wohin ging die beste Reise deines Lebens und warum?" },
       { id: 3, level: "1", category: "Humor", text: "Was ist dein heimlichstes Guilty Pleasure, für das du dich fast schämst?" },
       { id: 4, level: "1", category: "Alltag", text: "Wie sieht für dich der ideale freie Sonntag ohne Verpflichtungen aus?" },
       { id: 5, level: "2", category: "Charakter", text: "Welche Eigenschaft an dir verstehen Menschen oft erst auf den zweiten Blick?" },
@@ -262,9 +263,9 @@
       { id: 12, level: "3", category: "Knistern", text: "Was wolltest du mich schon die ganze Zeit fragen, hast dich aber noch nicht getraut?" }
     ];
 
-    // --- 2. INDEXED DB FÜR AUDIO ---
+    // --- 2. INDEXED DB ---
     let db;
-    const req = indexedDB.open("CloserAppDB_v1", 1);
+    const req = indexedDB.open("CloserAppDB_v2", 1);
     req.onupgradeneeded = (e) => {
       db = e.target.result;
       if (!db.objectStoreNames.contains("recordings")) {
@@ -287,18 +288,18 @@
     }
 
     // --- 3. STATE ---
-    let questions = JSON.parse(localStorage.getItem("closer_questions")) || DEFAULT_QUESTIONS;
-    let session = JSON.parse(localStorage.getItem("closer_session")) || null;
-    let savedAnswers = JSON.parse(localStorage.getItem("closer_answers")) || [];
-    let currentActiveLevel = localStorage.getItem("closer_lvl") || "all";
-    let gameMode = localStorage.getItem("closer_mode") || "alternate";
+    let questions = JSON.parse(localStorage.getItem("closer_questions_v4")) || DEFAULT_QUESTIONS;
+    let session = JSON.parse(localStorage.getItem("closer_session_v4")) || null;
+    let savedAnswers = JSON.parse(localStorage.getItem("closer_answers_v4")) || [];
+    let currentActiveLevel = localStorage.getItem("closer_lvl_v4") || "all";
+    let gameMode = localStorage.getItem("closer_mode_v4") || "alternate";
 
     function saveState() {
-      localStorage.setItem("closer_questions", JSON.stringify(questions));
-      localStorage.setItem("closer_session", JSON.stringify(session));
-      localStorage.setItem("closer_answers", JSON.stringify(savedAnswers));
-      localStorage.setItem("closer_lvl", currentActiveLevel);
-      localStorage.setItem("closer_mode", gameMode);
+      localStorage.setItem("closer_questions_v4", JSON.stringify(questions));
+      localStorage.setItem("closer_session_v4", JSON.stringify(session));
+      localStorage.setItem("closer_answers_v4", JSON.stringify(savedAnswers));
+      localStorage.setItem("closer_lvl_v4", currentActiveLevel);
+      localStorage.setItem("closer_mode_v4", gameMode);
       updateCounts();
     }
 
@@ -307,7 +308,7 @@
       document.getElementById("count-answers").textContent = savedAnswers.length;
     }
 
-    // Level Auswahl Setup
+    // Level Buttons im Setup
     document.querySelectorAll(".level-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".level-btn").forEach(b => {
@@ -353,7 +354,7 @@
 
     function renderModeUI() {
       if (gameMode === "both") {
-        modeLabel.textContent = "Beide antworten";
+        modeLabel.textContent = "Beide";
         modeDot.className = "w-1.5 h-1.5 rounded-full bg-rose-400";
       } else {
         modeLabel.textContent = "Abwechselnd";
@@ -454,13 +455,11 @@
         document.getElementById("btn-save-next-label").textContent = "➔";
       }
 
-      const lvlNames = { "1": "Lvl 1 • Easy", "2": "Lvl 2 • Deep", "3": "Lvl 3 • Intim" };
-      questionLevelBadge.textContent = lvlNames[q.level] || `Lvl ${q.level}`;
+      questionLevelBadge.textContent = `Lvl ${q.level}`;
       questionCategory.textContent = q.category || 'Allgemein';
       questionText.textContent = `„${q.text}“`;
       progressInfo.textContent = `${session.answeredCount + 1} / ${session.totalInSession}`;
 
-      // Reset Inputs
       document.getElementById("answer-transcript").value = "";
       document.getElementById("answer-summary").value = "";
       document.getElementById("audio-preview").classList.add("hidden");
@@ -472,7 +471,7 @@
       nextQuestion();
     });
 
-    // --- 5. VOICE RECORDER MIT FUNKTIONIERENDEM TIMER & SUMMARIZER ---
+    // --- 5. RECORDER & AUTO-SUMMARIZER ---
     let mediaRecorder, audioChunks = [], currentAudioBlob = null, isRecording = false, recognition;
     let timerInterval = null, timerSeconds = 0;
 
@@ -484,7 +483,6 @@
     const answerTranscript = document.getElementById("answer-transcript");
     const answerSummary = document.getElementById("answer-summary");
 
-    // Speech Recognition
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       recognition = new SpeechRecognition();
@@ -493,30 +491,22 @@
       recognition.interimResults = true;
       recognition.onresult = (event) => {
         let text = "";
-        for (let i = 0; i < event.results.length; i++) {
-          text += event.results[i][0].transcript + " ";
-        }
+        for (let i = 0; i < event.results.length; i++) text += event.results[i][0].transcript + " ";
         answerTranscript.value = text.trim();
         generateBulletSummary(text.trim());
       };
     }
 
-    // Automatischer Stichpunkt-Generator
     function generateBulletSummary(rawText) {
-      if (!rawText || rawText.length < 10) return;
-      // Filtert Sätze und extrahiert Kernaussagen
+      if (!rawText || rawText.length < 8) return;
       const sentences = rawText.split(/[.?!]+/).map(s => s.trim()).filter(s => s.length > 5);
       if (sentences.length > 0) {
-        const bullets = sentences.slice(0, 3).map(s => `• ${s.charAt(0).toUpperCase() + s.slice(1)}`).join("\n");
-        answerSummary.value = bullets;
+        answerSummary.value = sentences.slice(0, 3).map(s => `• ${s.charAt(0).toUpperCase() + s.slice(1)}`).join("\n");
       }
     }
 
-    document.getElementById("btn-re-summarize").addEventListener("click", () => {
-      generateBulletSummary(answerTranscript.value);
-    });
+    document.getElementById("btn-re-summarize").addEventListener("click", () => generateBulletSummary(answerTranscript.value));
 
-    // Timer Logik (Behebt den 00:00 Fehler!)
     function startTimer() {
       timerSeconds = 0;
       recordingTimer.textContent = "00:00";
@@ -530,9 +520,7 @@
       }, 1000);
     }
 
-    function stopTimer() {
-      clearInterval(timerInterval);
-    }
+    function stopTimer() { clearInterval(timerInterval); }
 
     btnRecord.addEventListener("click", async () => {
       if (!isRecording) {
@@ -549,7 +537,6 @@
           mediaRecorder.start();
           if (recognition) { try { recognition.start(); } catch(e){} }
           startTimer();
-
           isRecording = true;
           recordBtnText.textContent = "Stoppen";
           recordDot.className = "w-2 h-2 rounded-full bg-rose-500 animate-pulse";
@@ -594,135 +581,4 @@
         transcript: transcript || "Kein Transkript",
         summary: summary || "Keine Stichpunkte",
         hasAudio: !!currentAudioBlob,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-
-      if (gameMode === "both" && session.bothStep === 1) {
-        session.bothStep = 2;
-        saveState();
-        renderCurrentTurn();
-      } else {
-        session.answeredCount++;
-        session.currentTurn = 1 - session.currentTurn;
-        session.bothStep = 1;
-        saveState();
-        nextQuestion();
-      }
-    });
-
-    // --- 7. FRAGENPOOL VERWALTEN ---
-    const modalQuestions = document.getElementById("modal-questions");
-    document.getElementById("btn-manage-questions").addEventListener("click", () => {
-      renderQuestionsList();
-      modalQuestions.classList.remove("hidden");
-    });
-    document.getElementById("btn-close-modal-q").addEventListener("click", () => modalQuestions.classList.add("hidden"));
-
-    document.getElementById("btn-add-q").addEventListener("click", () => {
-      const text = document.getElementById("new-q-text").value.trim();
-      const level = document.getElementById("new-q-level").value;
-      const cat = document.getElementById("new-q-cat").value.trim() || "Eigene Frage";
-      if (!text) return;
-
-      questions.push({ id: Date.now(), level, category: cat, text });
-      document.getElementById("new-q-text").value = "";
-      saveState();
-      renderQuestionsList();
-    });
-
-    function renderQuestionsList() {
-      const c = document.getElementById("questions-list-render");
-      c.innerHTML = questions.map((q, idx) => `
-        <div class="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs">
-          <div class="flex-1 pr-2">
-            <span class="text-zinc-500 font-mono">[L${q.level}]</span>
-            <span class="text-zinc-200 ml-1">${q.text}</span>
-          </div>
-          <button onclick="deleteQuestion(${idx})" class="text-zinc-600 hover:text-rose-400">✕</button>
-        </div>
-      `).join("");
-    }
-
-    window.deleteQuestion = function(idx) {
-      questions.splice(idx, 1);
-      saveState();
-      renderQuestionsList();
-    };
-
-    // --- 8. ARCHIV & EXPORT ---
-    const modalArchive = document.getElementById("modal-archive");
-    document.getElementById("btn-view-archive").addEventListener("click", () => {
-      renderArchive();
-      modalArchive.classList.remove("hidden");
-    });
-    document.getElementById("btn-close-modal-archive").addEventListener("click", () => modalArchive.classList.add("hidden"));
-
-    function renderArchive() {
-      const c = document.getElementById("archive-list-render");
-      if (savedAnswers.length === 0) {
-        c.innerHTML = "<p class='text-zinc-500 text-center py-6'>Noch keine Antworten gespeichert.</p>";
-        return;
-      }
-      c.innerHTML = savedAnswers.map(ans => `
-        <div class="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2">
-          <div class="flex justify-between text-[11px] text-zinc-500">
-            <span class="font-medium text-zinc-300">${ans.player} (Lvl ${ans.level || '?'})</span>
-            <span>${ans.timestamp}</span>
-          </div>
-          <div class="font-serif-quote text-zinc-200 text-sm">„${ans.question}“</div>
-          
-          <div class="text-zinc-400 text-xs space-y-1 bg-zinc-950/60 p-2.5 rounded-lg border border-zinc-800/60">
-            <div><strong class="text-zinc-300">Stichpunkte:</strong><div class="whitespace-pre-line text-zinc-300 mt-0.5">${ans.summary}</div></div>
-            <div class="pt-1 text-[11px] text-zinc-500 border-t border-zinc-800/60 mt-1"><strong>Transkript:</strong> ${ans.transcript}</div>
-          </div>
-          ${ans.hasAudio ? `<div><button onclick="playSavedAudio('${ans.id}')" class="text-xs text-rose-400 hover:underline">▶️ Sprachnachricht abspielen</button></div>` : ''}
-        </div>
-      `).join("");
-    }
-
-    window.playSavedAudio = function(id) {
-      getAudioBlob(id, (blob) => {
-        if (!blob) return alert("Audioaufnahme nicht gefunden.");
-        new Audio(URL.createObjectURL(blob)).play();
-      });
-    };
-
-    document.getElementById("btn-export-json").addEventListener("click", () => {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ questions, savedAnswers }, null, 2));
-      const a = document.createElement("a");
-      a.href = dataStr;
-      a.download = `closer-session-${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-    });
-
-    document.getElementById("btn-export-summary").addEventListener("click", () => {
-      const win = window.open("", "_blank");
-      win.document.write(`
-        <html><head><title>Closer Session</title>
-        <style>body{font-family:sans-serif;padding:30px;max-width:700px;margin:auto;line-height:1.6;color:#18181b;} h1{font-size:24px;} .card{border-bottom:1px solid #e4e4e7;padding:16px 0;} .summary{background:#f4f4f5;padding:8px 12px;border-radius:6px;}</style>
-        </head><body>
-        <h1>Closer – Session Protokoll</h1>
-        <p>Datum: ${new Date().toLocaleDateString('de-DE')}</p><hr>
-        ${savedAnswers.map(a => `
-          <div class="card">
-            <p><strong>Frage:</strong> ${a.question}</p>
-            <p><strong>Antwort von:</strong> ${a.player} (${a.timestamp})</p>
-            <div class="summary"><strong>Kernaussagen:</strong><br>${a.summary.replace(/\n/g, '<br>')}</div>
-            <p style="color:#71717a;font-size:12px;"><strong>Transkript:</strong> ${a.transcript}</p>
-          </div>
-        `).join("")}
-        <script>window.print();<\/script>
-        </body></html>
-      `);
-      win.document.close();
-    });
-
-    // PWA Service Worker Registrierung
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
-    }
-
-    updateCounts();
-  </script>
-</body>
-</html>
+        timestamp: new Date().toLocaleTimeString([], {
