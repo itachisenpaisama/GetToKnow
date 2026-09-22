@@ -31,7 +31,7 @@
       font-family: 'Newsreader', serif;
     }
     .glass-surface {
-      background: rgba(18, 18, 20, 0.88);
+      background: rgba(18, 18, 20, 0.92);
       backdrop-filter: blur(24px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
@@ -39,23 +39,23 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 max-w-lg mx-auto select-none">
 
-  <!-- Minimal Header -->
+  <!-- Header -->
   <header class="w-full flex items-center justify-between py-3 border-b border-zinc-800/80">
     <div class="flex items-center gap-2.5">
       <span class="text-zinc-200 text-sm font-bold tracking-widest uppercase">✦ CLOSER</span>
     </div>
     <div class="flex items-center gap-2">
-      <button id="btn-manage-questions" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200 transition">
+      <button id="btn-manage-questions" type="button" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white transition">
         Fragen (<span id="count-total-questions">0</span>)
       </button>
-      <button id="btn-view-archive" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200 transition">
+      <button id="btn-view-archive" type="button" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white transition">
         Archiv (<span id="count-answers">0</span>)
       </button>
     </div>
   </header>
 
   <!-- Main View Area -->
-  <main class="w-full my-auto py-6">
+  <main class="w-full my-auto py-4">
 
     <!-- Screen 1: Setup / Start -->
     <div id="screen-setup" class="glass-surface rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
@@ -89,10 +89,10 @@
         </div>
       </div>
 
-      <button id="btn-start-game" class="w-full bg-white hover:bg-zinc-200 text-black font-semibold py-3.5 px-6 rounded-xl shadow-lg transition active:scale-[0.98]">
+      <button id="btn-start-game" type="button" class="w-full bg-white hover:bg-zinc-200 text-black font-semibold py-3.5 px-6 rounded-xl shadow-lg transition active:scale-[0.98]">
         Starten
       </button>
-      <button id="btn-resume-game" class="hidden w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-medium py-3 rounded-xl transition text-xs">
+      <button id="btn-resume-game" type="button" class="hidden w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-medium py-3 rounded-xl transition text-xs">
         Session fortsetzen
       </button>
     </div>
@@ -102,13 +102,11 @@
       
       <!-- Top Control Bar -->
       <div class="flex items-center justify-between text-xs px-1">
-        <!-- Mode Switcher -->
-        <button id="btn-toggle-mode" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium transition hover:border-zinc-700">
+        <button id="btn-toggle-mode" type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium transition hover:border-zinc-700">
           <span id="mode-dot" class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
           <span id="mode-label">Abwechselnd</span>
         </button>
 
-        <!-- Level Switcher -->
         <div class="flex items-center gap-1 bg-zinc-900 border border-zinc-800 p-1 rounded-full text-[11px]">
           <button id="lvl-badge-all" onclick="changeInGameLevel('all')" class="px-2 py-0.5 rounded-full text-zinc-400">Alle</button>
           <button id="lvl-badge-1" onclick="changeInGameLevel('1')" class="px-2 py-0.5 rounded-full text-zinc-400">Lvl 1</button>
@@ -116,7 +114,7 @@
           <button id="lvl-badge-3" onclick="changeInGameLevel('3')" class="px-2 py-0.5 rounded-full text-zinc-400">Lvl 3</button>
         </div>
 
-        <button id="btn-pause" class="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-300 transition">⏸️</button>
+        <button id="btn-pause" type="button" class="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-300 transition">⏸️</button>
       </div>
 
       <!-- Turn & Progress -->
@@ -130,7 +128,7 @@
         </div>
       </div>
 
-      <!-- Clean Question Card -->
+      <!-- Question Card -->
       <div class="glass-surface rounded-3xl p-6 sm:p-8 min-h-[200px] flex flex-col justify-between shadow-xl relative">
         <div class="flex items-center justify-between text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">
           <span id="question-level-badge" class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">Lvl 1</span>
@@ -143,7 +141,7 @@
 
         <div class="flex items-center justify-between text-xs text-zinc-500 pt-3 border-t border-zinc-800/80">
           <span class="text-[11px]">Keine Wiederholungen</span>
-          <button id="btn-skip" class="hover:text-zinc-300 transition">Überspringen ➔</button>
+          <button id="btn-skip" type="button" class="hover:text-zinc-300 transition">Überspringen ➔</button>
         </div>
       </div>
 
@@ -154,7 +152,7 @@
             <span class="text-xs font-semibold text-zinc-300">Sprachaufnahme</span>
             <span id="recording-timer" class="hidden font-mono text-xs font-semibold text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-900/40">00:00</span>
           </div>
-          <button id="btn-record-voice" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-200 flex items-center gap-2 border border-zinc-700/80 transition">
+          <button id="btn-record-voice" type="button" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-200 flex items-center gap-2 border border-zinc-700/80 transition">
             <span id="record-dot" class="w-2 h-2 rounded-full bg-rose-500"></span>
             <span id="record-btn-text">Aufnehmen</span>
           </button>
@@ -175,7 +173,7 @@
           <textarea id="answer-summary" rows="2" placeholder="• Wichtige Kernpunkte..." class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl p-3 text-xs text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition"></textarea>
         </div>
 
-        <button id="btn-save-answer" class="w-full bg-zinc-100 hover:bg-white text-zinc-950 py-3 rounded-xl font-semibold text-xs transition flex items-center justify-center gap-2">
+        <button id="btn-save-answer" type="button" class="w-full bg-zinc-100 hover:bg-white text-zinc-950 py-3 rounded-xl font-semibold text-xs transition flex items-center justify-center gap-2">
           <span>Antwort speichern</span>
           <span id="btn-save-next-label">➔</span>
         </button>
@@ -183,18 +181,20 @@
 
     </div>
 
-    <!-- Screen 3: Eigene Fragen Modal MIT AUTO-KATEGORISIERUNG -->
+    <!-- Screen 3: Eigene Fragen Modal -->
     <div id="modal-questions" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
       <div class="glass-surface w-full max-w-lg rounded-3xl p-6 space-y-4 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
-          <h3 class="font-semibold text-sm text-zinc-200">Fragen verwalten</h3>
-          <button id="btn-close-modal-q" class="text-zinc-500 hover:text-white">✕</button>
+          <div>
+            <h3 class="font-semibold text-sm text-zinc-200">Fragen verwalten</h3>
+            <span class="text-[10px] text-zinc-500">Automatische Einstufung aktiv</span>
+          </div>
+          <button id="btn-close-modal-q" type="button" class="text-zinc-400 hover:text-white p-1 text-base">✕</button>
         </div>
         
         <div class="space-y-2 bg-zinc-900/60 p-3 rounded-2xl border border-zinc-800/80">
           <div>
-            <input type="text" id="new-q-text" placeholder="Frage eingeben (wird automatisch eingestuft)..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-zinc-500">
-            <span id="auto-detected-hint" class="text-[10px] text-zinc-500 mt-1 block">💡 Automatisch zugewiesen, kann unten geändert werden:</span>
+            <input type="text" id="new-q-text" placeholder="Neue Frage hier tippen..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-zinc-500">
           </div>
           
           <div class="grid grid-cols-2 gap-2 pt-1">
@@ -212,8 +212,15 @@
             </div>
           </div>
           
-          <button id="btn-add-q" class="w-full mt-2 bg-zinc-100 hover:bg-white text-zinc-950 rounded-xl text-xs font-semibold py-2.5 transition">
-            Frage speichern
+          <button id="btn-add-q" type="button" class="w-full mt-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-xs font-semibold py-2.5 transition">
+            Frage hinzufügen
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between pt-1">
+          <span class="text-xs text-zinc-400 font-medium">Aktuelle Fragen:</span>
+          <button id="btn-reset-default-questions" type="button" class="text-[10px] text-zinc-500 hover:text-rose-400 underline">
+            Standard-Fragen wiederherstellen
           </button>
         </div>
 
@@ -226,14 +233,14 @@
       <div class="glass-surface w-full max-w-xl rounded-3xl p-6 space-y-4 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
           <h3 class="font-semibold text-sm text-zinc-200">Gespeicherte Antworten</h3>
-          <button id="btn-close-modal-archive" class="text-zinc-500 hover:text-white">✕</button>
+          <button id="btn-close-modal-archive" type="button" class="text-zinc-400 hover:text-white p-1 text-base">✕</button>
         </div>
         <div id="archive-list-render" class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs"></div>
         <div class="flex gap-2 pt-2 border-t border-zinc-800">
-          <button id="btn-export-json" class="flex-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition">
+          <button id="btn-export-json" type="button" class="flex-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition">
             JSON
           </button>
-          <button id="btn-export-summary" class="flex-1 bg-white hover:bg-zinc-200 text-zinc-950 text-xs py-2.5 rounded-xl font-semibold transition">
+          <button id="btn-export-summary" type="button" class="flex-1 bg-white hover:bg-zinc-200 text-zinc-950 text-xs py-2.5 rounded-xl font-semibold transition">
             Drucken / PDF
           </button>
         </div>
@@ -247,7 +254,7 @@
   </footer>
 
   <script>
-    // --- 1. DEFAULT FRAGENKATALOG (Lvl 1, Lvl 2, Lvl 3) ---
+    // --- 1. KURATIERTE STANDARD-FRAGEN (Garantierter Fallback) ---
     const DEFAULT_QUESTIONS = [
       { id: 1, level: "1", category: "Eisbrecher", text: "Was war der spontanste Moment deiner letzten Woche?" },
       { id: 2, level: "1", category: "Reisen", text: "Wohin ging die beste Reise deines Lebens und warum?" },
@@ -263,16 +270,18 @@
       { id: 12, level: "3", category: "Knistern", text: "Was wolltest du mich schon die ganze Zeit fragen, hast dich aber noch nicht getraut?" }
     ];
 
-    // --- 2. INDEXED DB ---
+    // --- 2. INDEXED DB FÜR AUDIO ---
     let db;
-    const req = indexedDB.open("CloserAppDB_v2", 1);
-    req.onupgradeneeded = (e) => {
-      db = e.target.result;
-      if (!db.objectStoreNames.contains("recordings")) {
-        db.createObjectStore("recordings", { keyPath: "id" });
-      }
-    };
-    req.onsuccess = (e) => { db = e.target.result; };
+    try {
+      const req = indexedDB.open("CloserAppDB_v3", 1);
+      req.onupgradeneeded = (e) => {
+        db = e.target.result;
+        if (!db.objectStoreNames.contains("recordings")) {
+          db.createObjectStore("recordings", { keyPath: "id" });
+        }
+      };
+      req.onsuccess = (e) => { db = e.target.result; };
+    } catch(e) {}
 
     function saveAudioBlob(id, blob) {
       if (!db) return;
@@ -281,34 +290,147 @@
     }
 
     function getAudioBlob(id, cb) {
-      if (!db) return;
+      if (!db) return cb(null);
       const tx = db.transaction("recordings", "readonly");
       const r = tx.objectStore("recordings").get(id);
       r.onsuccess = () => cb(r.result?.blob);
+      r.onerror = () => cb(null);
     }
 
-    // --- 3. STATE ---
-    let questions = JSON.parse(localStorage.getItem("closer_questions_v4")) || DEFAULT_QUESTIONS;
-    let session = JSON.parse(localStorage.getItem("closer_session_v4")) || null;
-    let savedAnswers = JSON.parse(localStorage.getItem("closer_answers_v4")) || [];
-    let currentActiveLevel = localStorage.getItem("closer_lvl_v4") || "all";
-    let gameMode = localStorage.getItem("closer_mode_v4") || "alternate";
+    // --- 3. SPEICHER & MIGRATION (Löst das leere Fragen-Problem!) ---
+    let rawQuestions = localStorage.getItem("closer_questions_v5");
+    let questions;
+    try {
+      questions = JSON.parse(rawQuestions);
+      if (!Array.isArray(questions) || questions.length === 0) {
+        questions = [...DEFAULT_QUESTIONS];
+      }
+    } catch (e) {
+      questions = [...DEFAULT_QUESTIONS];
+    }
+
+    let session = null;
+    try { session = JSON.parse(localStorage.getItem("closer_session_v5")); } catch(e){}
+    let savedAnswers = [];
+    try { savedAnswers = JSON.parse(localStorage.getItem("closer_answers_v5")) || []; } catch(e){}
+    let currentActiveLevel = localStorage.getItem("closer_lvl_v5") || "all";
+    let gameMode = localStorage.getItem("closer_mode_v5") || "alternate";
 
     function saveState() {
-      localStorage.setItem("closer_questions_v4", JSON.stringify(questions));
-      localStorage.setItem("closer_session_v4", JSON.stringify(session));
-      localStorage.setItem("closer_answers_v4", JSON.stringify(savedAnswers));
-      localStorage.setItem("closer_lvl_v4", currentActiveLevel);
-      localStorage.setItem("closer_mode_v4", gameMode);
+      localStorage.setItem("closer_questions_v5", JSON.stringify(questions));
+      localStorage.setItem("closer_session_v5", JSON.stringify(session));
+      localStorage.setItem("closer_answers_v5", JSON.stringify(savedAnswers));
+      localStorage.setItem("closer_lvl_v5", currentActiveLevel);
+      localStorage.setItem("closer_mode_v5", gameMode);
       updateCounts();
     }
 
     function updateCounts() {
-      document.getElementById("count-total-questions").textContent = questions.length;
-      document.getElementById("count-answers").textContent = savedAnswers.length;
+      const qCount = document.getElementById("count-total-questions");
+      const aCount = document.getElementById("count-answers");
+      if (qCount) qCount.textContent = questions.length;
+      if (aCount) aCount.textContent = savedAnswers.length;
     }
 
-    // Level Buttons im Setup
+    // --- 4. MODALS ÖFFNEN & SCHLIESSEN (ROBUST) ---
+    const modalQuestions = document.getElementById("modal-questions");
+    const modalArchive = document.getElementById("modal-archive");
+
+    document.getElementById("btn-manage-questions").addEventListener("click", () => {
+      renderQuestionsList();
+      modalQuestions.classList.remove("hidden");
+    });
+    document.getElementById("btn-close-modal-q").addEventListener("click", () => {
+      modalQuestions.classList.add("hidden");
+    });
+
+    document.getElementById("btn-view-archive").addEventListener("click", () => {
+      renderArchive();
+      modalArchive.classList.remove("hidden");
+    });
+    document.getElementById("btn-close-modal-archive").addEventListener("click", () => {
+      modalArchive.classList.add("hidden");
+    });
+
+    document.getElementById("btn-reset-default-questions").addEventListener("click", () => {
+      if (confirm("Möchtest du die Standard-Fragen wiederherstellen?")) {
+        questions = [...DEFAULT_QUESTIONS];
+        saveState();
+        renderQuestionsList();
+      }
+    });
+
+    // --- 5. AUTOMATISCHE KATEGORISIERUNG BEIM TIPPEN ---
+    const newQTextInput = document.getElementById("new-q-text");
+    const newQLevelSelect = document.getElementById("new-q-level");
+    const newQCatInput = document.getElementById("new-q-cat");
+
+    newQTextInput.addEventListener("input", () => {
+      const text = newQTextInput.value.toLowerCase();
+      if (text.length < 3) return;
+
+      if (text.match(/liebe|angst|gefühl|körper|intim|anziehung|trauen|eindruck|küss|nähe|sehnsucht|schmerz|verletzt/)) {
+        newQLevelSelect.value = "3";
+        newQCatInput.value = text.includes("angst") ? "Verletzlichkeit" : (text.includes("liebe") ? "Liebe" : "Intim");
+      } else if (text.match(/charakter|wert|leben|prägt|stolz|leidenschaft|ziel|freund|lernen|bedeut|eigenschaft/)) {
+        newQLevelSelect.value = "2";
+        newQCatInput.value = text.includes("wert") ? "Werte" : (text.includes("ziel") ? "Zukunft" : "Reflexion");
+      } else if (text.match(/film|musik|song|reise|urlaub|essen|lustig|witzig|spontan|kind|sonntag|serie|wochenende/)) {
+        newQLevelSelect.value = "1";
+        newQCatInput.value = text.includes("reise") ? "Reisen" : (text.includes("witzig") ? "Humor" : "Leicht");
+      }
+    });
+
+    document.getElementById("btn-add-q").addEventListener("click", () => {
+      const text = newQTextInput.value.trim();
+      const level = newQLevelSelect.value;
+      const cat = newQCatInput.value.trim() || "Allgemein";
+      if (!text) return;
+
+      questions.unshift({ id: Date.now(), level, category: cat, text });
+      newQTextInput.value = "";
+      newQCatInput.value = "Allgemein";
+      saveState();
+      renderQuestionsList();
+    });
+
+    function renderQuestionsList() {
+      const c = document.getElementById("questions-list-render");
+      if (!c) return;
+      if (questions.length === 0) {
+        c.innerHTML = "<p class='text-zinc-500 text-center py-4 text-xs'>Keine Fragen vorhanden. Klicke auf 'Standard-Fragen wiederherstellen'.</p>";
+        return;
+      }
+      c.innerHTML = questions.map((q, idx) => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs">
+          <div class="flex-1 pr-2">
+            <span class="text-zinc-500 font-mono">[Lvl ${q.level || '1'}]</span>
+            <span class="text-zinc-400 text-[10px]">(${q.category || 'Allgemein'})</span>
+            <span class="text-zinc-200 ml-1">${q.text}</span>
+          </div>
+          <button onclick="deleteQuestion(${idx})" class="text-zinc-500 hover:text-rose-400 p-1 text-sm">✕</button>
+        </div>
+      `).join("");
+    }
+
+    window.deleteQuestion = function(idx) {
+      questions.splice(idx, 1);
+      saveState();
+      renderQuestionsList();
+    };
+
+    // --- 6. GAME FLOW & ENGINE ---
+    const screenSetup = document.getElementById("screen-setup");
+    const screenGame = document.getElementById("screen-game");
+    const btnStart = document.getElementById("btn-start-game");
+    const btnResume = document.getElementById("btn-resume-game");
+    const turnIndicator = document.getElementById("turn-indicator");
+    const progressInfo = document.getElementById("progress-info");
+    const questionText = document.getElementById("question-text");
+    const questionCategory = document.getElementById("question-category");
+    const questionLevelBadge = document.getElementById("question-level-badge");
+
+    // Level Auswahl Setup
     document.querySelectorAll(".level-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".level-btn").forEach(b => {
@@ -329,6 +451,7 @@
       if (currentActiveLevel !== "all") {
         pool = pool.filter(q => q.level === currentActiveLevel);
       }
+      if (pool.length === 0) pool = questions.map((q, i) => ({ ...q, idx: i }));
       session.remainingIndices = pool.map(q => q.idx).sort(() => Math.random() - 0.5);
       session.totalInSession = session.remainingIndices.length;
       nextQuestion();
@@ -346,7 +469,6 @@
       });
     }
 
-    // Modus Switcher
     const btnToggleMode = document.getElementById("btn-toggle-mode");
     const modeLabel = document.getElementById("mode-label");
     const modeDot = document.getElementById("mode-dot");
@@ -369,18 +491,7 @@
       if (session) renderCurrentTurn();
     });
 
-    // --- 4. GAME FLOW ---
-    const screenSetup = document.getElementById("screen-setup");
-    const screenGame = document.getElementById("screen-game");
-    const btnStart = document.getElementById("btn-start-game");
-    const btnResume = document.getElementById("btn-resume-game");
-    const turnIndicator = document.getElementById("turn-indicator");
-    const progressInfo = document.getElementById("progress-info");
-    const questionText = document.getElementById("question-text");
-    const questionCategory = document.getElementById("question-category");
-    const questionLevelBadge = document.getElementById("question-level-badge");
-
-    if (session && session.remainingIndices.length > 0) {
+    if (session && session.remainingIndices && session.remainingIndices.length > 0) {
       btnResume.classList.remove("hidden");
     }
 
@@ -392,9 +503,7 @@
       if (currentActiveLevel !== "all") {
         pool = pool.filter(q => q.level === currentActiveLevel);
       }
-      if (pool.length === 0) {
-        pool = questions.map((q, i) => ({ ...q, originalIndex: i }));
-      }
+      if (pool.length === 0) pool = questions.map((q, i) => ({ ...q, originalIndex: i }));
 
       const indices = pool.map(q => q.originalIndex).sort(() => Math.random() - 0.5);
 
@@ -430,7 +539,7 @@
     });
 
     function nextQuestion() {
-      if (session.remainingIndices.length === 0) {
+      if (!session || session.remainingIndices.length === 0) {
         alert("Alle Fragen dieser Runde beantwortet!");
         return;
       }
@@ -441,7 +550,7 @@
     }
 
     function renderCurrentTurn() {
-      const q = questions[session.currentIndex];
+      const q = questions[session.currentIndex] || questions[0];
       const activePlayer = session.currentTurn === 0 ? session.p1 : session.p2;
 
       if (gameMode === "both") {
@@ -455,7 +564,7 @@
         document.getElementById("btn-save-next-label").textContent = "➔";
       }
 
-      questionLevelBadge.textContent = `Lvl ${q.level}`;
+      questionLevelBadge.textContent = `Lvl ${q.level || '1'}`;
       questionCategory.textContent = q.category || 'Allgemein';
       questionText.textContent = `„${q.text}“`;
       progressInfo.textContent = `${session.answeredCount + 1} / ${session.totalInSession}`;
@@ -471,7 +580,7 @@
       nextQuestion();
     });
 
-    // --- 5. RECORDER & AUTO-SUMMARIZER ---
+    // --- 7. AUDIO RECORDER & TIMER ---
     let mediaRecorder, audioChunks = [], currentAudioBlob = null, isRecording = false, recognition;
     let timerInterval = null, timerSeconds = 0;
 
@@ -554,7 +663,7 @@
       }
     });
 
-    // --- 6. ANTWORT SPEICHERN ---
+    // --- 8. ANTWORT SPEICHERN ---
     document.getElementById("btn-save-answer").addEventListener("click", () => {
       const q = questions[session.currentIndex];
       let answeringPlayer;
@@ -581,4 +690,89 @@
         transcript: transcript || "Kein Transkript",
         summary: summary || "Keine Stichpunkte",
         hasAudio: !!currentAudioBlob,
-        timestamp: new Date().toLocaleTimeString([], {
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      if (gameMode === "both" && session.bothStep === 1) {
+        session.bothStep = 2;
+        saveState();
+        renderCurrentTurn();
+      } else {
+        session.answeredCount++;
+        session.currentTurn = 1 - session.currentTurn;
+        session.bothStep = 1;
+        saveState();
+        nextQuestion();
+      }
+    });
+
+    // --- 9. ARCHIV RENDERN ---
+    function renderArchive() {
+      const c = document.getElementById("archive-list-render");
+      if (!c) return;
+      if (savedAnswers.length === 0) {
+        c.innerHTML = "<p class='text-zinc-500 text-center py-6'>Noch keine Antworten gespeichert.</p>";
+        return;
+      }
+      c.innerHTML = savedAnswers.map(ans => `
+        <div class="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2">
+          <div class="flex justify-between text-[11px] text-zinc-500">
+            <span class="font-medium text-zinc-300">${ans.player} (Lvl ${ans.level || '?'})</span>
+            <span>${ans.timestamp}</span>
+          </div>
+          <div class="font-serif-quote text-zinc-200 text-sm">„${ans.question}“</div>
+          
+          <div class="text-zinc-400 text-xs space-y-1 bg-zinc-950/60 p-2.5 rounded-lg border border-zinc-800/60">
+            <div><strong class="text-zinc-300">Stichpunkte:</strong><div class="whitespace-pre-line text-zinc-300 mt-0.5">${ans.summary}</div></div>
+            <div class="pt-1 text-[11px] text-zinc-500 border-t border-zinc-800/60 mt-1"><strong>Transkript:</strong> ${ans.transcript}</div>
+          </div>
+          ${ans.hasAudio ? `<div><button onclick="playSavedAudio('${ans.id}')" class="text-xs text-zinc-400 hover:underline">▶️ Sprachnachricht abspielen</button></div>` : ''}
+        </div>
+      `).join("");
+    }
+
+    window.playSavedAudio = function(id) {
+      getAudioBlob(id, (blob) => {
+        if (!blob) return alert("Audioaufnahme nicht gefunden.");
+        new Audio(URL.createObjectURL(blob)).play();
+      });
+    };
+
+    document.getElementById("btn-export-json").addEventListener("click", () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ questions, savedAnswers }, null, 2));
+      const a = document.createElement("a");
+      a.href = dataStr;
+      a.download = `closer-session-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+    });
+
+    document.getElementById("btn-export-summary").addEventListener("click", () => {
+      const win = window.open("", "_blank");
+      win.document.write(`
+        <html><head><title>Closer Session</title>
+        <style>body{font-family:sans-serif;padding:30px;max-width:700px;margin:auto;line-height:1.6;color:#18181b;} h1{font-size:24px;} .card{border-bottom:1px solid #e4e4e7;padding:16px 0;} .summary{background:#f4f4f5;padding:8px 12px;border-radius:6px;}</style>
+        </head><body>
+        <h1>Closer – Session Protokoll</h1>
+        <p>Datum: ${new Date().toLocaleDateString('de-DE')}</p><hr>
+        ${savedAnswers.map(a => `
+          <div class="card">
+            <p><strong>Frage:</strong> ${a.question} (Lvl ${a.level})</p>
+            <p><strong>Antwort von:</strong> ${a.player} (${a.timestamp})</p>
+            <div class="summary"><strong>Kernaussagen:</strong><br>${a.summary.replace(/\n/g, '<br>')}</div>
+            <p style="color:#71717a;font-size:12px;"><strong>Transkript:</strong> ${a.transcript}</p>
+          </div>
+        `).join("")}
+        <script>window.print();<\/script>
+        </body></html>
+      `);
+      win.document.close();
+    });
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+
+    saveState();
+  </script>
+</body>
+</html>
