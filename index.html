@@ -31,7 +31,7 @@
       font-family: 'Newsreader', serif;
     }
     .glass-surface {
-      background: rgba(18, 18, 20, 0.92);
+      background: rgba(18, 18, 20, 0.94);
       backdrop-filter: blur(24px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
@@ -39,14 +39,14 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 max-w-lg mx-auto select-none">
 
-  <!-- Header -->
+  <!-- Minimal Header -->
   <header class="w-full flex items-center justify-between py-3 border-b border-zinc-800/80">
-    <div class="flex items-center gap-2.5">
+    <div class="flex items-center gap-2">
       <span class="text-zinc-200 text-sm font-bold tracking-widest uppercase">✦ CLOSER</span>
     </div>
     <div class="flex items-center gap-2">
-      <button id="btn-manage-questions" type="button" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white transition">
-        Fragen (<span id="count-total-questions">0</span>)
+      <button id="btn-open-filter-modal" type="button" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white transition">
+        ⚙️ Auswahl (<span id="count-selected-session">110</span>)
       </button>
       <button id="btn-view-archive" type="button" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white transition">
         Archiv (<span id="count-answers">0</span>)
@@ -62,7 +62,7 @@
       <div class="space-y-1.5">
         <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Closer</h1>
         <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-          Tiefe Fragen für zwei Personen. Abwechselnd oder gemeinsam beantworten.
+          110 handverlesene Fragen für echte Verbindung.
         </p>
       </div>
 
@@ -78,15 +78,25 @@
         </div>
       </div>
 
-      <!-- Level Selection (Clean) -->
+      <!-- Quick Level Select -->
       <div class="space-y-2">
-        <label class="block text-[11px] font-medium tracking-wide uppercase text-zinc-500">Stufe</label>
+        <div class="flex justify-between items-center">
+          <label class="block text-[11px] font-medium tracking-wide uppercase text-zinc-500">Stufe</label>
+          <button id="btn-customize-session" type="button" class="text-[11px] text-zinc-400 hover:text-white underline">
+            Detaillierte Auswahl anpassen ➔
+          </button>
+        </div>
         <div class="grid grid-cols-4 gap-2 text-xs">
           <button type="button" class="level-btn py-2.5 rounded-xl bg-zinc-900 border border-zinc-400 text-white font-medium" data-level="all">Alle</button>
           <button type="button" class="level-btn py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium" data-level="1">Lvl 1</button>
           <button type="button" class="level-btn py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium" data-level="2">Lvl 2</button>
           <button type="button" class="level-btn py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium" data-level="3">Lvl 3</button>
         </div>
+      </div>
+
+      <div class="text-[11px] text-zinc-400 bg-zinc-900/60 p-3 rounded-2xl border border-zinc-800/80 flex items-center justify-between">
+        <span>Bereit für Session:</span>
+        <span id="session-summary-badge" class="font-semibold text-zinc-200">110 Fragen aktiv</span>
       </div>
 
       <button id="btn-start-game" type="button" class="w-full bg-white hover:bg-zinc-200 text-black font-semibold py-3.5 px-6 rounded-xl shadow-lg transition active:scale-[0.98]">
@@ -124,7 +134,7 @@
         </span>
         <div class="flex items-center gap-2">
           <span id="both-mode-status" class="hidden text-[10px] uppercase font-semibold text-zinc-300 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">Teil 1/2</span>
-          <span id="progress-info" class="font-mono text-zinc-500">1 / 30</span>
+          <span id="progress-info" class="font-mono text-zinc-500">1 / 110</span>
         </div>
       </div>
 
@@ -132,7 +142,7 @@
       <div class="glass-surface rounded-3xl p-6 sm:p-8 min-h-[200px] flex flex-col justify-between shadow-xl relative">
         <div class="flex items-center justify-between text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">
           <span id="question-level-badge" class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">Lvl 1</span>
-          <span id="question-category">Allgemein</span>
+          <span id="question-category">Kategorie</span>
         </div>
 
         <div id="question-text" class="font-serif-quote text-xl sm:text-2xl text-zinc-100 my-auto py-4 leading-relaxed font-normal">
@@ -181,55 +191,64 @@
 
     </div>
 
-    <!-- Screen 3: Eigene Fragen Modal -->
-    <div id="modal-questions" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-      <div class="glass-surface w-full max-w-lg rounded-3xl p-6 space-y-4 max-h-[85vh] flex flex-col">
+    <!-- Screen 3: Detaillierte Fragen-Auswahl (Session Filter & Eigene Fragen) -->
+    <div id="modal-filter" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="glass-surface w-full max-w-xl rounded-3xl p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
           <div>
-            <h3 class="font-semibold text-sm text-zinc-200">Fragen verwalten</h3>
-            <span class="text-[10px] text-zinc-500">Automatische Einstufung aktiv</span>
+            <h3 class="font-semibold text-sm text-zinc-200">Session-Auswahl & Fragen</h3>
+            <span class="text-[11px] text-zinc-400">Wähle Kategorien oder einzelne Fragen aus</span>
           </div>
-          <button id="btn-close-modal-q" type="button" class="text-zinc-400 hover:text-white p-1 text-base">✕</button>
+          <button id="btn-close-modal-filter" type="button" class="text-zinc-400 hover:text-white p-1 text-base">✕</button>
         </div>
-        
-        <div class="space-y-2 bg-zinc-900/60 p-3 rounded-2xl border border-zinc-800/80">
-          <div>
-            <input type="text" id="new-q-text" placeholder="Neue Frage hier tippen..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-zinc-500">
+
+        <!-- 1. Kategorie-Filter Chips -->
+        <div>
+          <label class="block text-[10px] uppercase font-bold tracking-wider text-zinc-500 mb-1.5">Kategorien filtern</label>
+          <div id="category-filter-chips" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <!-- 2. Schnellauswahl & Zähler -->
+        <div class="flex items-center justify-between pt-1 border-t border-zinc-800/80 text-xs">
+          <div class="flex gap-2">
+            <button id="btn-select-all" type="button" class="text-zinc-400 hover:text-white underline text-[11px]">Alle anwählen</button>
+            <button id="btn-deselect-all" type="button" class="text-zinc-500 hover:text-white underline text-[11px]">Keine</button>
           </div>
-          
-          <div class="grid grid-cols-2 gap-2 pt-1">
+          <span class="text-zinc-300 font-semibold text-xs" id="active-selection-count">110 / 110 aktiv</span>
+        </div>
+
+        <!-- 3. Fragenliste mit Checkboxen -->
+        <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="custom-questions-selector-list"></div>
+
+        <!-- 4. Neue Frage hinzufügen mit reparierter Auto-Kategorisierung -->
+        <div class="pt-2 border-t border-zinc-800 space-y-2">
+          <span class="text-[11px] font-semibold text-zinc-300 block">➕ Neue eigene Frage hinzufügen</span>
+          <input type="text" id="new-q-text" placeholder="Frage eingeben (wird automatisch eingestuft)..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-zinc-500">
+          <div id="auto-detect-feedback" class="text-[10px] text-emerald-400 hidden">✨ Automatisch erkannt: Lvl 1 • Humor & Marotten</div>
+          <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block text-[10px] uppercase text-zinc-500 font-semibold mb-1">Stufe</label>
-              <select id="new-q-level" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200">
+              <label class="block text-[10px] uppercase text-zinc-500 font-semibold mb-0.5">Stufe</label>
+              <select id="new-q-level" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-zinc-200">
                 <option value="1">Lvl 1</option>
                 <option value="2">Lvl 2</option>
                 <option value="3">Lvl 3</option>
               </select>
             </div>
             <div>
-              <label class="block text-[10px] uppercase text-zinc-500 font-semibold mb-1">Kategorie</label>
-              <input type="text" id="new-q-cat" value="Allgemein" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200">
+              <label class="block text-[10px] uppercase text-zinc-500 font-semibold mb-0.5">Kategorie</label>
+              <input type="text" id="new-q-cat" value="Allgemein" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-zinc-200">
             </div>
           </div>
-          
-          <button id="btn-add-q" type="button" class="w-full mt-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-xs font-semibold py-2.5 transition">
-            Frage hinzufügen
+          <button id="btn-add-new-q" type="button" class="w-full bg-white hover:bg-zinc-200 text-black rounded-xl text-xs font-semibold py-2 transition">
+            Frage speichern & aktivieren
           </button>
         </div>
 
-        <div class="flex items-center justify-between pt-1">
-          <span class="text-xs text-zinc-400 font-medium">Aktuelle Fragen:</span>
-          <button id="btn-reset-default-questions" type="button" class="text-[10px] text-zinc-500 hover:text-rose-400 underline">
-            Standard-Fragen wiederherstellen
-          </button>
-        </div>
-
-        <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="questions-list-render"></div>
       </div>
     </div>
 
     <!-- Screen 4: Archive Modal -->
-    <div id="modal-archive" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div id="modal-archive" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
       <div class="glass-surface w-full max-w-xl rounded-3xl p-6 space-y-4 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
           <h3 class="font-semibold text-sm text-zinc-200">Gespeicherte Antworten</h3>
@@ -254,31 +273,135 @@
   </footer>
 
   <script>
-    // --- 1. KURATIERTE STANDARD-FRAGEN (Garantierter Fallback) ---
-    const DEFAULT_QUESTIONS = [
-      { id: 1, level: "1", category: "Eisbrecher", text: "Was war der spontanste Moment deiner letzten Woche?" },
-      { id: 2, level: "1", category: "Reisen", text: "Wohin ging die beste Reise deines Lebens und warum?" },
-      { id: 3, level: "1", category: "Humor", text: "Was ist dein heimlichstes Guilty Pleasure, für das du dich fast schämst?" },
-      { id: 4, level: "1", category: "Alltag", text: "Wie sieht für dich der ideale freie Sonntag ohne Verpflichtungen aus?" },
-      { id: 5, level: "2", category: "Charakter", text: "Welche Eigenschaft an dir verstehen Menschen oft erst auf den zweiten Blick?" },
-      { id: 6, level: "2", category: "Werte", text: "Was hast du erst in den letzten zwei Jahren über dich selbst gelernt?" },
-      { id: 7, level: "2", category: "Leidenschaft", text: "Über welches Thema könntest du stundenlang reden, ohne müde zu werden?" },
-      { id: 8, level: "2", category: "Geborgenheit", text: "Wann fühlst du dich bei einer anderen Person wirklich angekommen?" },
-      { id: 9, level: "3", category: "Eindruck", text: "Was war dein erster ehrlicher Gedanke, als du mich gesehen hast?" },
-      { id: 10, level: "3", category: "Anziehung", text: "Was macht jemanden für dich auf mentaler Ebene unwiderstehlich?" },
-      { id: 11, level: "3", category: "Verletzlichkeit", text: "Wovor hast du im tiefsten Inneren manchmal Angst beim Kennenlernen?" },
-      { id: 12, level: "3", category: "Knistern", text: "Was wolltest du mich schon die ganze Zeit fragen, hast dich aber noch nicht getraut?" }
+    // --- 1. DEINE 110 HANDVERLESENEN FRAGEN (SAUBER KATEGORISIERT) ---
+    const RAW_USER_QUESTIONS = [
+      { t: "Welcher Song müsste als persönliche Erkennungsmusik ertönen, sobald du einen Raum betrittst?", l: "1", c: "Humor & Marotten" },
+      { t: "Was ist deine absolut seltsamste Angewohnheit, wenn du vollkommen ungestört allein zu Hause bist?", l: "1", c: "Humor & Marotten" },
+      { t: "Welche absurde Verschwörungstheorie findest du so unterhaltsam, dass du heimlich hoffst, sie wäre wahr?", l: "1", c: "Humor & Marotten" },
+      { t: "Was war der schlechteste, unpassendste Ratschlag, den dir jemals jemand mit voller Überzeugung gegeben hat?", l: "1", c: "Humor & Marotten" },
+      { t: "Wenn Haustiere sprechen könnten: Welches Geheimnis über dich würde dein Haustier als Erstes ausplaudern?", l: "1", c: "Humor & Marotten" },
+      { t: "Welcher Film oder welche Pop-Hymne ist dein absolutes Guilty Pleasure, das du ungern vor deinen Freunden zugibst?", l: "1", c: "Humor & Marotten" },
+      { t: "Über welches alltägliche Missgeschick oder welche Nichtigkeit kannst du dich völlig unverhältnismäßig aufregen?", l: "1", c: "Alltag & Gewohnheiten" },
+      { t: "In welcher vollkommen nutzlosen Disziplin wärst du gern über Nacht unangefochtener Weltmeister?", l: "1", c: "Humor & Marotten" },
+      { t: "Bei welchem modischen oder jugendkulturellen Fehltritt deiner Jugend hast du früher mit voller Überzeugung mitgemacht?", l: "1", c: "Humor & Marotten" },
+      { t: "Welcher Spontankauf hat sich im Nachhinein als die absurdeste Geldverschwendung deines Lebens herausgestellt?", l: "1", c: "Alltag & Gewohnheiten" },
+      { t: "Welches weit verbreitete Lieblingsessen der meisten Menschen stößt bei dir auf absolute Abscheu?", l: "1", c: "Alltag & Gewohnheiten" },
+      { t: "Was ist die hartnäckigste Lüge, die dir als Kind erzählt wurde und die du bis ins Erwachsenenalter geglaubt hast?", l: "1", c: "Humor & Marotten" },
+      { t: "Wenn du für genau 24 Stunden mit einem Serien-Bösewicht tauschen müsstest: Wer wäre das und was würdest du tun?", l: "1", c: "Humor & Marotten" },
+      { t: "Welches skurrile Partytalent besitzt du, das absolut niemanden im Berufsleben weiterbringt?", l: "1", c: "Humor & Marotten" },
+      { t: "Was war das ungenießbarste Gericht, das du jemals selbst gekocht oder aus purer Höflichkeit heruntergewürgt hast?", l: "1", c: "Humor & Marotten" },
+      { t: "Wenn dein bisheriges Leben als Comedy-Serie verfilmt würde: Wie lautet der Serientitel?", l: "1", c: "Humor & Marotten" },
+      { t: "Welchen scheinbar wertlosen Gegenstand besitzt du seit Jahren, bringst es aber einfach nicht übers Herz, ihn zu entsorgen?", l: "1", c: "Alltag & Gewohnheiten" },
+      { t: "Was war der merkwürdigste Nebenjob, mit dem du jemals dein Geld verdient hast?", l: "1", c: "Alltag & Gewohnheiten" },
+      { t: "Wenn du eine völlig unsinnige Sportart für die Olympischen Spiele erfinden müsstest: Welche Regeln gäbe es?", l: "1", c: "Humor & Marotten" },
+      { t: "Zu welchem randständigen Nischenthema könntest du aus dem Stand einen einstündigen, leidenschaftlichen Vortrag halten?", l: "2", c: "Identität & Alltag" },
+      { t: "Was ist dein ungeschriebenes Gesetz im Alltag, bei dessen Missachtung durch Fremde du innerlich explodierst?", l: "1", c: "Alltag & Gewohnheiten" },
+      { t: "Wenn du für ein einziges Wochenende als Statist in ein beliebiges historisches Jahrzehnt reisen könntest: Wohin ginge der Trip?", l: "1", c: "Gedankenspiele & Ethik" },
+      { t: "Wie verläuft ein ideal gestalteter Sonntag, an dem keinerlei äußere Verpflichtungen oder Termine existieren?", l: "1", c: "Identität & Alltag" },
+      { t: "Welches Buch, welches Album oder welcher Film hat in den letzten zwei Jahren deinen Blick auf die Realität verändert?", l: "2", c: "Identität & Alltag" },
+      { t: "Wie lädst du deine sozialen Batterien nach einer stressigen Phase auf: In totaler Isolation oder unter vertrauten Menschen?", l: "2", c: "Identität & Alltag" },
+      { t: "Welche bisherige Reise hat dein Weltbild am nachhaltigsten erschüttert oder erweitert?", l: "2", c: "Identität & Alltag" },
+      { t: "Welche praktische Fähigkeit möchtest du seit Jahren erlernen, findest aber schlichtweg nicht die nötige Zeit dafür?", l: "2", c: "Identität & Alltag" },
+      { t: "Wie sieht dein persönliches Notfall-Ritual aus, wenn ein Arbeitstag emotional völlig aus dem Ruder gelaufen ist?", l: "2", c: "Identität & Alltag" },
+      { t: "Wenn du deinen gegenwärtigen Wohnort gegen eine beliebige Stadt der Welt tauschen müsstest: Welcher Ort spiegelt dein Grundtempo wider?", l: "2", c: "Identität & Alltag" },
+      { t: "Was war das letzte kulturelle Ereignis oder Live-Konzert, das dich emotional vollkommen mitgerissen hat?", l: "2", c: "Identität & Alltag" },
+      { t: "Mit welchem spezifischen Gericht oder Geschmack verbindest du das tiefste Gefühl von Heimat und Sicherheit?", l: "2", c: "Identität & Alltag" },
+      { t: "Wie sieht deine Beziehung zur Ordnung aus: Beherrschst du das strukturierte System oder das kreative Improvisieren?", l: "2", c: "Alltag & Gewohnheiten" },
+      { t: "Welches wissenschaftliche oder gesellschaftliche Themenfeld fasziniert dich gegenwärtig so sehr, dass du nächtelang Artikel dazu liest?", l: "2", c: "Identität & Alltag" },
+      { t: "Was steht auf deinem inoffiziellen Lebenslauf – welche Brüche, Umwege und Fehltritte haben dich geformt?", l: "2", c: "Identität & Alltag" },
+      { t: "Wenn du ein ganzes Jahr bezahlt freigestellt wärst: Welche Projekte würdest du sofort anpacken?", l: "2", c: "Identität & Alltag" },
+      { t: "Welcher Geruch transportiert dich binnen Sekundenbruchteilen zurück in deine Kindheitstage?", l: "2", c: "Identität & Alltag" },
+      { t: "Welche Filmreihe oder Serie schaust du dir immer wieder an, wenn du nach emotionaler Verlässlichkeit suchst?", l: "2", c: "Identität & Alltag" },
+      { t: "Wo fühlst du dich innerlich stabiler verankert: In unberührter Natur, am Meer oder inmitten einer vibrierenden Großstadt?", l: "2", c: "Identität & Alltag" },
+      { t: "Welche materielle Anschaffung für kleines Geld hat deine tägliche Lebensqualität in letzter Zeit messbar verbessert?", l: "1", c: "Alltag & Gewohnheiten" },
+      { t: "Welche Person in deinem engen Freundeskreis fordert dich am stärksten heraus, eigene Denkmuster zu verlassen?", l: "2", c: "Freundschaft & Werte" },
+      { t: "Bewegst du dich in fremden Umgebungen strikt nach Navigation und Plan oder ziehst du das intuitive Verlaufen vor?", l: "1", c: "Alltag & Gewohnheiten" },
+      { t: "Welches handwerkliche, künstlerische oder intellektuelle Werk hat dich nach seiner Vollendung mit echtem Stolz erfüllt?", l: "2", c: "Identität & Alltag" },
+      { t: "Gibt es ein unverrückbares Morgenritual, ohne das dein Tag aus dem Gleichgewicht gerät?", l: "1", c: "Alltag & Gewohnheiten" },
+      { t: "Wie müsste dein persönlicher Rückzugsort architektonisch beschaffen sein, um dir maximale innere Ruhe zu garantieren?", l: "2", c: "Identität & Alltag" },
+      { t: "Wenn eine Kristallkugel dir eine fundamentale Wahrheit über deine eigene Zukunft beantworten könnte: Was würdest du fragen?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Würdest du lieber jede Lüge deines Gegenübers unweigerlich durchschauen oder selbst die Gabe besitzen, niemals beim Lügen ertappt zu werden?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Wenn du 90 Jahre alt werden könntest und für die letzten 60 Jahre entweder den Geist oder den Körper eines 30-Jährigen behalten dürftest: Was wählst du?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Angenommen, du hättest ein Rückflugticket in einer Zeitmaschine: Würdest du 500 Jahre in die Zukunft oder 500 Jahre in die Vergangenheit reisen?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Wenn dein Zuhause in Flammen stünde und alle Menschen sowie Tiere in Sicherheit wären: Welchen materiellen Gegenstand rettest du im letzten Sprint?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Bevorzugst du ein Leben voller extremer Glücksmomente und tiefer Krisen oder eine dauerhafte, unerschütterliche Zufriedenheit ohne Ausschläge?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Wenn du für den Rest deiner Existenz auf Musik oder auf Filme und Bücher verzichten müsstest: Was fiele dir schwerer?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Würdest du für zehn Millionen Euro die nächsten fünf Jahre vollkommen autark und isoliert auf einer Insel verbringen, ohne jeden Kontakt zur Außenwelt?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Welches ungelöste Mysterium der Menschheitsgeschichte würdest du sofort aufdecken, wenn du die Möglichkeit dazu hättest?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Wenn du morgen mit einer völlig neuen intellektuellen oder physischen Begabung erwachen könntest: Welche wäre das?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Wäre dir eine Welt lieber, in der alle Menschen gezwungen sind, ausnahmslos die Wahrheit zu sagen, oder eine, in der Gedanken lesbar sind?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Wenn du ein einziges globales Gesetz erlassen dürftest, das ab morgen ausnahmslos durchgesetzt wird: Welches wäre das?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Welche drei historischen Persönlichkeiten würdest du zu einem informellen Abendessen einladen, um die spannendste Diskussion zu erleben?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Wenn du wüsstest, dass dein Leben in exakt einem Jahr plötzlich endet: Welche gravierende Kurskorrektur nimmst du heute vor?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Würdest du lieber wissen, zu welchem exakten Datum du sterben wirst, oder die genauen Todesumstände kennen?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Wenn du ein bestimmtes Lebensjahr noch einmal mit dem Wissen von heute durchlaufen dürftest: Welches Alter wählst du?", l: "2", c: "Gedankenspiele & Ethik" },
+      { t: "Würdest du die schmerzhafteste Erinnerung deines Lebens unwiderruflich aus deinem Gedächtnis tilgen, wenn die Technologie existierte?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Was würdest du tun, wenn du für genau 24 Stunden völlig unsichtbar wärst und keine gesellschaftlichen Konsequenzen fürchten müsstest?", l: "1", c: "Gedankenspiele & Ethik" },
+      { t: "Wenn du bis an dein Lebensende an einen einzigen Naturraum gebunden wärst: Wäre es das Hochgebirge, das offene Meer oder ein alter Wald?", l: "2", c: "Identität & Alltag" },
+      { t: "Welche Frage würdest du deinem 85-jährigen Zukunfts-Ich stellen, wenn du fünf Minuten Sprechzeit hättest?", l: "2", c: "Reflexion & Werte" },
+      { t: "Würdest du lieber unzensiert erfahren, was Fremde beim ersten Eindruck über dich denken, oder was deine engsten Vertrauten hinter deinem Rücken besprechen?", l: "2", c: "Freundschaft & Werte" },
+      { t: "Wenn du eine universelle, unmissverständliche Nachricht für fünf Minuten an den Nachthimmel projizieren könntest: Was stünde dort?", l: "2", c: "Reflexion & Werte" },
+      { t: "Was macht für dich eine unzerstörbare Freundschaft aus, und welches Verhalten führt bei dir zum sofortigen Kontaktabbruch?", l: "2", c: "Freundschaft & Werte" },
+      { t: "Welche feste Überzeugung deiner Jugend musstest du durch schmerzhafte Lebenserfahrung vollständig revidieren?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Anhand welcher Kriterien misst du am Lebensende, ob du deine Zeit sinnvoll und erfüllt verbracht hast?", l: "2", c: "Reflexion & Werte" },
+      { t: "In welchen zwischenmenschlichen Situationen fällt es dir bis heute am schwersten, eine glasklare Grenze zu setzen?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Welcher Wert steuert deine großen Lebensentscheidungen: Autonomie, Sicherheit, Loyalität oder persönliches Wachstum?", l: "2", c: "Reflexion & Werte" },
+      { t: "Wie verarbeitest du schwere berufliche oder private Niederlagen: Durch langen Rückzug oder sofortigen Aktionismus?", l: "2", c: "Reflexion & Werte" },
+      { t: "Welche gesellschaftliche Erwartungshaltung lehnst du innerlich mit aller Konsequenz ab?", l: "2", c: "Reflexion & Werte" },
+      { t: "Welche frühere Beziehung oder Begegnung hat dein heutiges Verständnis von partnerschaftlicher Liebe am tiefsten geprägt?", l: "3", c: "Liebe & Beziehungen" },
+      { t: "Welche unbequeme Wahrheit über deinen eigenen Charakter hast du dir erst spät im Leben eingestanden?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Was nehmen flüchtige Bekannte an deiner Fassade wahr, das deinem inneren Wesenskern eigentlich widerspricht?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Welcher Mensch in deinem Leben verkörpert für dich durch sein reines Handeln Integrität und innere Stärke?", l: "2", c: "Freundschaft & Werte" },
+      { t: "Wie unterscheidest du für dich selbst die Grenze zwischen heilsamem Alleinsein und schmerzhafter Einsamkeit?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Bei welchen charakterlichen Verfehlungen fällt es dir extrem schwer, anderen Menschen echte Vergebung zu gewähren?", l: "3", c: "Freundschaft & Werte" },
+      { t: "Welches dysfunktionale Muster hast du in deinen bisherigen Partnerschaften oder Freundschaften bei dir selbst beobachtet?", l: "3", c: "Liebe & Beziehungen" },
+      { t: "Welche Rolle spielt finanzielle Unabhängigkeit für deinen Seelenfrieden, und wo liegt dein persönlicher Punkt des „Genug“?", l: "2", c: "Reflexion & Werte" },
+      { t: "Wie manifestiert sich echte emotionale Nähe für dich abseits von Verliebtheitsgefühlen im nüchternen Beziehungsalltag?", l: "3", c: "Liebe & Beziehungen" },
+      { t: "Wie verhältst du dich, wenn du spürst, dass ein ungelöster Konflikt mit einer nahestehenden Person unausgesprochen im Raum steht?", l: "3", c: "Liebe & Beziehungen" },
+      { t: "Für welchen Umstand oder welche Ressource in deinem Leben empfindest du tiefe Dankbarkeit, vergisst aber oft, sie wertzuschätzen?", l: "2", c: "Reflexion & Werte" },
+      { t: "Was war das größte persönliche oder berufliche Risiko deines Lebens, und wie bewertest du den Ausgang heute?", l: "2", c: "Reflexion & Werte" },
+      { t: "Welches weit verbreitete Vorurteil über dich erweist sich bei näherem Kennenlernen als vollkommener Irrtum?", l: "2", c: "Verletzlichkeit & Tiefe" },
+      { t: "Wo verläuft für dich in einer Liebesbeziehung die feine Grenze zwischen gesunder Bindung und emotionaler Einengung?", l: "3", c: "Liebe & Beziehungen" },
+      { t: "An welchem persönlichen Ziel arbeitest du aktuell rein aus intrinsischer Motivation, ohne dafür Bestätigung von außen zu erwarten?", l: "2", c: "Reflexion & Werte" },
+      { t: "Wenn du eine fundamentale Sache an der Art und Weise ändern könntest, wie du von deinen Eltern erzogen wurdest: Was wäre das?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Was ist deine heiligste, wertvollste Erinnerung, die dir in Phasen der Verunsicherung als innerer Anker dient?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Welches biografische Ereignis war für dich emotional die härteste Prüfung, die du bisher durchstehen musstest?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Wann hast du das letzte Mal in Gegenwart einer anderen Person geweint – und wann das letzte Mal ganz für dich allein?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Welche irrationale Angst oder Selbstzweifel taucht immer wieder auf, obwohl du kognitiv weißt, dass sie unberechtigt ist?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Welchen Lebenstraum trägst du seit Jahren unberührt in dir, wagst ihn aber nicht anzugehen, weil das Risiko des Scheiterns zu bedrohlich wirkt?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "In welchen Momenten deines bisherigen Lebens hast du dich emotional am schutzlosesten und verwundbarsten gefühlt?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Welcher Glaubenssatz aus deinem Elternhaus hat deine persönliche Entfaltung als erwachsener Mensch am meisten behindert?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Wenn du heute Nacht sterben würdest: Was nicht ausgesprochen zu haben, würdest du am meisten bereuen – und warum hast du es bisher verschwiegen?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Welcher Verlust – eines Menschen, eines Ideals oder einer Lebensphase – hat dich am radikalsten verändert?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Wie beschreibst du das emotionale Klima in deiner Herkunftsfamilie: War es von offener Wärme, von Leistungsanspruch oder von Distanz geprägt?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Welche Charaktereigenschaft von dir selbst empfindest du als besonders herausfordernd für Personen, die dir sehr nahekommen?", l: "3", c: "Liebe & Beziehungen" },
+      { t: "Welche Form der verbalen Anerkennung berührt dich so stark, dass du sie über Jahre hinweg im Gedächtnis behältst?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Für welchen Fehler deiner Vergangenheit schämst du dich bis heute, obwohl du weißt, dass du damals nach bestem Gewissen gehandelt hast?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Welche Facette deines inneren Wesens bleibt für die meisten Menschen deines Umfelds vollkommen unsichtbar?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Was hält dich nachts wach, wenn du keinen Schlaf findest: Grübeleien über vergangene Handlungen oder diffuse Zukunftssorgen?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Wenn du deinem zehnjährigen Selbst für drei Minuten gegenüberstehen könntest: Was würdest du ihm tröstend mit auf den Weg geben?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Was ist eine fundamentale Wahrheit über dich, von der du dir wünschst, dass ein Partner sie intuitiv verstünde, ohne dass du darum bitten musst?", l: "3", c: "Liebe & Beziehungen" },
+      { t: "Welches unausgesprochene Familientabu durfte in deinem Aufwachsen unter keinen Umständen thematisiert werden?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Wenn dich jemand tief verletzt hat: Führt Verzeihen bei dir zu echter Heilung oder bleibt im Fundament immer eine emotionale Narbe zurück?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Welcher körperliche oder psychische Aspekt des Alterns löst bei dir das größte Unbehagen aus?", l: "3", c: "Verletzlichkeit & Tiefe" },
+      { t: "Teile ein reales, ungelöstes Dilemma, das dich in den letzten Wochen innerlich beschäftigt hat, und frage mich, wie ich an deiner Stelle entscheiden würde.", l: "3", c: "Verletzlichkeit & Tiefe" }
     ];
 
-    // --- 2. INDEXED DB FÜR AUDIO ---
+    // IDs zuweisen
+    const DEFAULT_QUESTIONS = RAW_USER_QUESTIONS.map((q, i) => ({
+      id: i + 1,
+      text: q.t,
+      level: q.l,
+      category: q.c
+    }));
+
+    // --- 2. INDEXED DB ---
     let db;
     try {
-      const req = indexedDB.open("CloserAppDB_v3", 1);
+      const req = indexedDB.open("CloserAppDB_v4", 1);
       req.onupgradeneeded = (e) => {
         db = e.target.result;
-        if (!db.objectStoreNames.contains("recordings")) {
-          db.createObjectStore("recordings", { keyPath: "id" });
-        }
+        if (!db.objectStoreNames.contains("recordings")) db.createObjectStore("recordings", { keyPath: "id" });
       };
       req.onsuccess = (e) => { db = e.target.result; };
     } catch(e) {}
@@ -297,129 +420,197 @@
       r.onerror = () => cb(null);
     }
 
-    // --- 3. SPEICHER & MIGRATION (Löst das leere Fragen-Problem!) ---
-    let rawQuestions = localStorage.getItem("closer_questions_v5");
-    let questions;
-    try {
-      questions = JSON.parse(rawQuestions);
-      if (!Array.isArray(questions) || questions.length === 0) {
-        questions = [...DEFAULT_QUESTIONS];
-      }
-    } catch (e) {
-      questions = [...DEFAULT_QUESTIONS];
-    }
+    // --- 3. STATE ---
+    // Fragen neu befüllen
+    let questions = DEFAULT_QUESTIONS;
+    localStorage.setItem("closer_questions_v6", JSON.stringify(questions));
+
+    // Ausgewählte Fragen-IDs für die Session (standardmäßig ALLE)
+    let selectedQuestionIds = new Set(questions.map(q => q.id));
 
     let session = null;
-    try { session = JSON.parse(localStorage.getItem("closer_session_v5")); } catch(e){}
     let savedAnswers = [];
-    try { savedAnswers = JSON.parse(localStorage.getItem("closer_answers_v5")) || []; } catch(e){}
-    let currentActiveLevel = localStorage.getItem("closer_lvl_v5") || "all";
-    let gameMode = localStorage.getItem("closer_mode_v5") || "alternate";
+    try { savedAnswers = JSON.parse(localStorage.getItem("closer_answers_v6")) || []; } catch(e){}
+    let currentActiveLevel = "all";
+    let gameMode = "alternate";
+
+    // Alle eindeutigen Kategorien ermitteln
+    function getAllCategories() {
+      return Array.from(new Set(questions.map(q => q.category))).filter(Boolean);
+    }
+    let activeCategories = new Set(getAllCategories());
 
     function saveState() {
-      localStorage.setItem("closer_questions_v5", JSON.stringify(questions));
-      localStorage.setItem("closer_session_v5", JSON.stringify(session));
-      localStorage.setItem("closer_answers_v5", JSON.stringify(savedAnswers));
-      localStorage.setItem("closer_lvl_v5", currentActiveLevel);
-      localStorage.setItem("closer_mode_v5", gameMode);
+      localStorage.setItem("closer_questions_v6", JSON.stringify(questions));
+      localStorage.setItem("closer_answers_v6", JSON.stringify(savedAnswers));
       updateCounts();
     }
 
     function updateCounts() {
-      const qCount = document.getElementById("count-total-questions");
-      const aCount = document.getElementById("count-answers");
-      if (qCount) qCount.textContent = questions.length;
-      if (aCount) aCount.textContent = savedAnswers.length;
+      const countEl = document.getElementById("count-selected-session");
+      if (countEl) countEl.textContent = selectedQuestionIds.size;
+      const badgeEl = document.getElementById("session-summary-badge");
+      if (badgeEl) badgeEl.textContent = `${selectedQuestionIds.size} von ${questions.length} Fragen aktiv`;
+      const archiveEl = document.getElementById("count-answers");
+      if (archiveEl) archiveEl.textContent = savedAnswers.length;
     }
 
-    // --- 4. MODALS ÖFFNEN & SCHLIESSEN (ROBUST) ---
-    const modalQuestions = document.getElementById("modal-questions");
-    const modalArchive = document.getElementById("modal-archive");
+    // --- 4. SESSION FILTER & AUSWAHL MODAL ---
+    const modalFilter = document.getElementById("modal-filter");
+    document.getElementById("btn-open-filter-modal").addEventListener("click", openFilterModal);
+    document.getElementById("btn-customize-session").addEventListener("click", openFilterModal);
+    document.getElementById("btn-close-modal-filter").addEventListener("click", () => modalFilter.classList.add("hidden"));
 
-    document.getElementById("btn-manage-questions").addEventListener("click", () => {
-      renderQuestionsList();
-      modalQuestions.classList.remove("hidden");
-    });
-    document.getElementById("btn-close-modal-q").addEventListener("click", () => {
-      modalQuestions.classList.add("hidden");
-    });
+    function openFilterModal() {
+      renderCategoryChips();
+      renderCustomSelectorList();
+      modalFilter.classList.remove("hidden");
+    }
 
-    document.getElementById("btn-view-archive").addEventListener("click", () => {
-      renderArchive();
-      modalArchive.classList.remove("hidden");
-    });
-    document.getElementById("btn-close-modal-archive").addEventListener("click", () => {
-      modalArchive.classList.add("hidden");
-    });
+    function renderCategoryChips() {
+      const container = document.getElementById("category-filter-chips");
+      const cats = getAllCategories();
+      container.innerHTML = cats.map(cat => {
+        const isActive = activeCategories.has(cat);
+        return `
+          <button type="button" onclick="toggleCategoryFilter('${cat}')" class="px-2.5 py-1 rounded-full text-[11px] font-medium transition ${isActive ? 'bg-zinc-200 text-zinc-950 font-semibold' : 'bg-zinc-900 border border-zinc-800 text-zinc-500'}">
+            ${cat}
+          </button>
+        `;
+      }).join("");
+    }
 
-    document.getElementById("btn-reset-default-questions").addEventListener("click", () => {
-      if (confirm("Möchtest du die Standard-Fragen wiederherstellen?")) {
-        questions = [...DEFAULT_QUESTIONS];
-        saveState();
-        renderQuestionsList();
+    window.toggleCategoryFilter = function(cat) {
+      if (activeCategories.has(cat)) {
+        activeCategories.delete(cat);
+        // Fragen dieser Kategorie abwählen
+        questions.filter(q => q.category === cat).forEach(q => selectedQuestionIds.delete(q.id));
+      } else {
+        activeCategories.add(cat);
+        // Fragen dieser Kategorie anwählen
+        questions.filter(q => q.category === cat).forEach(q => selectedQuestionIds.add(q.id));
       }
+      renderCategoryChips();
+      renderCustomSelectorList();
+      updateCounts();
+    };
+
+    document.getElementById("btn-select-all").addEventListener("click", () => {
+      questions.forEach(q => selectedQuestionIds.add(q.id));
+      activeCategories = new Set(getAllCategories());
+      renderCategoryChips();
+      renderCustomSelectorList();
+      updateCounts();
     });
 
-    // --- 5. AUTOMATISCHE KATEGORISIERUNG BEIM TIPPEN ---
+    document.getElementById("btn-deselect-all").addEventListener("click", () => {
+      selectedQuestionIds.clear();
+      activeCategories.clear();
+      renderCategoryChips();
+      renderCustomSelectorList();
+      updateCounts();
+    });
+
+    function renderCustomSelectorList() {
+      const container = document.getElementById("custom-questions-selector-list");
+      document.getElementById("active-selection-count").textContent = `${selectedQuestionIds.size} / ${questions.length} aktiv`;
+
+      container.innerHTML = questions.map(q => {
+        const isChecked = selectedQuestionIds.has(q.id);
+        return `
+          <div class="flex items-start gap-2.5 p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80 text-xs">
+            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSingleQuestion(${q.id})" class="mt-1 w-3.5 h-3.5 rounded bg-zinc-800 accent-white cursor-pointer">
+            <div class="flex-1 cursor-pointer" onclick="toggleSingleQuestion(${q.id})">
+              <div class="flex items-center gap-1.5 text-[10px] text-zinc-500 mb-0.5">
+                <span class="font-mono bg-zinc-800 px-1 rounded text-zinc-300">Lvl ${q.level}</span>
+                <span>•</span>
+                <span>${q.category}</span>
+              </div>
+              <p class="text-zinc-200 leading-snug">${q.text}</p>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    window.toggleSingleQuestion = function(id) {
+      if (selectedQuestionIds.has(id)) {
+        selectedQuestionIds.delete(id);
+      } else {
+        selectedQuestionIds.add(id);
+      }
+      renderCustomSelectorList();
+      updateCounts();
+    };
+
+    // --- 5. AUTOMATISCHE KATEGORISIERUNG (REPARIERT & SOFORT SICHTBAR) ---
     const newQTextInput = document.getElementById("new-q-text");
     const newQLevelSelect = document.getElementById("new-q-level");
     const newQCatInput = document.getElementById("new-q-cat");
+    const autoFeedback = document.getElementById("auto-detect-feedback");
 
-    newQTextInput.addEventListener("input", () => {
-      const text = newQTextInput.value.toLowerCase();
-      if (text.length < 3) return;
-
-      if (text.match(/liebe|angst|gefühl|körper|intim|anziehung|trauen|eindruck|küss|nähe|sehnsucht|schmerz|verletzt/)) {
-        newQLevelSelect.value = "3";
-        newQCatInput.value = text.includes("angst") ? "Verletzlichkeit" : (text.includes("liebe") ? "Liebe" : "Intim");
-      } else if (text.match(/charakter|wert|leben|prägt|stolz|leidenschaft|ziel|freund|lernen|bedeut|eigenschaft/)) {
-        newQLevelSelect.value = "2";
-        newQCatInput.value = text.includes("wert") ? "Werte" : (text.includes("ziel") ? "Zukunft" : "Reflexion");
-      } else if (text.match(/film|musik|song|reise|urlaub|essen|lustig|witzig|spontan|kind|sonntag|serie|wochenende/)) {
-        newQLevelSelect.value = "1";
-        newQCatInput.value = text.includes("reise") ? "Reisen" : (text.includes("witzig") ? "Humor" : "Leicht");
-      }
-    });
-
-    document.getElementById("btn-add-q").addEventListener("click", () => {
-      const text = newQTextInput.value.trim();
-      const level = newQLevelSelect.value;
-      const cat = newQCatInput.value.trim() || "Allgemein";
-      if (!text) return;
-
-      questions.unshift({ id: Date.now(), level, category: cat, text });
-      newQTextInput.value = "";
-      newQCatInput.value = "Allgemein";
-      saveState();
-      renderQuestionsList();
-    });
-
-    function renderQuestionsList() {
-      const c = document.getElementById("questions-list-render");
-      if (!c) return;
-      if (questions.length === 0) {
-        c.innerHTML = "<p class='text-zinc-500 text-center py-4 text-xs'>Keine Fragen vorhanden. Klicke auf 'Standard-Fragen wiederherstellen'.</p>";
+    function analyzeQuestionText(raw) {
+      const t = raw.toLowerCase().trim();
+      if (t.length < 5) {
+        autoFeedback.classList.add("hidden");
         return;
       }
-      c.innerHTML = questions.map((q, idx) => `
-        <div class="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs">
-          <div class="flex-1 pr-2">
-            <span class="text-zinc-500 font-mono">[Lvl ${q.level || '1'}]</span>
-            <span class="text-zinc-400 text-[10px]">(${q.category || 'Allgemein'})</span>
-            <span class="text-zinc-200 ml-1">${q.text}</span>
-          </div>
-          <button onclick="deleteQuestion(${idx})" class="text-zinc-500 hover:text-rose-400 p-1 text-sm">✕</button>
-        </div>
-      `).join("");
+
+      let detectedLvl = "2";
+      let detectedCat = "Reflexion & Werte";
+
+      // Level 3 Patterns: Tiefe Verletzlichkeit, Wunden, Beziehungsängste, Tränen
+      if (t.match(/angst|weinen|geweint|tod|sterben|trauma|verletzt|narbe|schmerz|scham|schämen|bereuen|elter|verlust|tabu|einsam|schutzlos|verwundbar|dilemma|liebesbeziehung|partner|vertrauen/)) {
+        detectedLvl = "3";
+        if (t.match(/partner|liebe|beziehung|nähe/)) detectedCat = "Liebe & Beziehungen";
+        else detectedCat = "Verletzlichkeit & Tiefe";
+      }
+      // Level 1 Patterns: Humor, Marotten, Comedy, Spass, Essen, Guilty Pleasure, Verschwörung
+      else if (t.match(/song|raum|marotte|angewohnheit|verschwörung|ratschlag|haustier|guilty|pleasure|aufregen|missgeschick|meister|jugend|kauf|essen|lüge|kind|bösewicht|talent|gericht|serie|comedy|sport|olymp|party/)) {
+        detectedLvl = "1";
+        if (t.match(/essen|gericht|geschmack|kauf|sonntag|aufregen/)) detectedCat = "Alltag & Gewohnheiten";
+        else detectedCat = "Humor & Marotten";
+      }
+      // Level 2 Patterns: Ethik, Gedankenspiele, Identität, Philosophie
+      else if (t.match(/kristallkugel|wahrheit|lügen|zeitmaschine|zukunft|insel|mysterium|gesetz|dinner|philosoph|buch|kultur|reise|weltbild|batterie|notfall|stadt|ordnung|projekt/)) {
+        detectedLvl = "2";
+        if (t.match(/kristallkugel|zeitmaschine|gedanken|mysterium|gesetz|morgen|insel|90 jahre/)) detectedCat = "Gedankenspiele & Ethik";
+        else if (t.match(/reise|sonntag|buch|stadt|ordnung|beruf|batterie/)) detectedCat = "Identität & Alltag";
+        else detectedCat = "Reflexion & Werte";
+      }
+
+      newQLevelSelect.value = detectedLvl;
+      newQCatInput.value = detectedCat;
+      autoFeedback.textContent = `✨ Erkannt: Lvl ${detectedLvl} • ${detectedCat}`;
+      autoFeedback.classList.remove("hidden");
     }
 
-    window.deleteQuestion = function(idx) {
-      questions.splice(idx, 1);
-      saveState();
-      renderQuestionsList();
-    };
+    newQTextInput.addEventListener("input", (e) => analyzeQuestionText(e.target.value));
+    newQTextInput.addEventListener("paste", (e) => {
+      setTimeout(() => analyzeQuestionText(newQTextInput.value), 50);
+    });
 
-    // --- 6. GAME FLOW & ENGINE ---
+    document.getElementById("btn-add-new-q").addEventListener("click", () => {
+      const text = newQTextInput.value.trim();
+      const level = newQLevelSelect.value;
+      const cat = newQCatInput.value.trim() || "Eigene Frage";
+      if (!text) return;
+
+      const newId = Date.now();
+      const newQuestion = { id: newId, text, level, category: cat };
+      questions.unshift(newQuestion);
+      selectedQuestionIds.add(newId);
+      activeCategories.add(cat);
+
+      newQTextInput.value = "";
+      autoFeedback.classList.add("hidden");
+      saveState();
+      renderCategoryChips();
+      renderCustomSelectorList();
+      updateCounts();
+    });
+
+    // --- 6. GAME ENGINE ---
     const screenSetup = document.getElementById("screen-setup");
     const screenGame = document.getElementById("screen-game");
     const btnStart = document.getElementById("btn-start-game");
@@ -430,7 +621,6 @@
     const questionCategory = document.getElementById("question-category");
     const questionLevelBadge = document.getElementById("question-level-badge");
 
-    // Level Auswahl Setup
     document.querySelectorAll(".level-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".level-btn").forEach(b => {
@@ -440,20 +630,28 @@
         btn.classList.remove("border-zinc-800", "text-zinc-400");
         btn.classList.add("border-zinc-400", "text-white");
         currentActiveLevel = btn.dataset.level;
+
+        // Auto-Filter ausgewählte Fragen nach Level
+        selectedQuestionIds.clear();
+        questions.forEach(q => {
+          if (currentActiveLevel === "all" || q.level === currentActiveLevel) {
+            selectedQuestionIds.add(q.id);
+          }
+        });
+        updateCounts();
       });
     });
 
     window.changeInGameLevel = function(lvl) {
       currentActiveLevel = lvl;
-      saveState();
       updateInGameLevelUI();
-      let pool = questions.map((q, i) => ({ ...q, idx: i }));
+      let pool = questions.filter(q => selectedQuestionIds.has(q.id));
       if (currentActiveLevel !== "all") {
         pool = pool.filter(q => q.level === currentActiveLevel);
       }
-      if (pool.length === 0) pool = questions.map((q, i) => ({ ...q, idx: i }));
-      session.remainingIndices = pool.map(q => q.idx).sort(() => Math.random() - 0.5);
-      session.totalInSession = session.remainingIndices.length;
+      if (pool.length === 0) pool = questions.filter(q => selectedQuestionIds.has(q.id));
+      session.remainingIds = pool.map(q => q.id).sort(() => Math.random() - 0.5);
+      session.totalInSession = session.remainingIds.length;
       nextQuestion();
     };
 
@@ -461,11 +659,8 @@
       ['all', '1', '2', '3'].forEach(lvl => {
         const el = document.getElementById(`lvl-badge-${lvl}`);
         if (!el) return;
-        if (currentActiveLevel === lvl) {
-          el.className = "px-2 py-0.5 rounded-full bg-zinc-200 text-zinc-950 font-semibold";
-        } else {
-          el.className = "px-2 py-0.5 rounded-full text-zinc-400 font-medium";
-        }
+        if (currentActiveLevel === lvl) el.className = "px-2 py-0.5 rounded-full bg-zinc-200 text-zinc-950 font-semibold";
+        else el.className = "px-2 py-0.5 rounded-full text-zinc-400 font-medium";
       });
     }
 
@@ -486,37 +681,35 @@
 
     btnToggleMode.addEventListener("click", () => {
       gameMode = (gameMode === "alternate") ? "both" : "alternate";
-      saveState();
       renderModeUI();
       if (session) renderCurrentTurn();
     });
-
-    if (session && session.remainingIndices && session.remainingIndices.length > 0) {
-      btnResume.classList.remove("hidden");
-    }
 
     btnStart.addEventListener("click", () => {
       const p1 = document.getElementById("input-p1").value.trim() || "Person 1";
       const p2 = document.getElementById("input-p2").value.trim() || "Person 2";
 
-      let pool = questions.map((q, i) => ({ ...q, originalIndex: i }));
+      let pool = questions.filter(q => selectedQuestionIds.has(q.id));
       if (currentActiveLevel !== "all") {
         pool = pool.filter(q => q.level === currentActiveLevel);
       }
-      if (pool.length === 0) pool = questions.map((q, i) => ({ ...q, originalIndex: i }));
+      if (pool.length === 0) {
+        alert("Keine Fragen für diese Auswahl aktiv. Bitte wähle Fragen in der '⚙️ Auswahl' an!");
+        return;
+      }
 
-      const indices = pool.map(q => q.originalIndex).sort(() => Math.random() - 0.5);
+      const shuffledIds = pool.map(q => q.id).sort(() => Math.random() - 0.5);
 
       session = {
         p1, p2,
         currentTurn: 0,
         bothStep: 1,
-        remainingIndices: indices,
-        currentIndex: null,
-        totalInSession: indices.length,
+        remainingIds: shuffledIds,
+        currentId: null,
+        totalInSession: shuffledIds.length,
         answeredCount: 0
       };
-      saveState();
+
       renderModeUI();
       updateInGameLevelUI();
       screenSetup.classList.add("hidden");
@@ -539,18 +732,17 @@
     });
 
     function nextQuestion() {
-      if (!session || session.remainingIndices.length === 0) {
-        alert("Alle Fragen dieser Runde beantwortet!");
+      if (!session || session.remainingIds.length === 0) {
+        alert("Alle ausgewählten Fragen dieser Session wurden beantwortet!");
         return;
       }
-      session.currentIndex = session.remainingIndices.pop();
+      session.currentId = session.remainingIds.pop();
       session.bothStep = 1;
-      saveState();
       renderCurrentTurn();
     }
 
     function renderCurrentTurn() {
-      const q = questions[session.currentIndex] || questions[0];
+      const q = questions.find(item => item.id === session.currentId) || questions[0];
       const activePlayer = session.currentTurn === 0 ? session.p1 : session.p2;
 
       if (gameMode === "both") {
@@ -580,7 +772,7 @@
       nextQuestion();
     });
 
-    // --- 7. AUDIO RECORDER & TIMER ---
+    // --- 7. AUDIO RECORDER & LIVE-TIMER ---
     let mediaRecorder, audioChunks = [], currentAudioBlob = null, isRecording = false, recognition;
     let timerInterval = null, timerSeconds = 0;
 
@@ -665,7 +857,7 @@
 
     // --- 8. ANTWORT SPEICHERN ---
     document.getElementById("btn-save-answer").addEventListener("click", () => {
-      const q = questions[session.currentIndex];
+      const q = questions.find(item => item.id === session.currentId) || questions[0];
       let answeringPlayer;
       if (gameMode === "both") {
         answeringPlayer = session.bothStep === 1 
@@ -695,18 +887,24 @@
 
       if (gameMode === "both" && session.bothStep === 1) {
         session.bothStep = 2;
-        saveState();
         renderCurrentTurn();
       } else {
         session.answeredCount++;
         session.currentTurn = 1 - session.currentTurn;
         session.bothStep = 1;
-        saveState();
         nextQuestion();
       }
+      saveState();
     });
 
-    // --- 9. ARCHIV RENDERN ---
+    // --- 9. ARCHIV & EXPORT ---
+    const modalArchive = document.getElementById("modal-archive");
+    document.getElementById("btn-view-archive").addEventListener("click", () => {
+      renderArchive();
+      modalArchive.classList.remove("hidden");
+    });
+    document.getElementById("btn-close-modal-archive").addEventListener("click", () => modalArchive.classList.add("hidden"));
+
     function renderArchive() {
       const c = document.getElementById("archive-list-render");
       if (!c) return;
@@ -772,7 +970,7 @@
       navigator.serviceWorker.register('sw.js').catch(() => {});
     }
 
-    saveState();
+    updateCounts();
   </script>
 </body>
 </html>
