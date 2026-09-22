@@ -2,188 +2,195 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Zweites Date – Deep Talk & Connection</title>
-  <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Closer – Meaningful Conversations</title>
 
-  <!-- App-Icon & Vollbild-Einstellung -->
+  <!-- PWA & Mobile Standalone -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#09090b">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="2nd Date">
-  <link rel="apple-touch-icon" href="https://fav.farm/🍷">
-  <link rel="icon" href="https://fav.farm/🍷">
+  <meta name="apple-mobile-web-app-title" content="Closer">
+  <link rel="apple-touch-icon" href="https://fav.farm/✨">
+  <link rel="icon" href="https://fav.farm/✨">
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS & Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+
   <style>
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: radial-gradient(circle at 50% 5%, #2a1122 0%, #09090b 100%);
-      min-height: 100vh;
-      color: #f4f4f5;
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+      -webkit-font-smoothing: antialiased;
     }
-    .font-serif-date {
-      font-family: 'Playfair Display', serif;
+    .font-serif-quote {
+      font-family: 'Newsreader', serif;
     }
-    .glass-card {
-      background: rgba(24, 24, 27, 0.82);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+    .glass-surface {
+      background: rgba(18, 18, 20, 0.85);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .pulse-record {
-      animation: pulse 1.5s infinite;
+    .recording-wave {
+      animation: wave 1.2s ease-in-out infinite;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.08); }
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.4); }
+      50% { transform: scaleY(1); }
     }
   </style>
 </head>
-<body class="flex flex-col items-center justify-between p-4 sm:p-6 select-none">
+<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 max-w-lg mx-auto select-none">
 
-  <!-- Header -->
-  <header class="w-full max-w-xl flex items-center justify-between py-2 border-b border-zinc-800/80">
-    <div class="flex items-center gap-2">
-      <span class="text-xl">🍷</span>
-      <h1 class="font-serif-date text-lg tracking-wide text-rose-300">Connection Deck</h1>
+  <!-- Minimal Header -->
+  <header class="w-full flex items-center justify-between py-3 border-b border-zinc-800/80">
+    <div class="flex items-center gap-2.5">
+      <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+      <span class="text-sm font-semibold tracking-wider uppercase text-zinc-200">Closer</span>
     </div>
-    <div class="flex gap-2">
-      <button id="btn-manage-questions" class="px-3 py-1 text-xs rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition">
-        ➕ Fragen (<span id="count-total-questions">0</span>)
+    <div class="flex items-center gap-2">
+      <button id="btn-manage-questions" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200 transition">
+        Fragen (<span id="count-total-questions">0</span>)
       </button>
-      <button id="btn-view-archive" class="px-3 py-1 text-xs rounded-full bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-800/40 transition">
-        📖 Date-Memory (<span id="count-answers">0</span>)
+      <button id="btn-view-archive" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200 transition">
+        Archive (<span id="count-answers">0</span>)
       </button>
     </div>
   </header>
 
-  <!-- Hauptbereich -->
-  <main class="w-full max-w-xl my-auto py-4">
+  <!-- Main View Area -->
+  <main class="w-full my-auto py-6">
 
     <!-- Screen 1: Setup / Start -->
-    <div id="screen-setup" class="glass-card rounded-3xl p-6 sm:p-8 shadow-2xl text-center space-y-5">
-      <div class="w-16 h-16 mx-auto rounded-full bg-rose-500/10 flex items-center justify-center text-3xl border border-rose-500/20">
-        ✨
-      </div>
-      <div>
-        <h2 class="font-serif-date text-2xl sm:text-3xl text-zinc-100 mb-1">Unser 2. Date</h2>
-        <p class="text-xs sm:text-sm text-zinc-400">Kein Smalltalk mehr. Echte Fragen, Knistern & Momente.</p>
-      </div>
-
-      <div class="space-y-3 text-left">
-        <div>
-          <label class="block text-xs uppercase tracking-wider text-zinc-400 mb-1 font-semibold">Person 1</label>
-          <input type="text" id="input-p1" value="Ich" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-xl px-4 py-2.5 text-zinc-100 focus:outline-none focus:border-rose-500">
-        </div>
-        <div>
-          <label class="block text-xs uppercase tracking-wider text-zinc-400 mb-1 font-semibold">Person 2</label>
-          <input type="text" id="input-p2" value="Du" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-xl px-4 py-2.5 text-zinc-100 focus:outline-none focus:border-rose-500">
-        </div>
+    <div id="screen-setup" class="glass-surface rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+      <div class="space-y-1.5">
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Get closer.</h1>
+        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+          Gespräche, die in die Tiefe gehen. Beantwortet Fragen abwechselnd oder gemeinsam.
+        </p>
       </div>
 
-      <!-- Start-Level Auswahl -->
-      <div class="text-left space-y-2">
-        <label class="block text-xs uppercase tracking-wider text-zinc-400 font-semibold">Start-Tiefe wählen</label>
+      <!-- Player Names -->
+      <div class="space-y-3">
+        <div>
+          <label class="block text-[11px] font-medium tracking-wide uppercase text-zinc-500 mb-1">Person 1</label>
+          <input type="text" id="input-p1" value="Ich" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-500 transition">
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium tracking-wide uppercase text-zinc-500 mb-1">Person 2</label>
+          <input type="text" id="input-p2" value="Du" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-500 transition">
+        </div>
+      </div>
+
+      <!-- Level Selection -->
+      <div class="space-y-2">
+        <label class="block text-[11px] font-medium tracking-wide uppercase text-zinc-500">Intensität</label>
         <div class="grid grid-cols-3 gap-2 text-xs">
-          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-800/90 border border-zinc-700 text-zinc-300 font-medium active-level" data-level="all">
-            🎲 Alle Mixen
-          </button>
-          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-800/90 border border-zinc-700 text-zinc-300 font-medium" data-level="1">
-            🥂 Lvl 1: Warm-up
-          </button>
-          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-800/90 border border-zinc-700 text-zinc-300 font-medium" data-level="2">
-            🌟 Lvl 2: Deep
-          </button>
+          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium active-level" data-level="all">Alle Mixen</button>
+          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium" data-level="1">Lvl 1 • Easy</button>
+          <button type="button" class="level-btn py-2.5 px-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium" data-level="2">Lvl 2 • Deep</button>
         </div>
-        <button type="button" class="level-btn w-full py-2 px-3 rounded-xl bg-zinc-800/90 border border-zinc-700 text-rose-300 font-medium text-xs" data-level="3">
-          🔥 Lvl 3: Intim & Nah (Knistern)
+        <button type="button" class="level-btn w-full py-2.5 px-3 rounded-xl bg-zinc-900 border border-zinc-800 text-rose-400/90 font-medium text-xs" data-level="3">
+          Lvl 3 • Intim & Knistern
         </button>
       </div>
 
-      <button id="btn-start-game" class="w-full bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-500 hover:to-indigo-500 text-white font-medium py-3.5 px-6 rounded-xl shadow-lg transition-all transform active:scale-95">
-        Session starten 🍷
+      <button id="btn-start-game" class="w-full bg-white hover:bg-zinc-200 text-black font-semibold py-3.5 px-6 rounded-xl shadow-lg transition active:scale-[0.98]">
+        Session starten
       </button>
-      <button id="btn-resume-game" class="hidden w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-medium py-2.5 px-6 rounded-xl transition text-sm">
-        Vorherige Session fortsetzen ⏸️
+      <button id="btn-resume-game" class="hidden w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-medium py-3 rounded-xl transition text-xs">
+        Session fortsetzen
       </button>
     </div>
 
-    <!-- Screen 2: Game Flow -->
-    <div id="screen-game" class="hidden space-y-3">
+    <!-- Screen 2: Game View -->
+    <div id="screen-game" class="hidden space-y-4">
       
-      <!-- Top Switch Bar: Modus & Level In-Game Wechsel -->
-      <div class="flex items-center justify-between gap-1.5 px-1">
-        <!-- MODUS TOGGLE -->
-        <button id="btn-toggle-mode" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-950/80 border border-indigo-700/50 text-indigo-200 transition">
-          <span id="mode-icon">🔄</span>
+      <!-- Top Control Bar -->
+      <div class="flex items-center justify-between text-xs px-1">
+        <!-- Mode Switcher -->
+        <button id="btn-toggle-mode" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium transition hover:border-zinc-700">
+          <span id="mode-dot" class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
           <span id="mode-label">Abwechselnd</span>
         </button>
 
-        <!-- LEVEL SCHNELLWECHSLER IM SPIEL -->
+        <!-- Quick Level Pills -->
         <div class="flex items-center gap-1 bg-zinc-900/90 border border-zinc-800 p-1 rounded-full text-[11px]">
-          <button id="lvl-badge-all" onclick="changeInGameLevel('all')" class="px-2 py-0.5 rounded-full text-zinc-400 font-medium">Mix</button>
-          <button id="lvl-badge-1" onclick="changeInGameLevel('1')" class="px-2 py-0.5 rounded-full text-zinc-400 font-medium">Lvl 1</button>
-          <button id="lvl-badge-2" onclick="changeInGameLevel('2')" class="px-2 py-0.5 rounded-full text-zinc-400 font-medium">Lvl 2</button>
-          <button id="lvl-badge-3" onclick="changeInGameLevel('3')" class="px-2 py-0.5 rounded-full text-rose-300 font-medium">Lvl 3</button>
+          <button id="lvl-badge-all" onclick="changeInGameLevel('all')" class="px-2 py-0.5 rounded-full text-zinc-400">All</button>
+          <button id="lvl-badge-1" onclick="changeInGameLevel('1')" class="px-2 py-0.5 rounded-full text-zinc-400">L1</button>
+          <button id="lvl-badge-2" onclick="changeInGameLevel('2')" class="px-2 py-0.5 rounded-full text-zinc-400">L2</button>
+          <button id="lvl-badge-3" onclick="changeInGameLevel('3')" class="px-2 py-0.5 rounded-full text-rose-400">L3</button>
         </div>
 
-        <button id="btn-pause" class="text-xs px-2.5 py-1.5 rounded-full bg-zinc-800 text-zinc-300 hover:text-white">⏸️</button>
+        <button id="btn-pause" class="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-300 transition">⏸️</button>
       </div>
 
-      <!-- Turn & Level Info Bar -->
-      <div class="flex items-center justify-between text-xs px-2">
-        <div id="turn-indicator" class="font-semibold text-rose-300 bg-rose-950/70 px-3.5 py-1 rounded-full border border-rose-800/40">
-          🎤 Jetzt antwortet: ...
-        </div>
+      <!-- Turn & Progress -->
+      <div class="flex items-center justify-between text-xs px-2 text-zinc-400">
+        <span id="turn-indicator" class="font-medium text-zinc-200">
+          An der Reihe: ...
+        </span>
         <div class="flex items-center gap-2">
-          <span id="both-mode-status" class="hidden text-[11px] text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">
-            Teil 1/2
-          </span>
-          <span id="progress-info" class="text-xs text-zinc-400 font-mono">1 / 30</span>
+          <span id="both-mode-status" class="hidden text-[10px] uppercase font-semibold text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-900/40">Teil 1/2</span>
+          <span id="progress-info" class="font-mono text-zinc-500">1 / 30</span>
         </div>
       </div>
 
-      <!-- Question Card -->
-      <div class="glass-card rounded-3xl p-6 sm:p-7 min-h-[190px] flex flex-col justify-between shadow-2xl relative overflow-hidden">
-        <div class="flex justify-between items-center text-xs uppercase tracking-widest font-semibold">
-          <span id="question-level-badge" class="px-2.5 py-0.5 rounded-full bg-zinc-800 text-rose-300 border border-zinc-700">Lvl 1 • Warm-up</span>
-          <span id="question-category" class="text-zinc-500">Allgemein</span>
+      <!-- Clean Question Card -->
+      <div class="glass-surface rounded-3xl p-6 sm:p-8 min-h-[200px] flex flex-col justify-between shadow-xl relative">
+        <div class="flex items-center justify-between text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">
+          <span id="question-level-badge">Lvl 1 • Warm-up</span>
+          <span id="question-category">Allgemein</span>
         </div>
-        
-        <div id="question-text" class="font-serif-date text-xl sm:text-2xl text-zinc-100 my-auto py-3 leading-snug">
+
+        <div id="question-text" class="font-serif-quote text-xl sm:text-2xl text-zinc-100 my-auto py-4 leading-relaxed font-normal">
           Lade Frage...
         </div>
 
-        <div class="flex justify-between items-center text-xs text-zinc-500 pt-2 border-t border-zinc-800/60">
-          <span>Keine Wiederholungen</span>
-          <button id="btn-skip" class="text-zinc-400 hover:text-zinc-200">Überspringen ⏩</button>
+        <div class="flex items-center justify-between text-xs text-zinc-500 pt-3 border-t border-zinc-800/80">
+          <span class="text-[11px]">Keine Wiederholungen</span>
+          <button id="btn-skip" class="hover:text-zinc-300 transition">Überspringen ➔</button>
         </div>
       </div>
 
-      <!-- Voice Recording & Transcript Section -->
-      <div class="glass-card rounded-2xl p-4 sm:p-5 space-y-3">
+      <!-- Voice & Notes Section -->
+      <div class="glass-surface rounded-2xl p-5 space-y-4">
+        <!-- Voice Recorder Header -->
         <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold text-zinc-200">Voice-Aufnahme & Notiz</span>
-            <span id="recording-time" class="hidden text-xs text-rose-400 font-mono">00:00</span>
+          <div class="flex items-center gap-2.5">
+            <span class="text-xs font-semibold text-zinc-300">Sprachnachricht</span>
+            <!-- Live Timer (Fixed!) -->
+            <span id="recording-timer" class="hidden font-mono text-xs font-semibold text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-900/40">00:00</span>
           </div>
-          <button id="btn-record-voice" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-rose-600 hover:bg-rose-500 text-white flex items-center gap-1.5 transition">
-            <span id="record-dot" class="w-2 h-2 rounded-full bg-white"></span>
+          <button id="btn-record-voice" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-200 flex items-center gap-2 border border-zinc-700/80 transition">
+            <span id="record-dot" class="w-2 h-2 rounded-full bg-rose-500"></span>
             <span id="record-btn-text">Aufnehmen</span>
           </button>
         </div>
 
         <audio id="audio-preview" controls class="hidden w-full h-8"></audio>
 
-        <div>
-          <textarea id="answer-notes" rows="2" placeholder="Wird beim Sprechen transkribiert oder kann notiert werden..." class="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl p-3 text-xs sm:text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-rose-500"></textarea>
+        <!-- 1. Full Transcript Field -->
+        <div class="space-y-1">
+          <label class="block text-[11px] font-medium uppercase tracking-wider text-zinc-500">Vollständiges Transkript</label>
+          <textarea id="answer-transcript" rows="2" placeholder="Wird beim Sprechen automatisch transkribiert..." class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl p-3 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition"></textarea>
         </div>
 
-        <button id="btn-save-answer" class="w-full bg-gradient-to-r from-zinc-800 to-zinc-700 hover:from-zinc-700 hover:to-zinc-600 text-zinc-100 py-3 rounded-xl font-medium text-xs sm:text-sm transition flex items-center justify-center gap-2">
-          <span>Antwort speichern & Weiter</span>
+        <!-- 2. Bullet Summary Field -->
+        <div class="space-y-1">
+          <div class="flex justify-between items-center">
+            <label class="block text-[11px] font-medium uppercase tracking-wider text-zinc-500">Kernaussagen (Stichpunkte)</label>
+            <button id="btn-re-summarize" type="button" class="text-[10px] text-zinc-500 hover:text-zinc-300 underline">Neu zusammenfassen</button>
+          </div>
+          <textarea id="answer-summary" rows="2" placeholder="• Automatisch generierte Kernpunkte..." class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl p-3 text-xs text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition"></textarea>
+        </div>
+
+        <button id="btn-save-answer" class="w-full bg-zinc-100 hover:bg-white text-zinc-950 py-3 rounded-xl font-semibold text-xs transition flex items-center justify-center gap-2">
+          <span>Antwort sichern</span>
           <span id="btn-save-next-label">➔</span>
         </button>
       </div>
@@ -191,42 +198,42 @@
     </div>
 
     <!-- Screen 3: Eigene Fragen Modal -->
-    <div id="modal-questions" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div class="glass-card w-full max-w-lg rounded-2xl p-6 space-y-4 max-h-[85vh] flex flex-col">
+    <div id="modal-questions" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="glass-surface w-full max-w-lg rounded-3xl p-6 space-y-4 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
-          <h3 class="font-semibold text-zinc-100">Fragenpool anpassen</h3>
-          <button id="btn-close-modal-q" class="text-zinc-400 hover:text-white">✕</button>
+          <h3 class="font-semibold text-sm text-zinc-200">Fragenkatalog</h3>
+          <button id="btn-close-modal-q" class="text-zinc-500 hover:text-white">✕</button>
         </div>
         <div class="space-y-2">
-          <input type="text" id="new-q-text" placeholder="Neue Frage eingeben..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-zinc-200 focus:outline-none focus:border-rose-500">
+          <input type="text" id="new-q-text" placeholder="Eigene Frage eingeben..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-zinc-600">
           <div class="grid grid-cols-2 gap-2">
-            <select id="new-q-level" class="bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-zinc-300">
-              <option value="1">Level 1 (Warm-up)</option>
-              <option value="2">Level 2 (Deep Talk)</option>
-              <option value="3">Level 3 (Intim & Nah)</option>
+            <select id="new-q-level" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-300">
+              <option value="1">Level 1 (Easy)</option>
+              <option value="2">Level 2 (Deep)</option>
+              <option value="3">Level 3 (Intim)</option>
             </select>
-            <input type="text" id="new-q-cat" placeholder="Kategorie (z. B. Humor)" class="bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-zinc-300">
+            <input type="text" id="new-q-cat" placeholder="Kategorie (z. B. Humor)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-300">
           </div>
-          <button id="btn-add-q" class="w-full bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-semibold py-2">Frage speichern</button>
+          <button id="btn-add-q" class="w-full bg-zinc-100 hover:bg-white text-zinc-950 rounded-xl text-xs font-semibold py-2 transition">Frage hinzufügen</button>
         </div>
         <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="questions-list-render"></div>
       </div>
     </div>
 
-    <!-- Screen 4: Memory / Export Modal -->
-    <div id="modal-archive" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div class="glass-card w-full max-w-xl rounded-2xl p-6 space-y-4 max-h-[85vh] flex flex-col">
+    <!-- Screen 4: Archive Modal -->
+    <div id="modal-archive" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="glass-surface w-full max-w-xl rounded-3xl p-6 space-y-4 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
-          <h3 class="font-serif-date text-lg text-rose-300">Unsere Date-Erinnerungen</h3>
-          <button id="btn-close-modal-archive" class="text-zinc-400 hover:text-white">✕</button>
+          <h3 class="font-semibold text-sm text-zinc-200">Gespeicherte Antworten</h3>
+          <button id="btn-close-modal-archive" class="text-zinc-500 hover:text-white">✕</button>
         </div>
-        <div id="archive-list-render" class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs sm:text-sm"></div>
+        <div id="archive-list-render" class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs"></div>
         <div class="flex gap-2 pt-2 border-t border-zinc-800">
-          <button id="btn-export-json" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition">
-            💾 JSON Export
+          <button id="btn-export-json" class="flex-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition">
+            JSON Export
           </button>
-          <button id="btn-export-summary" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white text-xs py-2.5 rounded-xl font-medium transition">
-            📄 Drucken / PDF Zusammenfassung
+          <button id="btn-export-summary" class="flex-1 bg-white hover:bg-zinc-200 text-zinc-950 text-xs py-2.5 rounded-xl font-semibold transition">
+            Drucken / PDF
           </button>
         </div>
       </div>
@@ -234,41 +241,30 @@
 
   </main>
 
-  <footer class="text-[11px] text-zinc-600 py-1">
-    100% offline & lokal auf deinem Smartphone.
+  <footer class="text-[11px] text-zinc-600 text-center py-2">
+    Closer • 100% lokal & privat auf diesem Gerät.
   </footer>
 
   <script>
-    // --- 1. FRAGENKATALOG NACH LEVELN (30 kuratierte Fragen für ein 2. Date) ---
+    // --- 1. KURATIERTER FRAGENKATALOG ---
     const DEFAULT_QUESTIONS = [
-      // Level 1: Warm-up & Leicht (Eisbrecher, Alltag, Lachen)
-      { id: 1, level: "1", category: "Eisbrecher", text: "Was war der spontanste oder witzigste Moment deiner letzten Woche?" },
-      { id: 2, level: "1", category: "Genuss", text: "Wenn wir jetzt sofort ein Flugticket für ein langes Wochenende buchen müssten: Wohin geht es?" },
-      { id: 3, level: "1", category: "Humor", text: "Was ist dein absolut heimlichstes Guilty Pleasure (Essen, Serie oder Musik)?" },
-      { id: 4, level: "1", category: "Kindheit", text: "Welcher Kindheitstraum von dir war rückblickend total verrückt?" },
-      { id: 5, level: "1", category: "Alltag", text: "Wie sieht für dich der perfekte Sonntag ohne Verpflichtungen aus?" },
-      { id: 6, level: "1", category: "Spontan", text: "Gibt es einen Song, bei dem du im Auto oder unter der Dusche immer laut mitsingen musst?" },
-
-      // Level 2: Deep Talk & Werte (Träume, Reflexion, Charakter)
-      { id: 7, level: "2", category: "Reflexion", text: "Welche Eigenschaft an dir verstehen Menschen oft erst auf den zweiten Blick?" },
-      { id: 8, level: "2", category: "Werte", text: "Was ist etwas, das du in den letzten zwei Jahren über dich selbst gelernt hast?" },
-      { id: 9, level: "2", category: "Leidenschaft", text: "Über welches Thema oder welche Leidenschaft könntest du stundenlang reden, ohne müde zu werden?" },
-      { id: 10, level: "2", category: "Freundschaft", text: "Was schätzen deine engsten Freunde am allermeisten an dir?" },
-      { id: 11, level: "2", category: "Lebensweg", text: "Welcher Moment oder welche Entscheidung hat deinen Lebensweg bisher am stärksten geprägt?" },
-      { id: 12, level: "2", category: "Gefühl", text: "Wann fühlst du dich bei einem Menschen wirklich sicher und angekommen?" },
-
-      // Level 3: Intim, Knistern & Nähe (Verletzlichkeit, Liebe, Unser Date)
-      { id: 13, level: "3", category: "Erster Eindruck", text: "Was war dein erster Gedanke, als du mich bei unserem ersten Date gesehen hast?" },
-      { id: 14, level: "3", category: "Anziehung", text: "Was macht jemanden für dich auf mentaler und emotionaler Ebene extrem anziehend?" },
-      { id: 15, level: "3", category: "Verletzlichkeit", text: "Wovor hast du in Beziehungen oder beim Kennenlernen manchmal insgeheim Angst?" },
-      { id: 16, level: "3", category: "Romantik", text: "Was war der romantischste Moment, den du jemals erlebt hast?" },
-      { id: 17, level: "3", category: "Wahrheit", text: "Gibt es etwas, das du mich heute schon die ganze Zeit fragen wolltest, dich aber noch nicht getraut hast?" },
-      { id: 18, level: "3", category: "Zukunft", text: "Wenn du dir für heute Abend noch eine Sache wünschen könntest – was wäre es?" }
+      { id: 1, level: "1", category: "Eisbrecher", text: "Was war der spontanste Moment deiner letzten Woche?" },
+      { id: 2, level: "1", category: "Genuss", text: "Wohin ging die beste Reise deines Lebens und warum?" },
+      { id: 3, level: "1", category: "Humor", text: "Was ist dein heimlichstes Guilty Pleasure, für das du dich fast schämst?" },
+      { id: 4, level: "1", category: "Alltag", text: "Wie sieht für dich der ideale freie Sonntag ohne Verpflichtungen aus?" },
+      { id: 5, level: "2", category: "Charakter", text: "Welche Eigenschaft an dir verstehen Menschen oft erst auf den zweiten Blick?" },
+      { id: 6, level: "2", category: "Werte", text: "Was hast du erst in den letzten zwei Jahren über dich selbst gelernt?" },
+      { id: 7, level: "2", category: "Leidenschaft", text: "Über welches Thema könntest du stundenlang reden, ohne müde zu werden?" },
+      { id: 8, level: "2", category: "Geborgenheit", text: "Wann fühlst du dich bei einer anderen Person wirklich angekommen?" },
+      { id: 9, level: "3", category: "Eindruck", text: "Was war dein erster ehrlicher Gedanke, als du mich gesehen hast?" },
+      { id: 10, level: "3", category: "Anziehung", text: "Was macht jemanden für dich auf mentaler Ebene unwiderstehlich?" },
+      { id: 11, level: "3", category: "Verletzlichkeit", text: "Wovor hast du im tiefsten Inneren manchmal Angst beim Kennenlernen?" },
+      { id: 12, level: "3", category: "Knistern", text: "Was wolltest du mich schon die ganze Zeit fragen, hast dich aber noch nicht getraut?" }
     ];
 
-    // --- 2. INDEXED DB (Audio) ---
+    // --- 2. INDEXED DB FÜR AUDIO ---
     let db;
-    const req = indexedDB.open("DateAppDB_v3", 1);
+    const req = indexedDB.open("CloserAppDB_v1", 1);
     req.onupgradeneeded = (e) => {
       db = e.target.result;
       if (!db.objectStoreNames.contains("recordings")) {
@@ -283,26 +279,26 @@
       tx.objectStore("recordings").put({ id, blob });
     }
 
-    function getAudioBlob(id, callback) {
+    function getAudioBlob(id, cb) {
       if (!db) return;
       const tx = db.transaction("recordings", "readonly");
-      const request = tx.objectStore("recordings").get(id);
-      request.onsuccess = () => callback(request.result?.blob);
+      const r = tx.objectStore("recordings").get(id);
+      r.onsuccess = () => cb(r.result?.blob);
     }
 
     // --- 3. STATE ---
-    let questions = JSON.parse(localStorage.getItem("date_questions_v3")) || DEFAULT_QUESTIONS;
-    let session = JSON.parse(localStorage.getItem("date_session_v3")) || null;
-    let savedAnswers = JSON.parse(localStorage.getItem("date_answers_v3")) || [];
-    let currentActiveLevel = localStorage.getItem("date_current_lvl") || "all";
-    let gameMode = localStorage.getItem("date_mode") || "alternate";
+    let questions = JSON.parse(localStorage.getItem("closer_questions")) || DEFAULT_QUESTIONS;
+    let session = JSON.parse(localStorage.getItem("closer_session")) || null;
+    let savedAnswers = JSON.parse(localStorage.getItem("closer_answers")) || [];
+    let currentActiveLevel = localStorage.getItem("closer_lvl") || "all";
+    let gameMode = localStorage.getItem("closer_mode") || "alternate";
 
     function saveState() {
-      localStorage.setItem("date_questions_v3", JSON.stringify(questions));
-      localStorage.setItem("date_session_v3", JSON.stringify(session));
-      localStorage.setItem("date_answers_v3", JSON.stringify(savedAnswers));
-      localStorage.setItem("date_current_lvl", currentActiveLevel);
-      localStorage.setItem("date_mode", gameMode);
+      localStorage.setItem("closer_questions", JSON.stringify(questions));
+      localStorage.setItem("closer_session", JSON.stringify(session));
+      localStorage.setItem("closer_answers", JSON.stringify(savedAnswers));
+      localStorage.setItem("closer_lvl", currentActiveLevel);
+      localStorage.setItem("closer_mode", gameMode);
       updateCounts();
     }
 
@@ -311,25 +307,23 @@
       document.getElementById("count-answers").textContent = savedAnswers.length;
     }
 
-    // Level Auswahl im Setup
+    // Level Auswahl Setup
     document.querySelectorAll(".level-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".level-btn").forEach(b => {
-          b.classList.remove("border-rose-500", "text-rose-400", "bg-rose-950/50");
-          b.classList.add("bg-zinc-800/90", "text-zinc-300");
+          b.classList.remove("border-zinc-400", "text-white");
+          b.classList.add("border-zinc-800", "text-zinc-400");
         });
-        btn.classList.remove("bg-zinc-800/90", "text-zinc-300");
-        btn.classList.add("border-rose-500", "text-rose-400", "bg-rose-950/50");
+        btn.classList.remove("border-zinc-800", "text-zinc-400");
+        btn.classList.add("border-zinc-400", "text-white");
         currentActiveLevel = btn.dataset.level;
       });
     });
 
-    // In-Game Level Switcher
     window.changeInGameLevel = function(lvl) {
       currentActiveLevel = lvl;
       saveState();
       updateInGameLevelUI();
-      // Neuer Index-Pool aus dem gewählten Level
       let pool = questions.map((q, i) => ({ ...q, idx: i }));
       if (currentActiveLevel !== "all") {
         pool = pool.filter(q => q.level === currentActiveLevel);
@@ -344,28 +338,26 @@
         const el = document.getElementById(`lvl-badge-${lvl}`);
         if (!el) return;
         if (currentActiveLevel === lvl) {
-          el.className = "px-2 py-0.5 rounded-full bg-rose-600 text-white font-semibold shadow";
+          el.className = "px-2 py-0.5 rounded-full bg-zinc-200 text-zinc-950 font-semibold";
         } else {
-          el.className = "px-2 py-0.5 rounded-full text-zinc-400 hover:text-zinc-200 font-medium";
+          el.className = "px-2 py-0.5 rounded-full text-zinc-400 font-medium";
         }
       });
     }
 
-    // Modus Umschalter
+    // Modus Switcher
     const btnToggleMode = document.getElementById("btn-toggle-mode");
     const modeLabel = document.getElementById("mode-label");
-    const modeIcon = document.getElementById("mode-icon");
+    const modeDot = document.getElementById("mode-dot");
     const bothModeStatus = document.getElementById("both-mode-status");
 
     function renderModeUI() {
       if (gameMode === "both") {
         modeLabel.textContent = "Beide antworten";
-        modeIcon.textContent = "👥";
-        btnToggleMode.className = "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-rose-950/90 border border-rose-600/60 text-rose-200";
+        modeDot.className = "w-1.5 h-1.5 rounded-full bg-rose-400";
       } else {
         modeLabel.textContent = "Abwechselnd";
-        modeIcon.textContent = "🔄";
-        btnToggleMode.className = "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-950/80 border border-indigo-700/50 text-indigo-200";
+        modeDot.className = "w-1.5 h-1.5 rounded-full bg-indigo-400";
       }
     }
 
@@ -376,7 +368,7 @@
       if (session) renderCurrentTurn();
     });
 
-    // --- 4. GAME ENGINE ---
+    // --- 4. GAME FLOW ---
     const screenSetup = document.getElementById("screen-setup");
     const screenGame = document.getElementById("screen-game");
     const btnStart = document.getElementById("btn-start-game");
@@ -417,14 +409,16 @@
       saveState();
       renderModeUI();
       updateInGameLevelUI();
-      startGameView();
+      screenSetup.classList.add("hidden");
+      screenGame.classList.remove("hidden");
       nextQuestion();
     });
 
     btnResume.addEventListener("click", () => {
       renderModeUI();
       updateInGameLevelUI();
-      startGameView();
+      screenSetup.classList.add("hidden");
+      screenGame.classList.remove("hidden");
       renderCurrentTurn();
     });
 
@@ -434,14 +428,9 @@
       btnResume.classList.remove("hidden");
     });
 
-    function startGameView() {
-      screenSetup.classList.add("hidden");
-      screenGame.classList.remove("hidden");
-    }
-
     function nextQuestion() {
       if (session.remainingIndices.length === 0) {
-        alert("Wunderbar! Ihr habt alle Fragen in diesem Level beantwortet!");
+        alert("Alle Fragen dieser Runde beantwortet!");
         return;
       }
       session.currentIndex = session.remainingIndices.pop();
@@ -457,28 +446,23 @@
       if (gameMode === "both") {
         bothModeStatus.classList.remove("hidden");
         bothModeStatus.textContent = session.bothStep === 1 ? `1/2: ${activePlayer}` : `2/2: ${session.currentTurn === 0 ? session.p2 : session.p1}`;
-        turnIndicator.textContent = `👥 ${session.bothStep === 1 ? activePlayer : (session.currentTurn === 0 ? session.p2 : session.p1)} antwortet`;
-        document.getElementById("btn-save-next-label").textContent = session.bothStep === 1 ? `➔ Dann ${session.currentTurn === 0 ? session.p2 : session.p1}` : "➔ Nächste Frage";
+        turnIndicator.textContent = `An der Reihe: ${session.bothStep === 1 ? activePlayer : (session.currentTurn === 0 ? session.p2 : session.p1)}`;
+        document.getElementById("btn-save-next-label").textContent = session.bothStep === 1 ? `➔ Dann ${session.currentTurn === 0 ? session.p2 : session.p1}` : "➔ Weiter";
       } else {
         bothModeStatus.classList.add("hidden");
-        turnIndicator.textContent = `🎤 Jetzt antwortet: ${activePlayer}`;
+        turnIndicator.textContent = `An der Reihe: ${activePlayer}`;
         document.getElementById("btn-save-next-label").textContent = "➔";
       }
 
-      // Level Badge Styling
-      const lvlLabels = { "1": "Lvl 1 • Warm-up", "2": "Lvl 2 • Deep Talk", "3": "🔥 Lvl 3 • Intim & Nah" };
-      questionLevelBadge.textContent = lvlLabels[q.level] || `Lvl ${q.level}`;
-      if (q.level === "3") {
-        questionLevelBadge.className = "px-2.5 py-0.5 rounded-full bg-rose-950/80 text-rose-300 border border-rose-700/60 font-medium";
-      } else {
-        questionLevelBadge.className = "px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700";
-      }
-
+      const lvlNames = { "1": "Lvl 1 • Easy", "2": "Lvl 2 • Deep", "3": "Lvl 3 • Intim" };
+      questionLevelBadge.textContent = lvlNames[q.level] || `Lvl ${q.level}`;
       questionCategory.textContent = q.category || 'Allgemein';
       questionText.textContent = `„${q.text}“`;
       progressInfo.textContent = `${session.answeredCount + 1} / ${session.totalInSession}`;
 
-      document.getElementById("answer-notes").value = "";
+      // Reset Inputs
+      document.getElementById("answer-transcript").value = "";
+      document.getElementById("answer-summary").value = "";
       document.getElementById("audio-preview").classList.add("hidden");
       currentAudioBlob = null;
     }
@@ -488,15 +472,19 @@
       nextQuestion();
     });
 
-    // --- 5. AUDIO & TRANSKRIPT ---
+    // --- 5. VOICE RECORDER MIT FUNKTIONIERENDEM TIMER & SUMMARIZER ---
     let mediaRecorder, audioChunks = [], currentAudioBlob = null, isRecording = false, recognition;
+    let timerInterval = null, timerSeconds = 0;
+
     const btnRecord = document.getElementById("btn-record-voice");
     const recordBtnText = document.getElementById("record-btn-text");
     const recordDot = document.getElementById("record-dot");
-    const recordingTime = document.getElementById("recording-time");
+    const recordingTimer = document.getElementById("recording-timer");
     const audioPreview = document.getElementById("audio-preview");
-    const answerNotes = document.getElementById("answer-notes");
+    const answerTranscript = document.getElementById("answer-transcript");
+    const answerSummary = document.getElementById("answer-summary");
 
+    // Speech Recognition
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       recognition = new SpeechRecognition();
@@ -504,10 +492,46 @@
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.onresult = (event) => {
-        let transcript = "";
-        for (let i = 0; i < event.results.length; i++) transcript += event.results[i][0].transcript + " ";
-        answerNotes.value = transcript.trim();
+        let text = "";
+        for (let i = 0; i < event.results.length; i++) {
+          text += event.results[i][0].transcript + " ";
+        }
+        answerTranscript.value = text.trim();
+        generateBulletSummary(text.trim());
       };
+    }
+
+    // Automatischer Stichpunkt-Generator
+    function generateBulletSummary(rawText) {
+      if (!rawText || rawText.length < 10) return;
+      // Filtert Sätze und extrahiert Kernaussagen
+      const sentences = rawText.split(/[.?!]+/).map(s => s.trim()).filter(s => s.length > 5);
+      if (sentences.length > 0) {
+        const bullets = sentences.slice(0, 3).map(s => `• ${s.charAt(0).toUpperCase() + s.slice(1)}`).join("\n");
+        answerSummary.value = bullets;
+      }
+    }
+
+    document.getElementById("btn-re-summarize").addEventListener("click", () => {
+      generateBulletSummary(answerTranscript.value);
+    });
+
+    // Timer Logik (Behebt den 00:00 Fehler!)
+    function startTimer() {
+      timerSeconds = 0;
+      recordingTimer.textContent = "00:00";
+      recordingTimer.classList.remove("hidden");
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+        const secs = String(timerSeconds % 60).padStart(2, '0');
+        recordingTimer.textContent = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
     }
 
     btnRecord.addEventListener("click", async () => {
@@ -524,20 +548,22 @@
           };
           mediaRecorder.start();
           if (recognition) { try { recognition.start(); } catch(e){} }
+          startTimer();
+
           isRecording = true;
           recordBtnText.textContent = "Stoppen";
-          recordDot.classList.add("pulse-record", "bg-rose-400");
-          recordingTime.classList.remove("hidden");
+          recordDot.className = "w-2 h-2 rounded-full bg-rose-500 animate-pulse";
         } catch (err) {
           alert("Mikrofon nicht erreichbar: " + err.message);
         }
       } else {
         mediaRecorder.stop();
         if (recognition) recognition.stop();
+        stopTimer();
         isRecording = false;
         recordBtnText.textContent = "Fertig";
-        recordDot.classList.remove("pulse-record", "bg-rose-400");
-        recordingTime.classList.add("hidden");
+        recordDot.className = "w-2 h-2 rounded-full bg-emerald-500";
+        generateBulletSummary(answerTranscript.value);
       }
     });
 
@@ -553,7 +579,8 @@
         answeringPlayer = session.currentTurn === 0 ? session.p1 : session.p2;
       }
 
-      const notes = answerNotes.value.trim();
+      const transcript = answerTranscript.value.trim();
+      const summary = answerSummary.value.trim();
       const answerId = "ans_" + Date.now();
 
       if (currentAudioBlob) saveAudioBlob(answerId, currentAudioBlob);
@@ -564,7 +591,8 @@
         level: q.level,
         category: q.category,
         player: answeringPlayer,
-        notes: notes || "Keine Notiz",
+        transcript: transcript || "Kein Transkript",
+        summary: summary || "Keine Stichpunkte",
         hasAudio: !!currentAudioBlob,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
@@ -582,7 +610,7 @@
       }
     });
 
-    // --- 7. MODALS & EXPORT ---
+    // --- 7. FRAGENPOOL VERWALTEN ---
     const modalQuestions = document.getElementById("modal-questions");
     document.getElementById("btn-manage-questions").addEventListener("click", () => {
       renderQuestionsList();
@@ -603,14 +631,14 @@
     });
 
     function renderQuestionsList() {
-      const container = document.getElementById("questions-list-render");
-      container.innerHTML = questions.map((q, idx) => `
-        <div class="flex items-center justify-between p-2 rounded-xl bg-zinc-900/60 border border-zinc-800 text-xs">
+      const c = document.getElementById("questions-list-render");
+      c.innerHTML = questions.map((q, idx) => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs">
           <div class="flex-1 pr-2">
-            <span class="text-rose-400 font-medium">[Lvl ${q.level}]</span>
+            <span class="text-zinc-500 font-mono">[L${q.level}]</span>
             <span class="text-zinc-200 ml-1">${q.text}</span>
           </div>
-          <button onclick="deleteQuestion(${idx})" class="text-zinc-500 hover:text-rose-400">✕</button>
+          <button onclick="deleteQuestion(${idx})" class="text-zinc-600 hover:text-rose-400">✕</button>
         </div>
       `).join("");
     }
@@ -621,6 +649,7 @@
       renderQuestionsList();
     };
 
+    // --- 8. ARCHIV & EXPORT ---
     const modalArchive = document.getElementById("modal-archive");
     document.getElementById("btn-view-archive").addEventListener("click", () => {
       renderArchive();
@@ -629,29 +658,31 @@
     document.getElementById("btn-close-modal-archive").addEventListener("click", () => modalArchive.classList.add("hidden"));
 
     function renderArchive() {
-      const container = document.getElementById("archive-list-render");
+      const c = document.getElementById("archive-list-render");
       if (savedAnswers.length === 0) {
-        container.innerHTML = "<p class='text-zinc-500 text-center py-6'>Noch keine Antworten gespeichert.</p>";
+        c.innerHTML = "<p class='text-zinc-500 text-center py-6'>Noch keine Antworten gespeichert.</p>";
         return;
       }
-      container.innerHTML = savedAnswers.map(ans => `
-        <div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800 space-y-1">
-          <div class="flex justify-between text-[11px] text-zinc-400">
-            <span class="font-semibold text-rose-300">${ans.player} (Lvl ${ans.level || '?'})</span>
+      c.innerHTML = savedAnswers.map(ans => `
+        <div class="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2">
+          <div class="flex justify-between text-[11px] text-zinc-500">
+            <span class="font-medium text-zinc-300">${ans.player} (Lvl ${ans.level || '?'})</span>
             <span>${ans.timestamp}</span>
           </div>
-          <div class="font-serif-date text-zinc-100 text-sm">„${ans.question}“</div>
-          <div class="text-zinc-300 text-xs bg-zinc-950/40 p-2 rounded-lg mt-1">
-            <strong>Antwort/Notiz:</strong> ${ans.notes}
+          <div class="font-serif-quote text-zinc-200 text-sm">„${ans.question}“</div>
+          
+          <div class="text-zinc-400 text-xs space-y-1 bg-zinc-950/60 p-2.5 rounded-lg border border-zinc-800/60">
+            <div><strong class="text-zinc-300">Stichpunkte:</strong><div class="whitespace-pre-line text-zinc-300 mt-0.5">${ans.summary}</div></div>
+            <div class="pt-1 text-[11px] text-zinc-500 border-t border-zinc-800/60 mt-1"><strong>Transkript:</strong> ${ans.transcript}</div>
           </div>
-          ${ans.hasAudio ? `<div class="pt-1"><button onclick="playSavedAudio('${ans.id}')" class="text-xs text-rose-400 hover:underline">▶️ Sprachnachricht anhören</button></div>` : ''}
+          ${ans.hasAudio ? `<div><button onclick="playSavedAudio('${ans.id}')" class="text-xs text-rose-400 hover:underline">▶️ Sprachnachricht abspielen</button></div>` : ''}
         </div>
       `).join("");
     }
 
     window.playSavedAudio = function(id) {
       getAudioBlob(id, (blob) => {
-        if (!blob) return alert("Audio nicht gefunden.");
+        if (!blob) return alert("Audioaufnahme nicht gefunden.");
         new Audio(URL.createObjectURL(blob)).play();
       });
     };
@@ -660,24 +691,24 @@
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ questions, savedAnswers }, null, 2));
       const a = document.createElement("a");
       a.href = dataStr;
-      a.download = `date-memory-${new Date().toISOString().slice(0,10)}.json`;
+      a.download = `closer-session-${new Date().toISOString().slice(0,10)}.json`;
       a.click();
     });
 
     document.getElementById("btn-export-summary").addEventListener("click", () => {
       const win = window.open("", "_blank");
       win.document.write(`
-        <html><head><title>Date Memory</title>
-        <style>body{font-family:sans-serif;padding:30px;max-width:700px;margin:auto;line-height:1.5;color:#222;} h1{color:#e11d48;} .card{border-bottom:1px solid #ddd;padding:12px 0;}</style>
+        <html><head><title>Closer Session</title>
+        <style>body{font-family:sans-serif;padding:30px;max-width:700px;margin:auto;line-height:1.6;color:#18181b;} h1{font-size:24px;} .card{border-bottom:1px solid #e4e4e7;padding:16px 0;} .summary{background:#f4f4f5;padding:8px 12px;border-radius:6px;}</style>
         </head><body>
-        <h1>Unser 2. Date – Erinnerungs-Zusammenfassung</h1>
-        <p>Datum: ${new Date().toLocaleDateString('de-DE')}</p>
-        <hr>
+        <h1>Closer – Session Protokoll</h1>
+        <p>Datum: ${new Date().toLocaleDateString('de-DE')}</p><hr>
         ${savedAnswers.map(a => `
           <div class="card">
-            <p><strong>Frage:</strong> ${a.question} (Level ${a.level})</p>
+            <p><strong>Frage:</strong> ${a.question}</p>
             <p><strong>Antwort von:</strong> ${a.player} (${a.timestamp})</p>
-            <p><strong>Notiz:</strong> ${a.notes}</p>
+            <div class="summary"><strong>Kernaussagen:</strong><br>${a.summary.replace(/\n/g, '<br>')}</div>
+            <p style="color:#71717a;font-size:12px;"><strong>Transkript:</strong> ${a.transcript}</p>
           </div>
         `).join("")}
         <script>window.print();<\/script>
@@ -686,12 +717,12 @@
       win.document.close();
     });
 
+    // PWA Service Worker Registrierung
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+
     updateCounts();
   </script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
-</script>
 </body>
 </html>
