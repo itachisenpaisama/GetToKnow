@@ -63,7 +63,7 @@
         ⚙️ Auswahl (<span id="count-selected-session">110</span>)
       </button>
       <button id="btn-view-archive" type="button" class="px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white transition">
-        Archiv (<span id="count-answers">0</span>)
+        📁 Sessions (<span id="count-sessions-header">0</span>)
       </button>
     </div>
   </header>
@@ -72,7 +72,7 @@
   <main class="w-full my-auto py-4">
 
     <!-- Screen 1: Setup / Start -->
-    <div id="screen-setup" class="glass-surface rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+    <div id="screen-setup" class="glass-surface rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl">
       <div class="space-y-1.5">
         <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Closer</h1>
         <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">
@@ -80,15 +80,21 @@
         </p>
       </div>
 
+      <!-- Session Name Field -->
+      <div>
+        <label class="block text-[11px] font-medium tracking-wide uppercase text-zinc-400 mb-1">Session-Name (Ordner)</label>
+        <input type="text" id="input-session-name" placeholder="z. B. 2. Date in der Weinbar, Spaziergang..." class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-zinc-500 transition">
+      </div>
+
       <!-- Player Names -->
-      <div class="space-y-3">
+      <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="block text-[11px] font-medium tracking-wide uppercase text-indigo-400 mb-1">Person 1</label>
-          <input type="text" id="input-p1" value="Ich" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+          <input type="text" id="input-p1" value="Ich" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
         </div>
         <div>
           <label class="block text-[11px] font-medium tracking-wide uppercase text-rose-400 mb-1">Person 2</label>
-          <input type="text" id="input-p2" value="Du" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 transition">
+          <input type="text" id="input-p2" value="Du" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-rose-500 transition">
         </div>
       </div>
 
@@ -114,7 +120,7 @@
       </div>
 
       <button id="btn-start-game" type="button" class="w-full bg-white hover:bg-zinc-200 text-black font-semibold py-3.5 px-6 rounded-xl shadow-lg transition active:scale-[0.98]">
-        Neue Session starten
+        Session starten
       </button>
       <button id="btn-resume-game" type="button" class="hidden w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-medium py-3 rounded-xl transition text-xs">
         Laufende Session fortsetzen ⏸️
@@ -158,7 +164,7 @@
         <div id="progress-bar-fill" class="bg-gradient-to-r from-indigo-500 to-rose-500 h-full w-0 transition-all duration-300"></div>
       </div>
 
-      <!-- Question Card with Card Animation -->
+      <!-- Question Card with Card Animation, Skip & Immediate In-Game Delete -->
       <div id="question-card" class="glass-surface rounded-3xl p-6 sm:p-8 min-h-[200px] flex flex-col justify-between shadow-xl relative card-animate">
         <div class="flex items-center justify-between text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">
           <span id="question-level-badge" class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">Lvl 1</span>
@@ -169,9 +175,16 @@
           Lade Frage...
         </div>
 
+        <!-- Footer mit Frage löschen & Überspringen -->
         <div class="flex items-center justify-between text-xs text-zinc-500 pt-3 border-t border-zinc-800/80">
-          <span class="text-[11px]">Keine Wiederholungen</span>
-          <button id="btn-skip" type="button" class="hover:text-zinc-300 transition">Überspringen ➔</button>
+          <button id="btn-delete-current-q" type="button" class="text-zinc-500 hover:text-rose-400 transition flex items-center gap-1.5 text-[11px]" title="Diese Frage dauerhaft aus der App löschen">
+            <span>🗑️</span>
+            <span>Frage löschen</span>
+          </button>
+          <button id="btn-skip" type="button" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition flex items-center gap-1.5 text-xs">
+            <span>Überspringen</span>
+            <span>⏩</span>
+          </button>
         </div>
       </div>
 
@@ -275,22 +288,44 @@
       </div>
     </div>
 
-    <!-- Screen 4: Archive Modal mit AUDIO DOWNLOAD -->
+    <!-- Screen 4: Structured Session Archive (Ordnerstruktur) -->
     <div id="modal-archive" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-      <div class="glass-surface w-full max-w-xl rounded-3xl p-6 space-y-4 max-h-[85vh] flex flex-col">
+      <div class="glass-surface w-full max-w-xl rounded-3xl p-5 sm:p-6 space-y-4 max-h-[88vh] flex flex-col">
+        
+        <!-- Header mit dynamischem Titel / Zurück-Button -->
         <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
-          <h3 class="font-semibold text-sm text-zinc-200">Gespeicherte Antworten</h3>
+          <div class="flex items-center gap-2">
+            <button id="btn-archive-back" type="button" class="hidden text-xs px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition">
+              ← Alle Ordner
+            </button>
+            <div>
+              <h3 id="archive-modal-title" class="font-semibold text-sm text-zinc-200">📁 Session-Ordner</h3>
+              <span id="archive-modal-subtitle" class="text-[11px] text-zinc-500">Alle durchgespielten Dates & Runden</span>
+            </div>
+          </div>
           <button id="btn-close-modal-archive" type="button" class="text-zinc-400 hover:text-white p-1 text-base">✕</button>
         </div>
-        <div id="archive-list-render" class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs"></div>
+
+        <!-- Ansicht 1: Liste aller Sessions (Ordner-Übersicht) -->
+        <div id="archive-sessions-container" class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
+          <!-- Dynamisch gerendert -->
+        </div>
+
+        <!-- Ansicht 2: Detail-Ansicht einer einzelnen Session (Fragen & Antworten) -->
+        <div id="archive-single-session-container" class="hidden flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
+          <!-- Dynamisch gerendert -->
+        </div>
+
+        <!-- Export Buttons (dynamisch je nach Ansicht) -->
         <div class="flex gap-2 pt-2 border-t border-zinc-800">
-          <button id="btn-export-json" type="button" class="flex-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition">
-            JSON
+          <button id="btn-export-session-json" type="button" class="flex-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition">
+            💾 JSON Backup
           </button>
-          <button id="btn-export-summary" type="button" class="flex-1 bg-white hover:bg-zinc-200 text-zinc-950 text-xs py-2.5 rounded-xl font-semibold transition">
-            Drucken / PDF
+          <button id="btn-export-session-summary" type="button" class="flex-1 bg-white hover:bg-zinc-200 text-zinc-950 text-xs py-2.5 rounded-xl font-semibold transition">
+            📄 Drucken / PDF
           </button>
         </div>
+
       </div>
     </div>
 
@@ -301,7 +336,6 @@
   </footer>
 
   <script>
-    // --- HAPTISCHES FEEDBACK HELPER ---
     function haptic(ms = 10) {
       if (navigator.vibrate) try { navigator.vibrate(ms); } catch(e){}
     }
@@ -427,10 +461,10 @@
       category: q.c
     }));
 
-    // --- 2. INDEXED DB (Audio Storage) ---
+    // --- 2. INDEXED DB ---
     let db;
     try {
-      const req = indexedDB.open("CloserAppDB_v6", 1);
+      const req = indexedDB.open("CloserAppDB_v7", 1);
       req.onupgradeneeded = (e) => {
         db = e.target.result;
         if (!db.objectStoreNames.contains("recordings")) db.createObjectStore("recordings", { keyPath: "id" });
@@ -452,25 +486,51 @@
       r.onerror = () => cb(null);
     }
 
-    // --- 3. STATE & STORAGE MIT SESSION PERSISTENCE ---
-    let stored = localStorage.getItem("closer_questions_v8");
+    // --- 3. STATE & STORAGE MIT ORDNERSTRUKTUR (SESSIONS) ---
+    let storedQ = localStorage.getItem("closer_questions_v9");
     let questions;
     try {
-      questions = JSON.parse(stored);
+      questions = JSON.parse(storedQ);
       if (!Array.isArray(questions) || questions.length === 0) questions = DEFAULT_QUESTIONS;
     } catch(e) {
       questions = DEFAULT_QUESTIONS;
     }
 
     let selectedQuestionIds = new Set(questions.map(q => q.id));
-    let savedAnswers = [];
-    try { savedAnswers = JSON.parse(localStorage.getItem("closer_answers_v8")) || []; } catch(e){}
-    
-    let session = null;
-    try { session = JSON.parse(localStorage.getItem("closer_session_v8")); } catch(e){}
-    
+
+    // Strukturierte Sessions (Ordner)
+    let sessions = [];
+    try {
+      sessions = JSON.parse(localStorage.getItem("closer_sessions_v1")) || [];
+    } catch(e) {
+      sessions = [];
+    }
+
+    // Migration von alten Antworten in eine Session
+    try {
+      const oldAnswers = JSON.parse(localStorage.getItem("closer_answers_v8"));
+      if (Array.isArray(oldAnswers) && oldAnswers.length > 0 && sessions.length === 0) {
+        sessions.push({
+          id: "sess_migration",
+          name: "Frühere Antworten",
+          date: new Date().toLocaleDateString('de-DE'),
+          p1: "Ich",
+          p2: "Du",
+          answers: oldAnswers
+        });
+      }
+    } catch(e){}
+
+    let currentActiveSession = null;
+    try {
+      currentActiveSession = JSON.parse(localStorage.getItem("closer_active_session_v1"));
+    } catch(e) {
+      currentActiveSession = null;
+    }
+
     let currentActiveLevel = "all";
     let gameMode = "alternate";
+    let viewingSessionId = null; // Für das Öffnen eines Session-Ordners im Archiv
 
     function getAllCategories() {
       return Array.from(new Set(questions.map(q => q.category))).filter(Boolean);
@@ -478,12 +538,12 @@
     let activeCategories = new Set(getAllCategories());
 
     function saveState() {
-      localStorage.setItem("closer_questions_v8", JSON.stringify(questions));
-      localStorage.setItem("closer_answers_v8", JSON.stringify(savedAnswers));
-      if (session) {
-        localStorage.setItem("closer_session_v8", JSON.stringify(session));
+      localStorage.setItem("closer_questions_v9", JSON.stringify(questions));
+      localStorage.setItem("closer_sessions_v1", JSON.stringify(sessions));
+      if (currentActiveSession) {
+        localStorage.setItem("closer_active_session_v1", JSON.stringify(currentActiveSession));
       } else {
-        localStorage.removeItem("closer_session_v8");
+        localStorage.removeItem("closer_active_session_v1");
       }
       updateCounts();
     }
@@ -493,19 +553,18 @@
       if (countEl) countEl.textContent = selectedQuestionIds.size;
       const badgeEl = document.getElementById("session-summary-badge");
       if (badgeEl) badgeEl.textContent = `${selectedQuestionIds.size} von ${questions.length} Fragen aktiv`;
-      const archiveEl = document.getElementById("count-answers");
-      if (archiveEl) archiveEl.textContent = savedAnswers.length;
+      const headerSess = document.getElementById("count-sessions-header");
+      if (headerSess) headerSess.textContent = sessions.length;
 
-      // Resume Button Sichtbarkeit
       const btnResume = document.getElementById("btn-resume-game");
-      if (session && session.remainingIds && session.remainingIds.length > 0) {
+      if (currentActiveSession && currentActiveSession.remainingIds && currentActiveSession.remainingIds.length > 0) {
         btnResume.classList.remove("hidden");
       } else {
         btnResume.classList.add("hidden");
       }
     }
 
-    // --- 4. SESSION FILTER & LÖSCHEN ---
+    // --- 4. SESSION FILTER & FRAGEN VERWALTEN ---
     const modalFilter = document.getElementById("modal-filter");
     document.getElementById("btn-open-filter-modal").addEventListener("click", openFilterModal);
     document.getElementById("btn-customize-session").addEventListener("click", openFilterModal);
@@ -602,7 +661,7 @@
     };
 
     window.deleteSingleQuestion = function(id) {
-      if (confirm("Möchtest du diese Frage wirklich dauerhaft löschen?")) {
+      if (confirm("Möchtest du diese Frage wirklich dauerhaft aus der App löschen?")) {
         haptic(15);
         questions = questions.filter(q => q.id !== id);
         selectedQuestionIds.delete(id);
@@ -709,7 +768,7 @@
       updateCounts();
     });
 
-    // --- 6. GAME ENGINE ---
+    // --- 6. GAME ENGINE MIT SKIP & SOFORTIGEM LÖSCHEN ---
     const screenSetup = document.getElementById("screen-setup");
     const screenGame = document.getElementById("screen-game");
     const btnStart = document.getElementById("btn-start-game");
@@ -755,11 +814,11 @@
       }
       if (pool.length === 0) pool = questions.filter(q => selectedQuestionIds.has(q.id));
       
-      if (!session) {
-        session = { p1: "Ich", p2: "Du", currentTurn: 0, bothStep: 1, answeredCount: 0 };
+      if (!currentActiveSession) {
+        currentActiveSession = { id: "sess_" + Date.now(), name: "Date Session", p1: "Ich", p2: "Du", currentTurn: 0, bothStep: 1, answeredCount: 0, answers: [] };
       }
-      session.remainingIds = pool.map(q => q.id).sort(() => Math.random() - 0.5);
-      session.totalInSession = session.remainingIds.length + (session.answeredCount || 0);
+      currentActiveSession.remainingIds = pool.map(q => q.id).sort(() => Math.random() - 0.5);
+      currentActiveSession.totalInSession = currentActiveSession.remainingIds.length + (currentActiveSession.answeredCount || 0);
       nextQuestion();
     };
 
@@ -791,13 +850,17 @@
       haptic(8);
       gameMode = (gameMode === "alternate") ? "both" : "alternate";
       renderModeUI();
-      if (session) renderCurrentTurn();
+      if (currentActiveSession) renderCurrentTurn();
     });
 
     btnStart.addEventListener("click", () => {
       haptic(15);
       const p1 = document.getElementById("input-p1").value.trim() || "Person 1";
       const p2 = document.getElementById("input-p2").value.trim() || "Person 2";
+      
+      const customName = document.getElementById("input-session-name").value.trim();
+      const defaultName = `Date mit ${p2} • ${new Date().toLocaleDateString('de-DE', { day: '2-digit', month: 'short' })}`;
+      const sessionName = customName || defaultName;
 
       let pool = questions.filter(q => selectedQuestionIds.has(q.id));
       if (currentActiveLevel !== "all") pool = pool.filter(q => q.level === currentActiveLevel);
@@ -807,16 +870,32 @@
       }
 
       const shuffledIds = pool.map(q => q.id).sort(() => Math.random() - 0.5);
+      const sessionId = "sess_" + Date.now();
 
-      session = {
+      currentActiveSession = {
+        id: sessionId,
+        name: sessionName,
+        date: new Date().toLocaleDateString('de-DE'),
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         p1, p2,
         currentTurn: 0,
         bothStep: 1,
         remainingIds: shuffledIds,
         currentId: null,
         totalInSession: shuffledIds.length,
-        answeredCount: 0
+        answeredCount: 0,
+        answers: []
       };
+
+      // Zu den Sessions hinzufügen
+      sessions.unshift({
+        id: sessionId,
+        name: sessionName,
+        date: currentActiveSession.date,
+        time: currentActiveSession.time,
+        p1, p2,
+        answers: []
+      });
 
       saveState();
       renderModeUI();
@@ -844,29 +923,28 @@
     });
 
     function nextQuestion() {
-      if (!session || session.remainingIds.length === 0) {
-        alert("Wunderbar! Alle Fragen dieser Session wurden beantwortet!");
-        session = null;
+      if (!currentActiveSession || currentActiveSession.remainingIds.length === 0) {
+        alert("Wunderbar! Alle ausgewählten Fragen dieser Session wurden beantwortet!");
+        currentActiveSession = null;
         saveState();
         screenGame.classList.add("hidden");
         screenSetup.classList.remove("hidden");
         return;
       }
-      session.currentId = session.remainingIds.pop();
-      session.bothStep = 1;
+      currentActiveSession.currentId = currentActiveSession.remainingIds.pop();
+      currentActiveSession.bothStep = 1;
       saveState();
       renderCurrentTurn();
     }
 
     function renderCurrentTurn() {
-      const q = questions.find(item => item.id === session.currentId) || questions[0];
+      const q = questions.find(item => item.id === currentActiveSession.currentId) || questions[0];
       const isP1 = (gameMode === "both") 
-        ? (session.bothStep === 1 ? session.currentTurn === 0 : session.currentTurn !== 0)
-        : (session.currentTurn === 0);
+        ? (currentActiveSession.bothStep === 1 ? currentActiveSession.currentTurn === 0 : currentActiveSession.currentTurn !== 0)
+        : (currentActiveSession.currentTurn === 0);
       
-      const activePlayer = isP1 ? session.p1 : session.p2;
+      const activePlayer = isP1 ? currentActiveSession.p1 : currentActiveSession.p2;
 
-      // Glow & Player Colors
       if (isP1) {
         playerGlowDot.className = "w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]";
         turnText.innerHTML = `An der Reihe: <strong class="text-indigo-300 font-semibold">${activePlayer}</strong>`;
@@ -877,8 +955,8 @@
 
       if (gameMode === "both") {
         bothModeStatus.classList.remove("hidden");
-        bothModeStatus.textContent = session.bothStep === 1 ? `1/2: ${activePlayer}` : `2/2: ${activePlayer}`;
-        document.getElementById("btn-save-next-label").textContent = session.bothStep === 1 ? `➔ Dann ${isP1 ? session.p2 : session.p1}` : "➔ Weiter";
+        bothModeStatus.textContent = currentActiveSession.bothStep === 1 ? `1/2: ${activePlayer}` : `2/2: ${activePlayer}`;
+        document.getElementById("btn-save-next-label").textContent = currentActiveSession.bothStep === 1 ? `➔ Dann ${isP1 ? currentActiveSession.p2 : currentActiveSession.p1}` : "➔ Weiter";
       } else {
         bothModeStatus.classList.add("hidden");
         document.getElementById("btn-save-next-label").textContent = "➔";
@@ -888,16 +966,14 @@
       questionCategory.textContent = q.category || 'Allgemein';
       questionText.textContent = `„${q.text}“`;
       
-      const currentNum = session.answeredCount + 1;
-      progressInfo.textContent = `${currentNum} / ${session.totalInSession}`;
+      const currentNum = currentActiveSession.answeredCount + 1;
+      progressInfo.textContent = `${currentNum} / ${currentActiveSession.totalInSession}`;
       
-      // Progress Bar Update
-      const pct = Math.min(100, Math.round((currentNum / session.totalInSession) * 100));
+      const pct = Math.min(100, Math.round((currentNum / currentActiveSession.totalInSession) * 100));
       progressBarFill.style.width = `${pct}%`;
 
-      // Trigger Card Transition Animation
       questionCard.classList.remove("card-animate");
-      void questionCard.offsetWidth; // Reflow
+      void questionCard.offsetWidth;
       questionCard.classList.add("card-animate");
 
       document.getElementById("answer-transcript").value = "";
@@ -906,14 +982,33 @@
       currentAudioBlob = null;
     }
 
+    // --- SKIPPEN INNERHALB DER SESSION ---
     document.getElementById("btn-skip").addEventListener("click", () => {
-      haptic(8);
+      haptic(10);
       stopActiveMediaStream();
-      session.currentTurn = 1 - session.currentTurn;
+      // Bei Skip neue Frage ziehen für denselben Spieler (oder wechseln wenn man will)
       nextQuestion();
     });
 
-    // --- 7. AUDIO RECORDER (MIT ZERO STREAM LEAK & ACCURATE TIMER) ---
+    // --- FRAGE DIREKT WÄHREND DER SESSION LÖSCHEN ---
+    document.getElementById("btn-delete-current-q").addEventListener("click", () => {
+      haptic(15);
+      if (!currentActiveSession || !currentActiveSession.currentId) return;
+      const targetId = currentActiveSession.currentId;
+      
+      if (confirm("Möchtest du diese Frage dauerhaft aus der App löschen? Sie wird sofort durch die nächste Frage ersetzt.")) {
+        stopActiveMediaStream();
+        questions = questions.filter(q => q.id !== targetId);
+        selectedQuestionIds.delete(targetId);
+        currentActiveSession.remainingIds = currentActiveSession.remainingIds.filter(id => id !== targetId);
+        saveState();
+        renderCategoryChips();
+        populateCategoryDropdown();
+        nextQuestion();
+      }
+    });
+
+    // --- 7. AUDIO RECORDER ---
     let activeMediaStream = null;
     let mediaRecorder = null;
     let audioChunks = [];
@@ -930,7 +1025,6 @@
     const answerTranscript = document.getElementById("answer-transcript");
     const answerSummary = document.getElementById("answer-summary");
 
-    // Sicherstellen, dass kein Mikrofon-Stream im Hintergrund weiterläuft
     function stopActiveMediaStream() {
       if (activeMediaStream) {
         activeMediaStream.getTracks().forEach(t => {
@@ -983,9 +1077,7 @@
       }, 1000);
     }
 
-    function stopTimer() {
-      clearInterval(timerInterval);
-    }
+    function stopTimer() { clearInterval(timerInterval); }
 
     btnRecord.addEventListener("click", async () => {
       haptic(12);
@@ -994,16 +1086,14 @@
           activeMediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
           mediaRecorder = new MediaRecorder(activeMediaStream);
           audioChunks = [];
-          
           mediaRecorder.ondataavailable = (e) => {
             if (e.data && e.data.size > 0) audioChunks.push(e.data);
           };
-          
           mediaRecorder.onstop = () => {
             currentAudioBlob = new Blob(audioChunks, { type: "audio/webm" });
             audioPreview.src = URL.createObjectURL(currentAudioBlob);
             audioPreview.classList.remove("hidden");
-            stopActiveMediaStream(); // Stream sauber schließen!
+            stopActiveMediaStream();
           };
 
           mediaRecorder.start(250);
@@ -1017,9 +1107,7 @@
           stopActiveMediaStream();
         }
       } else {
-        if (mediaRecorder && mediaRecorder.state !== "inactive") {
-          mediaRecorder.stop();
-        }
+        if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
         if (recognition) { try { recognition.stop(); } catch(e){} }
         stopTimer();
         isRecording = false;
@@ -1029,16 +1117,16 @@
       }
     });
 
-    // --- 8. ANTWORT SPEICHERN ---
+    // --- 8. ANTWORT IN DER LAUFENDEN SESSION SPEICHERN ---
     document.getElementById("btn-save-answer").addEventListener("click", () => {
       haptic(15);
       stopActiveMediaStream();
 
-      const q = questions.find(item => item.id === session.currentId) || questions[0];
+      const q = questions.find(item => item.id === currentActiveSession.currentId) || questions[0];
       const isP1 = (gameMode === "both") 
-        ? (session.bothStep === 1 ? session.currentTurn === 0 : session.currentTurn !== 0)
-        : (session.currentTurn === 0);
-      const answeringPlayer = isP1 ? session.p1 : session.p2;
+        ? (currentActiveSession.bothStep === 1 ? currentActiveSession.currentTurn === 0 : currentActiveSession.currentTurn !== 0)
+        : (currentActiveSession.currentTurn === 0);
+      const answeringPlayer = isP1 ? currentActiveSession.p1 : currentActiveSession.p2;
 
       const transcript = answerTranscript.value.trim();
       const summary = answerSummary.value.trim();
@@ -1046,7 +1134,7 @@
 
       if (currentAudioBlob) saveAudioBlob(answerId, currentAudioBlob);
 
-      savedAnswers.push({
+      const newAnswer = {
         id: answerId,
         question: q.text,
         level: q.level,
@@ -1056,41 +1144,124 @@
         summary: summary || "Keine Stichpunkte",
         hasAudio: !!currentAudioBlob,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
+      };
 
-      if (gameMode === "both" && session.bothStep === 1) {
-        session.bothStep = 2;
+      currentActiveSession.answers.push(newAnswer);
+
+      // Auch in der globalen Sessions-Liste abspeichern
+      const targetSessionIndex = sessions.findIndex(s => s.id === currentActiveSession.id);
+      if (targetSessionIndex !== -1) {
+        sessions[targetSessionIndex].answers.push(newAnswer);
+      }
+
+      if (gameMode === "both" && currentActiveSession.bothStep === 1) {
+        currentActiveSession.bothStep = 2;
         renderCurrentTurn();
       } else {
-        session.answeredCount++;
-        session.currentTurn = 1 - session.currentTurn;
-        session.bothStep = 1;
+        currentActiveSession.answeredCount++;
+        currentActiveSession.currentTurn = 1 - currentActiveSession.currentTurn;
+        currentActiveSession.bothStep = 1;
         nextQuestion();
       }
       saveState();
     });
 
-    // --- 9. ARCHIV & AUDIO DOWNLOAD ---
+    // --- 9. STRUKTURIERTES ARCHIV (ORDNERSTRUKTUR & SESSIONS) ---
     const modalArchive = document.getElementById("modal-archive");
+    const archiveSessionsContainer = document.getElementById("archive-sessions-container");
+    const archiveSingleContainer = document.getElementById("archive-single-session-container");
+    const btnArchiveBack = document.getElementById("btn-archive-back");
+    const archiveTitle = document.getElementById("archive-modal-title");
+    const archiveSubtitle = document.getElementById("archive-modal-subtitle");
+
     document.getElementById("btn-view-archive").addEventListener("click", () => {
       haptic(8);
-      renderArchive();
+      viewingSessionId = null;
+      renderArchiveFolderView();
       modalArchive.classList.remove("hidden");
     });
-    document.getElementById("btn-close-modal-archive").addEventListener("click", () => modalArchive.classList.add("hidden"));
 
-    function renderArchive() {
-      const c = document.getElementById("archive-list-render");
-      if (!c) return;
-      if (savedAnswers.length === 0) {
-        c.innerHTML = "<p class='text-zinc-500 text-center py-6'>Noch keine Antworten gespeichert.</p>";
+    document.getElementById("btn-close-modal-archive").addEventListener("click", () => {
+      modalArchive.classList.add("hidden");
+    });
+
+    btnArchiveBack.addEventListener("click", () => {
+      haptic(5);
+      viewingSessionId = null;
+      renderArchiveFolderView();
+    });
+
+    // Ansicht 1: Alle Sessions (Ordner)
+    function renderArchiveFolderView() {
+      btnArchiveBack.classList.add("hidden");
+      archiveTitle.textContent = "📁 Session-Ordner";
+      archiveSubtitle.textContent = `${sessions.length} gespeicherte Dates & Runden`;
+
+      archiveSessionsContainer.classList.remove("hidden");
+      archiveSingleContainer.classList.add("hidden");
+
+      if (sessions.length === 0) {
+        archiveSessionsContainer.innerHTML = "<p class='text-zinc-500 text-center py-8'>Noch keine Sessions gespeichert. Starte eine neue Runde!</p>";
         return;
       }
-      c.innerHTML = savedAnswers.map(ans => `
+
+      archiveSessionsContainer.innerHTML = sessions.map(sess => {
+        const count = sess.answers ? sess.answers.length : 0;
+        return `
+          <div class="p-4 rounded-2xl bg-zinc-900/90 border border-zinc-800 space-y-2 hover:border-zinc-700 transition">
+            <div class="flex items-start justify-between">
+              <div>
+                <h4 class="font-semibold text-zinc-100 text-sm flex items-center gap-1.5">
+                  <span>🍷</span>
+                  <span>${sess.name}</span>
+                </h4>
+                <p class="text-[11px] text-zinc-500 mt-0.5">${sess.date || ''} • ${sess.p1 || 'P1'} & ${sess.p2 || 'P2'} • <strong class="text-zinc-400">${count} beantwortete Fragen</strong></p>
+              </div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="renameSession('${sess.id}')" class="text-zinc-500 hover:text-zinc-200 p-1 text-xs" title="Session umbenennen">✏️</button>
+                <button type="button" onclick="deleteSession('${sess.id}')" class="text-zinc-500 hover:text-rose-400 p-1 text-xs" title="Session löschen">🗑️</button>
+              </div>
+            </div>
+            
+            <div class="pt-2 flex items-center justify-between border-t border-zinc-800/80">
+              <button type="button" onclick="openSessionDetail('${sess.id}')" class="text-xs font-semibold text-white bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                <span>Ordner öffnen</span>
+                <span>➔</span>
+              </button>
+              <div class="flex gap-2">
+                <button type="button" onclick="exportSingleSessionPDF('${sess.id}')" class="text-[11px] text-zinc-400 hover:text-white underline">📄 PDF</button>
+                <button type="button" onclick="exportSingleSessionJSON('${sess.id}')" class="text-[11px] text-zinc-400 hover:text-white underline">💾 JSON</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // Ansicht 2: Detailansicht einer einzelnen Session (Fragen & Antworten)
+    window.openSessionDetail = function(sessId) {
+      haptic(10);
+      viewingSessionId = sessId;
+      const sess = sessions.find(s => s.id === sessId);
+      if (!sess) return;
+
+      btnArchiveBack.classList.remove("hidden");
+      archiveTitle.textContent = `📁 ${sess.name}`;
+      archiveSubtitle.textContent = `${sess.date || ''} • ${sess.p1} & ${sess.p2} (${sess.answers.length} Fragen)`;
+
+      archiveSessionsContainer.classList.add("hidden");
+      archiveSingleContainer.classList.remove("hidden");
+
+      if (!sess.answers || sess.answers.length === 0) {
+        archiveSingleContainer.innerHTML = "<p class='text-zinc-500 text-center py-6'>In dieser Session wurden noch keine Antworten gespeichert.</p>";
+        return;
+      }
+
+      archiveSingleContainer.innerHTML = sess.answers.map(ans => `
         <div class="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2">
           <div class="flex justify-between text-[11px] text-zinc-500">
-            <span class="font-medium text-zinc-300">${ans.player} (Lvl ${ans.level || '?'})</span>
-            <span>${ans.timestamp}</span>
+            <span class="font-medium ${ans.player === sess.p1 ? 'text-indigo-300' : 'text-rose-300'}">${ans.player} (Lvl ${ans.level || '?'})</span>
+            <span>${ans.timestamp || ''}</span>
           </div>
           <div class="font-serif-quote text-zinc-200 text-sm">„${ans.question}“</div>
           
@@ -1106,7 +1277,32 @@
           ` : ''}
         </div>
       `).join("");
-    }
+    };
+
+    window.renameSession = function(sessId) {
+      const sess = sessions.find(s => s.id === sessId);
+      if (!sess) return;
+      const newName = prompt("Neuer Name für diese Session:", sess.name);
+      if (newName && newName.trim()) {
+        sess.name = newName.trim();
+        if (currentActiveSession && currentActiveSession.id === sessId) {
+          currentActiveSession.name = newName.trim();
+        }
+        saveState();
+        renderArchiveFolderView();
+      }
+    };
+
+    window.deleteSession = function(sessId) {
+      if (confirm("Möchtest du diesen gesamten Session-Ordner wirklich löschen?")) {
+        sessions = sessions.filter(s => s.id !== sessId);
+        if (currentActiveSession && currentActiveSession.id === sessId) {
+          currentActiveSession = null;
+        }
+        saveState();
+        renderArchiveFolderView();
+      }
+    };
 
     window.playSavedAudio = function(id) {
       haptic(8);
@@ -1127,25 +1323,28 @@
       });
     };
 
-    document.getElementById("btn-export-json").addEventListener("click", () => {
-      haptic(10);
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ questions, savedAnswers }, null, 2));
+    // Export Funktionen
+    window.exportSingleSessionJSON = function(sessId) {
+      const sess = sessions.find(s => s.id === sessId);
+      if (!sess) return;
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sess, null, 2));
       const a = document.createElement("a");
       a.href = dataStr;
-      a.download = `closer-session-${new Date().toISOString().slice(0,10)}.json`;
+      a.download = `closer-${sess.name.replace(/[^a-zA-Z0-9]/g, '_')}.json`;
       a.click();
-    });
+    };
 
-    document.getElementById("btn-export-summary").addEventListener("click", () => {
-      haptic(10);
+    window.exportSingleSessionPDF = function(sessId) {
+      const sess = sessions.find(s => s.id === sessId);
+      if (!sess) return;
       const win = window.open("", "_blank");
       win.document.write(`
-        <html><head><title>Closer Session</title>
+        <html><head><title>${sess.name}</title>
         <style>body{font-family:sans-serif;padding:30px;max-width:700px;margin:auto;line-height:1.6;color:#18181b;} h1{font-size:24px;} .card{border-bottom:1px solid #e4e4e7;padding:16px 0;} .summary{background:#f4f4f5;padding:8px 12px;border-radius:6px;}</style>
         </head><body>
-        <h1>Closer – Session Protokoll</h1>
-        <p>Datum: ${new Date().toLocaleDateString('de-DE')}</p><hr>
-        ${savedAnswers.map(a => `
+        <h1>${sess.name}</h1>
+        <p>Datum: ${sess.date || ''} • Personen: ${sess.p1} & ${sess.p2}</p><hr>
+        ${(sess.answers || []).map(a => `
           <div class="card">
             <p><strong>Frage:</strong> ${a.question} (Lvl ${a.level})</p>
             <p><strong>Antwort von:</strong> ${a.player} (${a.timestamp})</p>
@@ -1157,6 +1356,28 @@
         </body></html>
       `);
       win.document.close();
+    };
+
+    document.getElementById("btn-export-session-json").addEventListener("click", () => {
+      haptic(10);
+      if (viewingSessionId) {
+        exportSingleSessionJSON(viewingSessionId);
+      } else {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sessions, null, 2));
+        const a = document.createElement("a");
+        a.href = dataStr;
+        a.download = `closer-all-sessions-${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+      }
+    });
+
+    document.getElementById("btn-export-session-summary").addEventListener("click", () => {
+      haptic(10);
+      if (viewingSessionId) {
+        exportSingleSessionPDF(viewingSessionId);
+      } else {
+        if (sessions.length > 0) exportSingleSessionPDF(sessions[0].id);
+      }
     });
 
     if ('serviceWorker' in navigator) {
